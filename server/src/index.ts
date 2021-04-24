@@ -1,35 +1,24 @@
-import express from 'express';
+import express from "express";
 import * as bodyParser from "body-parser";
-import dotenv from 'dotenv';
-import cors from 'cors';
-import path from 'path';
-import mongoose from 'mongoose';
-dotenv.config();
-import * as EnvHandler from './helpers/environment.handler';
+import dotenv from "dotenv";
+import cors from "cors";
+import connection from "./config/connection";
+import * as EnvHandler from "./helpers/environment.handler";
 
+import auth from "./routes/auth";
+import customer from "./routes/customer";
+import user from "./routes/user";
 
 const app = express();
 dotenv.config();
 const port = EnvHandler.envPORT() || 3001;
-app.use(bodyParser.json());
 
-
-mongoose
-  .connect(
-    "mongodb://localhost:27017/management_DB",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
-  .then(() => {
-    console.log("Connected to Mongo database!");
-  })
-  .catch(() => {
-    console.log("Connection failed!");
-  });
-
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/images", express.static(path.join("Server/images")));
 
+//Call connection
+connection;
 
 // allow cross origin
 app.use(cors());
@@ -48,20 +37,20 @@ app.use(cors());
 //   next();
 // });
 
+app.use("/auth", auth);
+app.use("/user", user);
+app.use("/customer", customer);
 
-
-app.get('/', (req, res) => {
-  res.send('Hey there!!!');
+app.get("/", (req, res) => {
+  res.send("Hey there!!!");
 });
 
 /**
  * Comment for server
  */
-app.listen(port, err => {
+app.listen(port, (err) => {
   if (err) {
     return console.error(err);
   }
   return console.log(`Server is listening on ${port}`);
 });
-
-
