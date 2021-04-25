@@ -1,69 +1,102 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-sm-5">
+      <form
+        [formGroup]="form"
+        (submit)="onCreateCustomer()"
+        enctype="multipart/form-data"
+        class="form-horizontal"
+      >
+        <div class="card">
+          <div class="card-header"><strong>Manage Customer</strong> Form</div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input"
+                >Full Name</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  id="text-input"
+                  name="text-input"
+                  class="form-control"
+                  placeholder="Text"
+                  formControlName="fullname"
+                />
+                <span class="help-block" *ngIf="form.get('fullname').invalid"
+                  >Please enter the Full Name</span
+                >
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input"
+                >Email</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="email"
+                  id="email-input"
+                  name="email-input"
+                  class="form-control"
+                  placeholder="Enter Email"
+                  autocomplete="email"
+                  formControlName="email"
+                />
+                <span class="help-block" *ngIf="form.get('email').invalid"
+                  >Please enter the Email Address</span
+                >
+              </div>
+            </div>
 
-      <div class="card">
-        <div class="card-header">
-          <strong>Manage Customer</strong> Form
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="date-input"
+                >DOB</label
+              >
+              <div class="col-md-9">
+                <input
+                  class="form-control"
+                  id="date-input"
+                  type="date"
+                  name="date-input"
+                  placeholder="date"
+                  formControlName="DOB"
+                />
+                <span class="help-block" *ngIf="form.get('DOB').invalid"
+                  >Please enter the DOB</span
+                >
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="textarea-input"
+                >Address</label
+              >
+              <div class="col-md-9">
+                <textarea
+                  id="textarea-input"
+                  name="textarea-input"
+                  rows="9"
+                  class="form-control"
+                  placeholder="Please enter Address"
+                  formControlName="address"
+                ></textarea>
+
+                <span class="help-block" *ngIf="form.get('address').invalid"
+                  >Please enter the Address</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-sm btn-primary">
+              <i class="fa fa-dot-circle-o"></i> Submit
+            </button>
+            <button type="reset" class="btn btn-sm btn-danger">
+              <i class="fa fa-ban"></i> Reset
+            </button>
+          </div>
         </div>
-        <div class="card-body">
-          <form [formGroup]="form" (submit)="onCreateCustomer()"  enctype="multipart/form-data"
-            class="form-horizontal">
-
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="text-input">Full Name</label>
-              <div class="col-md-9">
-                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Text"
-                  formControlName="fullname">
-                <span class="help-block" *ngIf="form.get('fullname').invalid">Please enter the Full Name</span>
-                
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="email-input">Email</label>
-              <div class="col-md-9">
-                <input type="email" id="email-input" name="email-input" class="form-control" placeholder="Enter Email"
-                  autocomplete="email" formControlName="email">
-                <span class="help-block" *ngIf="form.get('email').invalid">Please enter the Email Address</span>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="password-input">Password</label>
-              <div class="col-md-9">
-                <input type="password" id="password-input" name="password-input" class="form-control"
-                  placeholder="Password" autocomplete="current-password" formControlName="password">
-                <span class="help-block" *ngIf="form.get('password').invalid">Please enter the Email Address</span>
-
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="date-input">DOB</label>
-              <div class="col-md-9">
-                <input class="form-control" id="date-input" type="date" name="date-input" placeholder="date" formControlName="DOB">
-                <span class="help-block" *ngIf="form.get('DOB').invalid">Please enter the DOB</span>
-
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label class="col-md-3 col-form-label" for="textarea-input">Address</label>
-              <div class="col-md-9">
-                <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control"
-                  placeholder="Please enter Address" formControlName="address"></textarea>
-
-                  <span class="help-block" *ngIf="form.get('address').invalid">Please enter the Address</span>
-              </div>
-            </div>
-
-          </form>
-        </div>
-        <div class="card-footer">
-          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>
-            Submit</button>
-          <button type="reset" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Reset</button>
-        </div>
-      </div>
-
+      </form>
     </div>
     <div class="col-sm-7">
       <div class="card">
@@ -74,51 +107,29 @@
           <table class="table table-striped">
             <thead>
               <tr>
-                <th>Username</th>
-                <th>Date registered</th>
-                <th>Role</th>
-                <th>Status</th>
+                <th>Name</th>
+                <th>DOB</th>
+                <th>Email</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Yiorgos Avraamu</td>
-                <td>2012/01/01</td>
-                <td>Member</td>
+              <tr *ngFor="let customer of customerList">
+                <td>{{ customer.fullname }}</td>
+                <td>{{ customer.DOB }}</td>
+                <td>{{ customer.email }}</td>
                 <td>
-                  <span class="badge badge-success">Active</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Avram Tarasios</td>
-                <td>2012/02/01</td>
-                <td>Staff</td>
-                <td>
-                  <span class="badge badge-danger">Banned</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Quintin Ed</td>
-                <td>2012/02/01</td>
-                <td>Admin</td>
-                <td>
-                  <span class="badge badge-secondary">Inactive</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Enéas Kwadwo</td>
-                <td>2012/03/01</td>
-                <td>Member</td>
-                <td>
-                  <span class="badge badge-warning">Pending</span>
-                </td>
-              </tr>
-              <tr>
-                <td>Agapetus Tadeáš</td>
-                <td>2012/01/21</td>
-                <td>Staff</td>
-                <td>
-                  <span class="badge badge-success">Active</span>
+                  <div class="row">
+                    <span class="cil-zoom icon-space"></span>
+                    <span
+                      class="icon-pencil icon-space"
+                      (click)="onEdit(customer.customer_id)"
+                    ></span>
+                    <span
+                      class="icon-trash icon-space"
+                      (click)="onDelete(customer.customer_id)"
+                    ></span>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -137,5 +148,4 @@
       </div>
     </div>
   </div>
-
 </div>

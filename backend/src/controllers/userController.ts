@@ -18,6 +18,7 @@ class UserController {
         user_email: input.user_email,
         role_id: input.role_id,
         profile_img: input.profile_img,
+        status: 1,
       };
 
       const data = await userLib.addUser(obj);

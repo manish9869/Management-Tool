@@ -18,7 +18,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   getToken() {
-    return false;
+    return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6MSwiaWF0IjoxNjE5Mjk5OTE5LCJleHAiOjE2MTkzODYzMTl9.xenb8fmpNt4idcdZHVAHsXFDaF-4WxzwShSE4E4SEkY";
     return this.token;
   }
 

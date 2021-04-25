@@ -4,46 +4,41 @@ import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { Customer } from "./Manage Customer/customer.model";
+import * as moment from "moment";
 const BACKEND_URL = environment.apiUrl + "/customer";
 
 @Injectable({ providedIn: "root" })
 export class CustomerService {
-  private Customers: Customer[] = [];
+  private customers: any = [];
+
   private CustomersUpdated = new Subject<{
-    Customers: Customer[];
-    CustomerCount: number;
+    customers: any;
   }>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  getCustomers(CustomersPerPage: number, currentPage: number) {
-    const queryParams = `?pagesize=${CustomersPerPage}&page=${currentPage}`;
+  getCustomers() {
     this.http
-      .get<{ message: string; Customers: any; maxCustomers: number }>(
-        BACKEND_URL + queryParams
-      )
+      .get(BACKEND_URL)
       .pipe(
-        map((CustomerData) => {
+        map((resData: any) => {
           return {
-            Customers: CustomerData.Customers.map((Customer) => {
+            customers: resData.data.map((data) => {
               return {
-                title: Customer.title,
-                content: Customer.content,
-                id: Customer._id,
-                imagePath: Customer.imagePath,
-                creator: Customer.creator,
+                customer_id: data.customer_id,
+                fullname: data.fullname,
+                email: data.email,
+                address: data.address,
+                DOB: data.DOB ? moment(data.DOB).format("DD-MMM-YYYY") : "NA",
               };
             }),
-            maxCustomers: CustomerData.maxCustomers,
           };
         })
       )
-      .subscribe((transformedCustomerData) => {
-        this.Customers = transformedCustomerData.Customers;
+      .subscribe((data: any) => {
+        this.customers = data.customers;
         this.CustomersUpdated.next({
-          Customers: [...this.Customers],
-          CustomerCount: transformedCustomerData.maxCustomers,
+          customers: [...this.customers],
         });
       });
   }
@@ -53,49 +48,18 @@ export class CustomerService {
   }
 
   getCustomer(id: string) {
-    return this.http.get<{
-      _id: string;
-      title: string;
-      content: string;
-      imagePath: string;
-      creator: string;
-    }>(BACKEND_URL + id);
+    return this.http.get(BACKEND_URL + "/" + id);
   }
 
-  addCustomer(title: string, content: string, image: File) {
-    const CustomerData = new FormData();
-    CustomerData.append("title", title);
-    CustomerData.append("content", content);
-    CustomerData.append("image", image, title);
-    this.http
-      .post<{ message: string; Customer: Customer }>(BACKEND_URL, CustomerData)
-      .subscribe((responseData) => {
-        this.router.navigate(["/"]);
-      });
+  addCustomer(customerObj) {
+    const CustomerData = customerObj;
+
+    this.http.post(BACKEND_URL, CustomerData).subscribe((responseData) => {
+      console.log(responseData);
+    });
   }
 
-  updateCustomer(
-    id: string,
-    title: string,
-    content: string,
-    image: File | string
-  ) {
-    let CustomerData: Customer | FormData;
-    if (typeof image === "object") {
-      CustomerData = new FormData();
-      CustomerData.append("id", id);
-      CustomerData.append("title", title);
-      CustomerData.append("content", content);
-      CustomerData.append("image", image, title);
-    } else {
-      CustomerData = {
-        id: id,
-        title: title,
-        content: content,
-        imagePath: image,
-        creator: null,
-      };
-    }
+  updateCustomer(CustomerData, id) {
     this.http.put(BACKEND_URL + id, CustomerData).subscribe((response) => {
       this.router.navigate(["/"]);
     });

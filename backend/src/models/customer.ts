@@ -20,6 +20,10 @@ const CustomerSchema = new Schema(
       type: String,
       default: null,
     },
+    DOB: {
+      type: Date,
+      default: null,
+    },
     created_user_id: {
       type: Number,
     },
