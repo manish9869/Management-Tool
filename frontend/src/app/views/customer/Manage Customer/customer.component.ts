@@ -49,8 +49,6 @@ export class CustomerComponent implements OnInit, OnDestroy {
   }
 
   onCreateCustomer() {
-    console.log(this.form.invalid);
-
     if (this.form.invalid) {
       return;
     }

@@ -58,6 +58,7 @@ class AuthController {
             is_twofa_enabled: user["is_twofa_enabled"] === 0 ? false : true,
             twofa_qr_url,
             secret_key,
+            expiresIn: 3600,
           };
 
           res.locals.data = data;
