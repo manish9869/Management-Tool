@@ -1,5 +1,5 @@
 import express from "express";
-import CustomerController from "../../../server/src/controllers/customerController";
+import CustomerController from "../controllers/customerController";
 import { validateJwt } from "../middlewares/validateJWT";
 
 const router = express.Router();
