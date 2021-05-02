@@ -6,9 +6,7 @@ import { ButtonsModule } from "ngx-bootstrap/buttons";
 import { ManageProductsComponent } from "./manage-products/manage-products.component";
 import { ProductRoutingModule } from "./product-routing.module";
 import { CommonModule } from "@angular/common";
-
 import { AgGridModule } from "ag-grid-angular";
-
 import { CustomTooltip } from "../helpers/custom-tooltip.component";
 
 @NgModule({

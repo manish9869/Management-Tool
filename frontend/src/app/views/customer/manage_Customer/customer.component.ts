@@ -108,9 +108,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     if (this.mode === "create") {
       const customer_data = {
-        fullname: this.form.value.fullname,
-        email: this.form.value.email,
-        address: this.form.value.address,
+        fullname: this.form.value.fullname.trim(),
+        email: this.form.value.email.trim(),
+        address: this.form.value.address.trim(),
         DOB: this.form.value.DOB,
       };
 
@@ -122,9 +122,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
         });
     } else {
       const customer_data = {
-        fullname: this.form.value.fullname,
-        email: this.form.value.email,
-        address: this.form.value.address,
+        fullname: this.form.value.fullname.trim(),
+        email: this.form.value.email.trim(),
+        address: this.form.value.address.trim(),
         DOB: this.form.value.DOB,
       };
 

@@ -33,23 +33,23 @@ export const navItems: INavData[] = [
   {
     name: "Product Master",
     url: "",
-    icon: "icon-user",
+    icon: "cil-basket",
     children: [
       {
         name: "Manage Products",
         url: "/product/manage-product",
-        icon: "icon-user-follow",
+        icon: "cil-book",
       },
     ],
   },
-  {
-    name: "Disabled",
-    url: "/dashboard",
-    icon: "icon-ban",
-    badge: {
-      variant: "secondary",
-      text: "NEW",
-    },
-    attributes: { disabled: true },
-  },
+  // {
+  //   name: "Disabled",
+  //   url: "/dashboard",
+  //   icon: "icon-ban",
+  //   badge: {
+  //     variant: "secondary",
+  //     text: "NEW",
+  //   },
+  //   attributes: { disabled: true },
+  // },
 ];
