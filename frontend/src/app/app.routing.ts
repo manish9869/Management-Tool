@@ -55,7 +55,7 @@ export const routes: Routes = [
           ),
       },
     ],
-    canActivate: [AuthGuard],
+    canActivate: [],
   },
   { path: "**", component: P404Component },
 ];

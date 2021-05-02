@@ -4,13 +4,13 @@ import { validateJwt } from "../middlewares/validateJWT";
 
 const router = express.Router();
 
-router.get("/:id", validateJwt, CustomerController.getCustomerDataById);
+router.get("/:id", CustomerController.getCustomerDataById);
 
-router.get("/", validateJwt, CustomerController.getAllCustomerData);
+router.get("/", CustomerController.getAllCustomerData);
 
 router.post("/", validateJwt, CustomerController.addCustomerData);
 
-router.patch("/:id", validateJwt, CustomerController.updateCustomerData);
+router.patch("/:id", CustomerController.updateCustomerData);
 
 router.delete("/:id", validateJwt, CustomerController.deleteCustomerData);
 

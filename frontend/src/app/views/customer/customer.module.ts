@@ -7,6 +7,10 @@ import { CustomerComponent } from "./Manage Customer/customer.component";
 import { CustomerRoutingModule } from "./customer-routing.module";
 import { CommonModule } from "@angular/common";
 
+import { AgGridModule } from "ag-grid-angular";
+
+import { CustomTooltip } from "./../helpers/custom-tooltip.component";
+
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +20,8 @@ import { CommonModule } from "@angular/common";
     ChartsModule,
     BsDropdownModule,
     ButtonsModule.forRoot(),
+    AgGridModule.withComponents([CustomTooltip]),
   ],
-  declarations: [CustomerComponent],
+  declarations: [CustomerComponent, CustomTooltip],
 })
 export class CustomerModule {}

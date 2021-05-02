@@ -3,6 +3,11 @@ import { CustomerService } from "./../customer.service";
 import { formatDate } from "@angular/common";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
+
+import { AllCommunityModules, Module } from "@ag-grid-community/all-modules";
+import { CustomTooltip } from "./../../helpers/custom-tooltip.component";
+import { ButtonRendererComponent } from "../../helpers/button.renderer.component";
+
 @Component({
   selector: "app-user",
   templateUrl: "./customer.component.html",
@@ -14,10 +19,47 @@ export class CustomerComponent implements OnInit, OnDestroy {
   customer_id;
   customerList: any = [];
   private mode = "create";
-
+  public modules: Module[] = AllCommunityModules;
   private customerSub: Subscription;
 
-  constructor(public customerService: CustomerService) {}
+  private tooltipShowDelay;
+  private defaultColDef;
+  private frameworkComponents;
+  private paginationPageSize;
+  columnDefs = [
+    {
+      field: "fullname",
+      tooltipField: "fullname",
+      tooltipComponentParams: { color: "#ececec" },
+    },
+    { field: "email" },
+    { field: "DOB" },
+    {
+      field: "Actions",
+      cellRenderer: "buttonRenderer",
+      cellRendererParams: {
+        onClick: this.onClick.bind(this),
+        label: "Click 1",
+      },
+    },
+  ];
+
+  constructor(public customerService: CustomerService) {
+    this.defaultColDef = {
+      editable: true,
+      sortable: true,
+      flex: 1,
+      filter: true,
+      resizable: true,
+      tooltipComponent: "customTooltip",
+    };
+    this.tooltipShowDelay = 0;
+    this.paginationPageSize = 1;
+    this.frameworkComponents = {
+      customTooltip: CustomTooltip,
+      buttonRenderer: ButtonRendererComponent,
+    };
+  }
 
   ngOnInit() {
     this.form = new FormGroup({
@@ -43,8 +85,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
       .getCustomerUpdateListener()
       .subscribe((customerData: any) => {
         this.isLoading = false;
-        console.log(customerData);
         this.customerList = customerData.customers;
+        console.log(this.customerList);
       });
   }
 
@@ -73,7 +115,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
     this.form.reset();
   }
 
-  onDelete(customer_id: string) {
+  onDelete(customer_id) {
+    alert("Delete call");
     this.isLoading = true;
     this.customerService.deleteCustomer(customer_id).subscribe(
       () => {
@@ -83,6 +126,19 @@ export class CustomerComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     );
+  }
+
+  onClick(e) {
+    switch (e.type) {
+      case "select":
+        break;
+      case "edit":
+        this.onEdit(e.rowData.customer_id);
+        break;
+      case "delete":
+        this.onDelete(e.rowData.customer_id);
+        break;
+    }
   }
 
   onEdit(customer_id: string) {
