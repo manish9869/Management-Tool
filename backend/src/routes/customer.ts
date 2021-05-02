@@ -8,10 +8,10 @@ router.get("/:id", CustomerController.getCustomerDataById);
 
 router.get("/", CustomerController.getAllCustomerData);
 
-router.post("/", validateJwt, CustomerController.addCustomerData);
+router.post("/", CustomerController.addCustomerData);
 
 router.patch("/:id", CustomerController.updateCustomerData);
 
-router.delete("/:id", validateJwt, CustomerController.deleteCustomerData);
+router.delete("/:id", CustomerController.deleteCustomerData);
 
 export default router;

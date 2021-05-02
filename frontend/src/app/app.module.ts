@@ -7,6 +7,8 @@ import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 import { PERFECT_SCROLLBAR_CONFIG } from "ngx-perfect-scrollbar";
 import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 
+import { ToastrModule } from "ngx-toastr";
+
 import {
   IconModule,
   IconSetModule,
@@ -62,6 +64,7 @@ import { AuthInterceptor } from "./views/auth/auth-interceptor";
     ChartsModule,
     IconModule,
     IconSetModule.forRoot(),
+    ToastrModule.forRoot(),
   ],
   declarations: [AppComponent, ...APP_CONTAINERS, P404Component, P500Component],
   providers: [

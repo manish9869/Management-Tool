@@ -3,10 +3,11 @@ import { CustomerService } from "./../customer.service";
 import { formatDate } from "@angular/common";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
-
+import { ToastrService } from "ngx-toastr";
 import { AllCommunityModules, Module } from "@ag-grid-community/all-modules";
 import { CustomTooltip } from "./../../helpers/custom-tooltip.component";
 import { ButtonRendererComponent } from "../../helpers/button.renderer.component";
+import Messages from "../../../comman/constants";
 
 @Component({
   selector: "app-user",
@@ -39,12 +40,14 @@ export class CustomerComponent implements OnInit, OnDestroy {
       cellRenderer: "buttonRenderer",
       cellRendererParams: {
         onClick: this.onClick.bind(this),
-        label: "Click 1",
       },
     },
   ];
 
-  constructor(public customerService: CustomerService) {
+  constructor(
+    public customerService: CustomerService,
+    private toastr: ToastrService
+  ) {
     this.defaultColDef = {
       editable: true,
       sortable: true,
@@ -54,7 +57,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
       tooltipComponent: "customTooltip",
     };
     this.tooltipShowDelay = 0;
-    this.paginationPageSize = 1;
+    this.paginationPageSize = 10;
     this.frameworkComponents = {
       customTooltip: CustomTooltip,
       buttonRenderer: ButtonRendererComponent,
@@ -79,14 +82,16 @@ export class CustomerComponent implements OnInit, OnDestroy {
       }),
     });
 
-    this.customerService.getCustomers();
+    this.onLoadCustomerList();
+  }
 
+  onLoadCustomerList() {
+    this.customerService.getCustomers();
     this.customerSub = this.customerService
       .getCustomerUpdateListener()
       .subscribe((customerData: any) => {
         this.isLoading = false;
         this.customerList = customerData.customers;
-        console.log(this.customerList);
       });
   }
 
@@ -103,7 +108,12 @@ export class CustomerComponent implements OnInit, OnDestroy {
         DOB: this.form.value.DOB,
       };
 
-      this.customerService.addCustomer(customer_data);
+      this.customerService
+        .addCustomer(customer_data)
+        .subscribe((responseData) => {
+          this.toastr.success("", Messages.SAVED);
+          this.onLoadCustomerList();
+        });
     } else {
       const customer_data = {
         fullname: this.form.value.fullname,
@@ -111,15 +121,22 @@ export class CustomerComponent implements OnInit, OnDestroy {
         address: this.form.value.address,
         DOB: this.form.value.DOB,
       };
+
+      this.customerService
+        .updateCustomer(customer_data, this.customer_id)
+        .subscribe((responseData) => {
+          this.toastr.info("", Messages.UPDATED);
+          this.onLoadCustomerList();
+        });
     }
     this.form.reset();
   }
 
   onDelete(customer_id) {
-    alert("Delete call");
     this.isLoading = true;
     this.customerService.deleteCustomer(customer_id).subscribe(
       () => {
+        this.toastr.warning("", Messages.DELETED);
         this.customerService.getCustomers();
       },
       () => {
@@ -144,9 +161,8 @@ export class CustomerComponent implements OnInit, OnDestroy {
   onEdit(customer_id: string) {
     this.mode = "edit";
     this.isLoading = true;
+    this.customer_id = customer_id;
     this.customerService.getCustomer(customer_id).subscribe((data: any) => {
-      console.log(data);
-
       this.isLoading = false;
 
       this.form.setValue({

@@ -7,6 +7,9 @@
 @import "../../node_modules/ag-grid-community/dist/styles/ag-grid.css";
 @import "../../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
 
+// regular style toast
+@import "~ngx-toastr/toastr";
+
 // If you want to add something do it here
 @import "custom";
 

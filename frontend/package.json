@@ -30,7 +30,7 @@
   "dependencies": {
     "@ag-grid-community/all-modules": "^25.2.0",
     "@ag-grid-community/angular": "^25.2.0",
-    "@angular/animations": "^11.2.5",
+    "@angular/animations": "^11.2.12",
     "@angular/cdk": "^11.2.4",
     "@angular/common": "^11.2.5",
     "@angular/compiler": "^11.2.5",
@@ -57,6 +57,7 @@
     "ng2-charts": "^2.4.2",
     "ngx-bootstrap": "^6.2.0",
     "ngx-perfect-scrollbar": "^10.1.0",
+    "ngx-toastr": "^13.2.1",
     "rxjs": "^6.6.6",
     "simple-line-icons": "^2.5.5",
     "ts-helpers": "^1.1.2",

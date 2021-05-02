@@ -54,15 +54,12 @@ export class CustomerService {
   addCustomer(customerObj) {
     const CustomerData = customerObj;
 
-    this.http.post(BACKEND_URL, CustomerData).subscribe((responseData) => {
-      console.log(responseData);
-    });
+    return this.http.post(BACKEND_URL, CustomerData);
   }
 
-  updateCustomer(CustomerData, id) {
-    this.http.put(BACKEND_URL + id, CustomerData).subscribe((response) => {
-      this.router.navigate(["/"]);
-    });
+  updateCustomer(customerObj, id) {
+    const CustomerData = customerObj;
+    return this.http.patch(BACKEND_URL + "/" + id, CustomerData);
   }
 
   deleteCustomer(CustomerId: string) {
