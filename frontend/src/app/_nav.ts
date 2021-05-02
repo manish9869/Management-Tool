@@ -27,6 +27,22 @@ export const navItems: INavData[] = [
     ],
   },
   {
+    title: true,
+    name: "Products",
+  },
+  {
+    name: "Product Master",
+    url: "",
+    icon: "icon-user",
+    children: [
+      {
+        name: "Manage Products",
+        url: "/product/manage-product",
+        icon: "icon-user-follow",
+      },
+    ],
+  },
+  {
     name: "Disabled",
     url: "/dashboard",
     icon: "icon-ban",

@@ -1,24 +1,24 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 
-import { CustomerComponent } from "./manage_Customer/customer.component";
+import { ManageProductsComponent } from "./manage-products/manage-products.component";
 
 const routes: Routes = [
   {
     path: "",
     data: {
-      title: "Customer",
+      title: "Product Master",
     },
     children: [
       {
         path: "",
-        redirectTo: "manage-customer",
+        redirectTo: "manage-product",
       },
       {
-        path: "manage-customer",
-        component: CustomerComponent,
+        path: "manage-product",
+        component: ManageProductsComponent,
         data: {
-          title: "Manage Customer",
+          title: "Manage Product",
         },
       },
     ],
@@ -29,4 +29,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class CustomerRoutingModule {}
+export class ProductRoutingModule {}

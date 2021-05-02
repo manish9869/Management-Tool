@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { CustomerService } from "./../customer.service";
+import { CustomerService } from "../customer.service";
 import { formatDate } from "@angular/common";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import { AllCommunityModules, Module } from "@ag-grid-community/all-modules";
-import { CustomTooltip } from "./../../helpers/custom-tooltip.component";
+import { CustomTooltip } from "../../helpers/custom-tooltip.component";
 import { ButtonRendererComponent } from "../../helpers/button.renderer.component";
 import Messages from "../../../comman/constants";
 
@@ -38,6 +38,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
     {
       field: "Actions",
       cellRenderer: "buttonRenderer",
+      editable: false,
+      sortable: false,
+      resizable: false,
       cellRendererParams: {
         onClick: this.onClick.bind(this),
       },
