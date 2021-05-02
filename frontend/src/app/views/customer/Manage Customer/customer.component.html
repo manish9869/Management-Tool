@@ -22,10 +22,17 @@
                   class="form-control"
                   placeholder="Text"
                   formControlName="fullname"
+                  [ngClass]="{ 'is-invalid': submitted && f.fullname.errors }"
                 />
-                <span class="help-block" *ngIf="form.get('fullname').invalid"
-                  >Please enter the Full Name</span
+
+                <div
+                  *ngIf="submitted && f.fullname.errors"
+                  class="invalid-feedback"
                 >
+                  <div *ngIf="f.fullname.errors.required">
+                    Please enter the Full Name
+                  </div>
+                </div>
               </div>
             </div>
             <div class="form-group row">
@@ -41,10 +48,17 @@
                   placeholder="Enter Email"
                   autocomplete="email"
                   formControlName="email"
+                  [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
                 />
-                <span class="help-block" *ngIf="form.get('email').invalid"
-                  >Please enter the Email Address</span
+
+                <div
+                  *ngIf="submitted && f.email.errors"
+                  class="invalid-feedback"
                 >
+                  <div *ngIf="f.email.errors.required">
+                    Please enter the Email Address
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -60,10 +74,12 @@
                   name="date-input"
                   placeholder="date"
                   formControlName="DOB"
+                  [ngClass]="{ 'is-invalid': submitted && f.DOB.errors }"
                 />
-                <span class="help-block" *ngIf="form.get('DOB').invalid"
-                  >Please enter the DOB</span
-                >
+
+                <div *ngIf="submitted && f.DOB.errors" class="invalid-feedback">
+                  <div *ngIf="f.DOB.errors.required">Please enter the DOB</div>
+                </div>
               </div>
             </div>
 
@@ -79,11 +95,17 @@
                   class="form-control"
                   placeholder="Please enter Address"
                   formControlName="address"
+                  [ngClass]="{ 'is-invalid': submitted && f.address.errors }"
                 ></textarea>
 
-                <span class="help-block" *ngIf="form.get('address').invalid"
-                  >Please enter the Address</span
+                <div
+                  *ngIf="submitted && f.address.errors"
+                  class="invalid-feedback"
                 >
+                  <div *ngIf="f.address.errors.required">
+                    Please enter the Address
+                  </div>
+                </div>
               </div>
             </div>
           </div>

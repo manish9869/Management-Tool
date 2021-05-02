@@ -22,7 +22,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
   private mode = "create";
   public modules: Module[] = AllCommunityModules;
   private customerSub: Subscription;
-
+  submitted = false;
   private tooltipShowDelay;
   private defaultColDef;
   private frameworkComponents;
@@ -84,7 +84,9 @@ export class CustomerComponent implements OnInit, OnDestroy {
 
     this.onLoadCustomerList();
   }
-
+  get f() {
+    return this.form.controls;
+  }
   onLoadCustomerList() {
     this.customerService.getCustomers();
     this.customerSub = this.customerService
@@ -96,6 +98,7 @@ export class CustomerComponent implements OnInit, OnDestroy {
   }
 
   onCreateCustomer() {
+    this.submitted = true;
     if (this.form.invalid) {
       return;
     }
