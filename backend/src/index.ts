@@ -8,6 +8,8 @@ import * as EnvHandler from "./helpers/environment.handler";
 import auth from "./routes/auth";
 import customer from "./routes/customer";
 import user from "./routes/user";
+import subscription from "./routes/subscription";
+import subscription_mapping from "./routes/subscription_mapping";
 
 const app = express();
 dotenv.config();
@@ -39,6 +41,9 @@ app.use(cors());
 
 app.use("/auth", auth);
 app.use("/user", user);
+app.use("/customer", customer);
+app.use("/subscription", subscription);
+app.use("/subscription-mapping", subscription_mapping);
 app.use("/customer", customer);
 
 app.get("/", (req, res) => {
