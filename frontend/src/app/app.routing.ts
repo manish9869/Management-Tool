@@ -61,8 +61,15 @@ export const routes: Routes = [
             (m) => m.ProductModule
           ),
       },
+      {
+        path: "subscription",
+        loadChildren: () =>
+          import("./views/subscription/subscription.module").then(
+            (m) => m.SubscriptionModule
+          ),
+      },
     ],
-    canActivate: [],
+    //canActivate: [AuthGuard],
   },
   { path: "**", component: P404Component },
 ];

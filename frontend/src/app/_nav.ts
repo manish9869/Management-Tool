@@ -42,6 +42,26 @@ export const navItems: INavData[] = [
       },
     ],
   },
+  {
+    title: true,
+    name: "Subscription",
+  },
+  {
+    name: "Subscription Master",
+    url: "",
+    icon: "cil-basket",
+    children: [
+      {
+        name: "Subscription Plan",
+        url: "/subscription/manage-subscription",
+        icon: "cil-book",
+      },{
+        name: "Subscription Mapping",
+        url: "/subscription/subscription-mapping",
+        icon: "cil-book",
+      },
+    ],
+  },
   // {
   //   name: "Disabled",
   //   url: "/dashboard",

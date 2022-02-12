@@ -1,0 +1,124 @@
+<div class="animated fadeIn">
+    <div class="row">
+      <div class="col-sm-5">
+        <form
+          [formGroup]="form"
+          (submit)="onCreateCustomer()"
+          enctype="multipart/form-data"
+          class="form-horizontal"
+        >
+          <div class="card">
+            <div class="card-header"><strong>Manage Subscription</strong> Form</div>
+            <div class="card-body">
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input"
+                  >Subscription Plan Name</label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    id="text-input"
+                    name="text-input"
+                    class="form-control"
+                    placeholder="Enter Subscription Plan Name"
+                    formControlName="SubscriptionPlanName"
+                    [ngClass]="{ 'is-invalid': submitted && f.SubscriptionPlanName.errors }"
+                  />
+  
+                  <div
+                    *ngIf="submitted && f.SubscriptionPlanName.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.SubscriptionPlanName.errors.required">
+                      Please enter the Subscription Plan Name
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="Price-input"
+                  >Price </label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="number"
+                    id="Price-input"
+                    name="Price-input"
+                    class="form-control"
+                    placeholder="Enter Price"
+                    formControlName="Price"
+                    [ngClass]="{ 'is-invalid': submitted && f.Price.errors }"
+                  />
+  
+                  <div
+                    *ngIf="submitted && f.Price.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.Price.errors.required">
+                      Please enter the Price
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="Validity-input"
+                  >Validity </label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="number"
+                    id="Validity-input"
+                    name="Validity-input"
+                    class="form-control"
+                    placeholder="Enter Validity"
+                    formControlName="Validity"
+                    [ngClass]="{ 'is-invalid': submitted && f.Validity.errors }"
+                  />
+  
+                  <div
+                    *ngIf="submitted && f.Validity.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.Validity.errors.required">
+                      Please enter the Validity
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="card-footer">
+              <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-dot-circle-o"></i> Submit
+              </button>
+              <button type="reset" class="btn btn-sm btn-danger">
+                <i class="fa fa-ban"></i> Reset
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-sm-7">
+        <div class="card" style="width: 100%; height: 100%">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> Customer Table
+          </div>
+          <div class="card-body">
+            <ag-grid-angular
+              style="width: 100%; height: 100%"
+              class="ag-theme-alpine"
+              [modules]="modules"
+              [columnDefs]="columnDefs"
+              [defaultColDef]="defaultColDef"
+              [tooltipShowDelay]="tooltipShowDelay"
+              [frameworkComponents]="frameworkComponents"
+              [rowData]="customerList"
+              [pagination]="true"
+              [paginationPageSize]="paginationPageSize"
+            >
+            </ag-grid-angular>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
