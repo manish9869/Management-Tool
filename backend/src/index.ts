@@ -19,7 +19,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//ser
+
 
 //Call connection
 connection;
