@@ -27,13 +27,29 @@ export const navItems: INavData[] = [
     ],
   },
   {
-    name: "Disabled",
-    url: "/dashboard",
-    icon: "icon-ban",
-    badge: {
-      variant: "secondary",
-      text: "NEW",
-    },
-    attributes: { disabled: true },
+    title: true,
+    name: "Products",
   },
+  {
+    name: "Product Master",
+    url: "",
+    icon: "cil-basket",
+    children: [
+      {
+        name: "Manage Products",
+        url: "/product/manage-product",
+        icon: "cil-book",
+      },
+    ],
+  },
+  // {
+  //   name: "Disabled",
+  //   url: "/dashboard",
+  //   icon: "icon-ban",
+  //   badge: {
+  //     variant: "secondary",
+  //     text: "NEW",
+  //   },
+  //   attributes: { disabled: true },
+  // },
 ];

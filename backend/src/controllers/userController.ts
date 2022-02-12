@@ -10,16 +10,15 @@ class UserController {
     const { loggedInUser } = req;
     try {
       const input = req.body;
-
       const obj = {
-        user_name: input.user_name,
+        user_name: input.username,
         password: await generatePassword(input.password),
         name: input.name,
-        user_email: input.user_email,
+        user_email: input.email,
         role_id: input.role_id,
         profile_img: input.profile_img,
+        status: 1,
       };
-
       const data = await userLib.addUser(obj);
       res.locals.data = data;
       res.locals.message = Messages.SAVED;

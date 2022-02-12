@@ -1,30 +1,30 @@
 import { Request, Response } from "express";
 import * as ResponseHandler from "../helpers/response.handler";
 import Messages from "../common/constants";
-import * as customerLib from "../modules/customer/customer.lib";
+import * as subscriptionLib from "../modules/subscription/subscription.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
-class CustomerController {
-  static addCustomerData = async (req: Request, res: Response) => {
+class SubscriptionController {
+  static addSubscriptionData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {
       const input = req.body;
 
       const obj = {
-        fullname: input.fullname,
-        email: input.email,
-        address: input.address,
-        DOB: input.DOB,
+        subscription_plan_name: input.subscription_plan_name,
+        price: input.price,
+        validity: input.validity,
         created_user_id: loggedInUser,
+        createddate: moment(new Date()).format(),
       };
-      const data = await customerLib.addCustomer(obj);
+      const data = await subscriptionLib.addSubscription(obj);
       res.locals.data = data;
       res.locals.message = Messages.SAVED;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "addCustomerData",
+        pagename: "SubscriptionController",
+        function_name: "addSubscriptionData",
         error_message: e,
         req_body: req.body,
         createddate: moment(new Date()).format(),
@@ -36,23 +36,22 @@ class CustomerController {
     }
   };
 
-  static updateCustomerData = async (req: Request, res: Response) => {
+  static updateSubscriptionData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {
       const input = req.body;
-      const customer_id = req.params.id;
+      const Subscription_id = req.params.id;
 
       const obj = {
-        fullname: input.fullname,
-        email: input.email,
-        address: input.address,
-        DOB: input.DOB,
+        subscription_plan_name: input.subscription_plan_name,
+        price: input.price,
+        validity: input.validity,
         updated_user_id: loggedInUser,
       };
-      await customerLib.updateCustomerData({ customer_id: customer_id }, obj);
+      await subscriptionLib.updateSubscriptionData({ subscription_id: Subscription_id }, obj);
 
-      const data = await customerLib.getCustomerDataById({
-        customer_id: customer_id,
+      const data = await subscriptionLib.getSubscriptionDataById({
+        subscription_id: Subscription_id,
       });
 
       res.locals.data = data;
@@ -60,8 +59,8 @@ class CustomerController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "updateCustomerData",
+        pagename: "SubscriptionController",
+        function_name: "updateSubscriptionData",
         error_message: e,
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
@@ -73,21 +72,21 @@ class CustomerController {
     }
   };
 
-  static deleteCustomerData = async (req: Request, res: Response) => {
+  static deleteSubscriptionData = async (req: Request, res: Response) => {
     const { loggedInUser, masterUserID } = req;
     try {
-      const customer_id = req.params.id;
+      const Subscription_id = req.params.id;
 
-      const result = await customerLib.deleteCustomerData({
-        customer_id: customer_id,
+      const result = await subscriptionLib.deleteSubscriptionData({
+        subscription_id: Subscription_id,
       });
       if (!result) throw new Error(Messages.SOMETHING_WENT_WRONG);
       res.locals.message = Messages.DELETED;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "deleteCustomerData",
+        pagename: "SubscriptionController",
+        function_name: "deleteSubscriptionData",
         error_message: e,
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
@@ -100,13 +99,13 @@ class CustomerController {
     }
   };
 
-  static getCustomerDataById = async (req: Request, res: Response) => {
+  static getSubscriptionDataById = async (req: Request, res: Response) => {
     const { loggedInUser, masterUserID } = req;
     try {
-      const customer_id = req.params.id;
+      const Subscription_id = req.params.id;
 
-      const data = await customerLib.getCustomerDataById({
-        customer_id: customer_id,
+      const data = await subscriptionLib.getSubscriptionDataById({
+        subscription_id: Subscription_id,
       });
       if (!data) res.locals.message = Messages.NO_DATA;
 
@@ -114,8 +113,8 @@ class CustomerController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "getCustomerDataById",
+        pagename: "SubscriptionController",
+        function_name: "getSubscriptionDataById",
         error_message: e,
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
@@ -129,18 +128,18 @@ class CustomerController {
     }
   };
 
-  static getAllCustomerData = async (req: Request, res: Response) => {
+  static getAllSubscriptionData = async (req: Request, res: Response) => {
     const { loggedInUser, masterUserID } = req;
     try {
-      const data = await customerLib.getAllCustomerData({});
+      const data = await subscriptionLib.getAllSubscriptionData({});
       if (!data) res.locals.message = Messages.NO_DATA;
 
       res.locals.data = data;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "getAllCustomerData",
+        pagename: "SubscriptionController",
+        function_name: "getAllSubscriptionData",
         error_message: e,
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
@@ -154,4 +153,4 @@ class CustomerController {
   };
 }
 
-export default CustomerController;
+export default SubscriptionController;

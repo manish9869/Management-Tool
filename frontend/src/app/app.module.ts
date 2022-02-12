@@ -2,10 +2,12 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { LocationStrategy, HashLocationStrategy } from "@angular/common";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-
+import { FormsModule } from "@angular/forms";
 import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 import { PERFECT_SCROLLBAR_CONFIG } from "ngx-perfect-scrollbar";
 import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
+
+import { ToastrModule } from "ngx-toastr";
 
 import {
   IconModule,
@@ -41,10 +43,12 @@ import { AppRoutingModule } from "./app.routing";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { ChartsModule } from "ng2-charts";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { AuthInterceptor } from "./views/auth/auth-interceptor";
 
 @NgModule({
   imports: [
+    FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -60,6 +64,7 @@ import { HttpClientModule } from "@angular/common/http";
     ChartsModule,
     IconModule,
     IconSetModule.forRoot(),
+    ToastrModule.forRoot(),
   ],
   declarations: [AppComponent, ...APP_CONTAINERS, P404Component, P500Component],
   providers: [
@@ -67,6 +72,8 @@ import { HttpClientModule } from "@angular/common/http";
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
+
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     IconSetService,
   ],
   bootstrap: [AppComponent],

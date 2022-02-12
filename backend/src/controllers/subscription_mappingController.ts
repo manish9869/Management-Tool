@@ -1,30 +1,31 @@
 import { Request, Response } from "express";
 import * as ResponseHandler from "../helpers/response.handler";
 import Messages from "../common/constants";
-import * as customerLib from "../modules/customer/customer.lib";
+import * as subscription_mappingLib from "../modules/subscription_mapping/subscription_mapping.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
-class CustomerController {
-  static addCustomerData = async (req: Request, res: Response) => {
+class Subscription_mappingController {
+  static addSubscription_mappingData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {
       const input = req.body;
 
       const obj = {
-        fullname: input.fullname,
-        email: input.email,
-        address: input.address,
-        DOB: input.DOB,
+        customer_id: input.customer_id,
+        subscription_id: input.subscription_id,
+        amount_paid: input.amount_paid,
+        total_amount: input.total_amount,
+        pending_amount: input.pending_amount,
         created_user_id: loggedInUser,
       };
-      const data = await customerLib.addCustomer(obj);
+      const data = await subscription_mappingLib.addSubscription_mapping(obj);
       res.locals.data = data;
       res.locals.message = Messages.SAVED;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "addCustomerData",
+        pagename: "Subscription_mappingController",
+        function_name: "addSubscription_mappingData",
         error_message: e,
         req_body: req.body,
         createddate: moment(new Date()).format(),
@@ -36,23 +37,24 @@ class CustomerController {
     }
   };
 
-  static updateCustomerData = async (req: Request, res: Response) => {
+  static updateSubscription_mappingData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {
       const input = req.body;
-      const customer_id = req.params.id;
+      const Subscription_mapping_id = req.params.id;
 
       const obj = {
-        fullname: input.fullname,
-        email: input.email,
-        address: input.address,
-        DOB: input.DOB,
+        customer_id: input.customer_id,
+        subscription_id: input.subscription_id,
+        amount_paid: input.amount_paid,
+        total_amount: input.total_amount,
+        pending_amount: input.pending_amount,
         updated_user_id: loggedInUser,
       };
-      await customerLib.updateCustomerData({ customer_id: customer_id }, obj);
+      await subscription_mappingLib.updateSubscription_mappingData({ subscription_mapping_id: Subscription_mapping_id }, obj);
 
-      const data = await customerLib.getCustomerDataById({
-        customer_id: customer_id,
+      const data = await subscription_mappingLib.getSubscription_mappingDataById({
+        subscription_mapping_id: Subscription_mapping_id,
       });
 
       res.locals.data = data;
@@ -60,8 +62,8 @@ class CustomerController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "updateCustomerData",
+        pagename: "Subscription_mappingController",
+        function_name: "updateSubscription_mappingData",
         error_message: e,
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
@@ -73,21 +75,21 @@ class CustomerController {
     }
   };
 
-  static deleteCustomerData = async (req: Request, res: Response) => {
+  static deleteSubscription_mappingData = async (req: Request, res: Response) => {
     const { loggedInUser, masterUserID } = req;
     try {
-      const customer_id = req.params.id;
+      const Subscription_mapping_id = req.params.id;
 
-      const result = await customerLib.deleteCustomerData({
-        customer_id: customer_id,
+      const result = await subscription_mappingLib.deleteSubscription_mappingData({
+        subscription_mapping_id: Subscription_mapping_id,
       });
       if (!result) throw new Error(Messages.SOMETHING_WENT_WRONG);
       res.locals.message = Messages.DELETED;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "deleteCustomerData",
+        pagename: "Subscription_mappingController",
+        function_name: "deleteSubscription_mappingData",
         error_message: e,
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
@@ -100,13 +102,13 @@ class CustomerController {
     }
   };
 
-  static getCustomerDataById = async (req: Request, res: Response) => {
+  static getSubscription_mappingDataById = async (req: Request, res: Response) => {
     const { loggedInUser, masterUserID } = req;
     try {
-      const customer_id = req.params.id;
+      const Subscription_mapping_id = req.params.id;
 
-      const data = await customerLib.getCustomerDataById({
-        customer_id: customer_id,
+      const data = await subscription_mappingLib.getSubscription_mappingDataById({
+        subscription_mapping_id: Subscription_mapping_id,
       });
       if (!data) res.locals.message = Messages.NO_DATA;
 
@@ -114,8 +116,8 @@ class CustomerController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "getCustomerDataById",
+        pagename: "Subscription_mappingController",
+        function_name: "getSubscription_mappingDataById",
         error_message: e,
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
@@ -129,18 +131,18 @@ class CustomerController {
     }
   };
 
-  static getAllCustomerData = async (req: Request, res: Response) => {
+  static getAllSubscription_mappingData = async (req: Request, res: Response) => {
     const { loggedInUser, masterUserID } = req;
     try {
-      const data = await customerLib.getAllCustomerData({});
+      const data = await subscription_mappingLib.getAllSubscription_mappingData({});
       if (!data) res.locals.message = Messages.NO_DATA;
 
       res.locals.data = data;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
-        pagename: "CustomerController",
-        function_name: "getAllCustomerData",
+        pagename: "Subscription_mappingController",
+        function_name: "getAllSubscription_mappingData",
         error_message: e,
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
@@ -154,4 +156,4 @@ class CustomerController {
   };
 }
 
-export default CustomerController;
+export default Subscription_mappingController;

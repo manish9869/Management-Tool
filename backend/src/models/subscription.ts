@@ -1,27 +1,22 @@
 import * as mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const CustomerSchema = new Schema(
+const SubscriptionSchema = new Schema(
   {
-    customer_id: {
+    subscription_id: {
       type: Number,
       unique: true,
     },
-
-    fullname: {
+    subscription_plan_name: {
       type: String,
       default: null,
     },
-    email: {
-      type: String,
+    price: {
+      type: Number,
       default: null,
     },
-    address: {
-      type: String,
-      default: null,
-    },
-    DOB: {
-      type: Date,
+    validity: {
+      type: Number,
       default: null,
     },
     created_user_id: {
@@ -37,16 +32,16 @@ const CustomerSchema = new Schema(
   }
 );
 
-CustomerSchema.set("toObject", {
+SubscriptionSchema.set("toObject", {
   virtuals: true,
 });
-CustomerSchema.set("toJSON", {
+SubscriptionSchema.set("toJSON", {
   virtuals: true,
 });
 
-CustomerSchema.pre("validate", autonIncrement);
+SubscriptionSchema.pre("validate", autonIncrement);
 
-const Customer = mongoose.model("customer", CustomerSchema);
+const Subscription = mongoose.model("subscription_plans", SubscriptionSchema);
 
 /**
  * auto increment
@@ -55,12 +50,12 @@ const Customer = mongoose.model("customer", CustomerSchema);
 function autonIncrement(next) {
   const self = this;
   if (self.isNew) {
-    Customer.findOne({})
+    Subscription.findOne({})
       .sort({ _id: -1 })
       .limit(1)
       .then((newObj: any) => {
-        self.customer_id =
-          newObj && newObj.customer_id ? newObj.customer_id + 1 : 1;
+        self.subscription_id =
+          newObj && newObj.subscription_id ? newObj.subscription_id + 1 : 1;
         next();
       })
       .catch((err) => {
@@ -71,4 +66,4 @@ function autonIncrement(next) {
   }
 }
 
-export default Customer;
+export default Subscription;

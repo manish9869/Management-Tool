@@ -1,27 +1,30 @@
 import * as mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const CustomerSchema = new Schema(
+const SubscriptionMappingSchema = new Schema(
   {
-    customer_id: {
+    subscription_mapping_id: {
       type: Number,
       unique: true,
     },
-
-    fullname: {
+    customer_id: {
+      type: Number,
+      default: null,
+    },
+    subscription_id: {
       type: String,
       default: null,
     },
-    email: {
-      type: String,
+    amount_paid: {
+      type: Number,
       default: null,
     },
-    address: {
-      type: String,
+    pending_amount: {
+      type: Number,
       default: null,
     },
-    DOB: {
-      type: Date,
+    total_amount: {
+      type: Number,
       default: null,
     },
     created_user_id: {
@@ -37,16 +40,16 @@ const CustomerSchema = new Schema(
   }
 );
 
-CustomerSchema.set("toObject", {
+SubscriptionMappingSchema.set("toObject", {
   virtuals: true,
 });
-CustomerSchema.set("toJSON", {
+SubscriptionMappingSchema.set("toJSON", {
   virtuals: true,
 });
 
-CustomerSchema.pre("validate", autonIncrement);
+SubscriptionMappingSchema.pre("validate", autonIncrement);
 
-const Customer = mongoose.model("customer", CustomerSchema);
+const SubscriptionMapping = mongoose.model("subscription_mapping", SubscriptionMappingSchema);
 
 /**
  * auto increment
@@ -55,12 +58,12 @@ const Customer = mongoose.model("customer", CustomerSchema);
 function autonIncrement(next) {
   const self = this;
   if (self.isNew) {
-    Customer.findOne({})
+    SubscriptionMapping.findOne({})
       .sort({ _id: -1 })
       .limit(1)
       .then((newObj: any) => {
-        self.customer_id =
-          newObj && newObj.customer_id ? newObj.customer_id + 1 : 1;
+        self.subscription_mapping_id =
+          newObj && newObj.subscription_mapping_id ? newObj.subscription_mapping_id + 1 : 1;
         next();
       })
       .catch((err) => {
@@ -71,4 +74,4 @@ function autonIncrement(next) {
   }
 }
 
-export default Customer;
+export default SubscriptionMapping;

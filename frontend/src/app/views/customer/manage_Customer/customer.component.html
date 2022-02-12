@@ -1,0 +1,146 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-sm-5">
+      <form
+        [formGroup]="form"
+        (submit)="onCreateCustomer()"
+        enctype="multipart/form-data"
+        class="form-horizontal"
+      >
+        <div class="card">
+          <div class="card-header"><strong>Manage Customer</strong> Form</div>
+          <div class="card-body">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input"
+                >Full Name</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="text"
+                  id="text-input"
+                  name="text-input"
+                  class="form-control"
+                  placeholder="Full Name"
+                  formControlName="fullname"
+                  [ngClass]="{ 'is-invalid': submitted && f.fullname.errors }"
+                />
+
+                <div
+                  *ngIf="submitted && f.fullname.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.fullname.errors.required">
+                    Please enter the Full Name
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="email-input"
+                >Email</label
+              >
+              <div class="col-md-9">
+                <input
+                  type="email"
+                  id="email-input"
+                  name="email-input"
+                  class="form-control"
+                  placeholder="Enter Email"
+                  autocomplete="email"
+                  formControlName="email"
+                  [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                />
+
+                <div
+                  *ngIf="submitted && f.email.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.email.errors.required">
+                    Please enter the Email Address
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="date-input"
+                >DOB</label
+              >
+              <div class="col-md-9">
+                <input
+                  class="form-control"
+                  id="date-input"
+                  type="date"
+                  name="date-input"
+                  placeholder="date"
+                  formControlName="DOB"
+                  [ngClass]="{ 'is-invalid': submitted && f.DOB.errors }"
+                />
+
+                <div *ngIf="submitted && f.DOB.errors" class="invalid-feedback">
+                  <div *ngIf="f.DOB.errors.required">Please enter the DOB</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="textarea-input"
+                >Address</label
+              >
+              <div class="col-md-9">
+                <textarea
+                  id="textarea-input"
+                  name="textarea-input"
+                  rows="9"
+                  class="form-control"
+                  placeholder="Please enter Address"
+                  formControlName="address"
+                  [ngClass]="{ 'is-invalid': submitted && f.address.errors }"
+                ></textarea>
+
+                <div
+                  *ngIf="submitted && f.address.errors"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="f.address.errors.required">
+                    Please enter the Address
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-sm btn-primary">
+              <i class="fa fa-dot-circle-o"></i> Submit
+            </button>
+            <button type="reset" class="btn btn-sm btn-danger">
+              <i class="fa fa-ban"></i> Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-7">
+      <div class="card" style="width: 100%; height: 100%">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Customer Table
+        </div>
+        <div class="card-body">
+          <ag-grid-angular
+            style="width: 100%; height: 100%"
+            class="ag-theme-alpine"
+            [modules]="modules"
+            [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef"
+            [tooltipShowDelay]="tooltipShowDelay"
+            [frameworkComponents]="frameworkComponents"
+            [rowData]="customerList"
+            [pagination]="true"
+            [paginationPageSize]="paginationPageSize"
+          >
+          </ag-grid-angular>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

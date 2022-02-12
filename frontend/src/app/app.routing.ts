@@ -54,8 +54,15 @@ export const routes: Routes = [
             (m) => m.CustomerModule
           ),
       },
+      {
+        path: "product",
+        loadChildren: () =>
+          import("./views/product Master/product.module").then(
+            (m) => m.ProductModule
+          ),
+      },
     ],
-    canActivate: [AuthGuard],
+    canActivate: [],
   },
   { path: "**", component: P404Component },
 ];
