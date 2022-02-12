@@ -11,11 +11,11 @@ class SubscriptionController {
       const input = req.body;
 
       const obj = {
-        fullname: input.fullname,
-        email: input.email,
-        address: input.address,
-        DOB: input.DOB,
+        subscription_plan_name: input.subscription_plan_name,
+        price: input.price,
+        validity: input.validity,
         created_user_id: loggedInUser,
+        createddate: moment(new Date()).format(),
       };
       const data = await subscriptionLib.addSubscription(obj);
       res.locals.data = data;
@@ -43,16 +43,15 @@ class SubscriptionController {
       const Subscription_id = req.params.id;
 
       const obj = {
-        fullname: input.fullname,
-        email: input.email,
-        address: input.address,
-        DOB: input.DOB,
+        subscription_plan_name: input.subscription_plan_name,
+        price: input.price,
+        validity: input.validity,
         updated_user_id: loggedInUser,
       };
-      await subscriptionLib.updateSubscriptionData({ Subscription_id: Subscription_id }, obj);
+      await subscriptionLib.updateSubscriptionData({ subscription_id: Subscription_id }, obj);
 
       const data = await subscriptionLib.getSubscriptionDataById({
-        Subscription_id: Subscription_id,
+        subscription_id: Subscription_id,
       });
 
       res.locals.data = data;
@@ -79,7 +78,7 @@ class SubscriptionController {
       const Subscription_id = req.params.id;
 
       const result = await subscriptionLib.deleteSubscriptionData({
-        Subscription_id: Subscription_id,
+        subscription_id: Subscription_id,
       });
       if (!result) throw new Error(Messages.SOMETHING_WENT_WRONG);
       res.locals.message = Messages.DELETED;
@@ -106,7 +105,7 @@ class SubscriptionController {
       const Subscription_id = req.params.id;
 
       const data = await subscriptionLib.getSubscriptionDataById({
-        Subscription_id: Subscription_id,
+        subscription_id: Subscription_id,
       });
       if (!data) res.locals.message = Messages.NO_DATA;
 

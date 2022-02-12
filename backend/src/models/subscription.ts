@@ -11,11 +11,11 @@ const SubscriptionSchema = new Schema(
       type: String,
       default: null,
     },
-    Price: {
+    price: {
       type: Number,
       default: null,
     },
-    Validity: {
+    validity: {
       type: Number,
       default: null,
     },

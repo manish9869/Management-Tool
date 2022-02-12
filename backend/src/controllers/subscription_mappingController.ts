@@ -11,10 +11,11 @@ class Subscription_mappingController {
       const input = req.body;
 
       const obj = {
-        fullname: input.fullname,
-        email: input.email,
-        address: input.address,
-        DOB: input.DOB,
+        customer_id: input.customer_id,
+        subscription_id: input.subscription_id,
+        amount_paid: input.amount_paid,
+        total_amount: input.total_amount,
+        pending_amount: input.pending_amount,
         created_user_id: loggedInUser,
       };
       const data = await subscription_mappingLib.addSubscription_mapping(obj);
@@ -43,16 +44,17 @@ class Subscription_mappingController {
       const Subscription_mapping_id = req.params.id;
 
       const obj = {
-        fullname: input.fullname,
-        email: input.email,
-        address: input.address,
-        DOB: input.DOB,
+        customer_id: input.customer_id,
+        subscription_id: input.subscription_id,
+        amount_paid: input.amount_paid,
+        total_amount: input.total_amount,
+        pending_amount: input.pending_amount,
         updated_user_id: loggedInUser,
       };
-      await subscription_mappingLib.updateSubscription_mappingData({ Subscription_mapping_id: Subscription_mapping_id }, obj);
+      await subscription_mappingLib.updateSubscription_mappingData({ subscription_mapping_id: Subscription_mapping_id }, obj);
 
       const data = await subscription_mappingLib.getSubscription_mappingDataById({
-        Subscription_mapping_id: Subscription_mapping_id,
+        subscription_mapping_id: Subscription_mapping_id,
       });
 
       res.locals.data = data;
@@ -79,7 +81,7 @@ class Subscription_mappingController {
       const Subscription_mapping_id = req.params.id;
 
       const result = await subscription_mappingLib.deleteSubscription_mappingData({
-        Subscription_mapping_id: Subscription_mapping_id,
+        subscription_mapping_id: Subscription_mapping_id,
       });
       if (!result) throw new Error(Messages.SOMETHING_WENT_WRONG);
       res.locals.message = Messages.DELETED;
@@ -106,7 +108,7 @@ class Subscription_mappingController {
       const Subscription_mapping_id = req.params.id;
 
       const data = await subscription_mappingLib.getSubscription_mappingDataById({
-        Subscription_mapping_id: Subscription_mapping_id,
+        subscription_mapping_id: Subscription_mapping_id,
       });
       if (!data) res.locals.message = Messages.NO_DATA;
 
