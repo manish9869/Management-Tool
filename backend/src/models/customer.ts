@@ -16,6 +16,14 @@ const CustomerSchema = new Schema(
       type: String,
       default: null,
     },
+    mobile: {
+      type: String,
+      default: null,
+    },
+    alt_mobile: {
+      type: String,
+      default: null
+    },
     address: {
       type: String,
       default: null,

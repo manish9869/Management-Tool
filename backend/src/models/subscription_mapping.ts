@@ -15,6 +15,18 @@ const SubscriptionMappingSchema = new Schema(
       type: String,
       default: null,
     },
+    payment_mode:{
+      type: String,
+      default: null,
+    },
+    payment_detail:{
+      type: String,
+      default: null,
+    },
+    remark:{
+      type: String,
+      default: null,
+    },
     amount_paid: {
       type: Number,
       default: null,

@@ -18,6 +18,9 @@ class Subscription_mappingController {
         amount_paid: input.amount_paid,
         total_amount: input.total_amount,
         pending_amount: input.pending_amount,
+        payment_mode: input.payment_mode,
+        payment_detail: input.payment_detail,
+        remark: input.remark,
         created_user_id: loggedInUser,
       };
       const data = await subscription_mappingLib.addSubscription_mapping(obj);
@@ -54,6 +57,9 @@ class Subscription_mappingController {
         amount_paid: input.amount_paid,
         total_amount: input.total_amount,
         pending_amount: input.pending_amount,
+        payment_mode: input.payment_mode,
+        payment_detail: input.payment_detail,
+        remark: input.remark,
         updated_user_id: loggedInUser,
       };
       await subscription_mappingLib.updateSubscription_mappingData(

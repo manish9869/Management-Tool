@@ -15,6 +15,8 @@ class CustomerController {
         email: input.email,
         address: input.address,
         DOB: input.DOB,
+        mobile:input.mobile,
+        alt_mobile:input.alt_mobile,
         created_user_id: loggedInUser,
       };
       const data = await customerLib.addCustomer(obj);
@@ -47,6 +49,8 @@ class CustomerController {
         email: input.email,
         address: input.address,
         DOB: input.DOB,
+        mobile:input.mobile,
+        alt_mobile:input.alt_mobile,
         updated_user_id: loggedInUser,
       };
       await customerLib.updateCustomerData({ customer_id: customer_id }, obj);
