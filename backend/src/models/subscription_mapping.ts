@@ -9,7 +9,7 @@ const SubscriptionMappingSchema = new Schema(
     },
     customer_id: {
       type: Number,
-      default: null,
+      default: null
     },
     subscription_id: {
       type: String,

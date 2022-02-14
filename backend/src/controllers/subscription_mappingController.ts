@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import * as ResponseHandler from "../helpers/response.handler";
 import Messages from "../common/constants";
 import * as subscription_mappingLib from "../modules/subscription_mapping/subscription_mapping.lib";
+import * as customerLib from "../modules/customer/customer.lib";
+import * as subscriptionLib from "../modules/subscription/subscription.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
 class Subscription_mappingController {
@@ -37,7 +39,10 @@ class Subscription_mappingController {
     }
   };
 
-  static updateSubscription_mappingData = async (req: Request, res: Response) => {
+  static updateSubscription_mappingData = async (
+    req: Request,
+    res: Response
+  ) => {
     const { loggedInUser } = req;
     try {
       const input = req.body;
@@ -51,11 +56,15 @@ class Subscription_mappingController {
         pending_amount: input.pending_amount,
         updated_user_id: loggedInUser,
       };
-      await subscription_mappingLib.updateSubscription_mappingData({ subscription_mapping_id: Subscription_mapping_id }, obj);
+      await subscription_mappingLib.updateSubscription_mappingData(
+        { subscription_mapping_id: Subscription_mapping_id },
+        obj
+      );
 
-      const data = await subscription_mappingLib.getSubscription_mappingDataById({
-        subscription_mapping_id: Subscription_mapping_id,
-      });
+      const data =
+        await subscription_mappingLib.getSubscription_mappingDataById({
+          subscription_mapping_id: Subscription_mapping_id,
+        });
 
       res.locals.data = data;
       res.locals.message = Messages.UPDATED;
@@ -75,14 +84,18 @@ class Subscription_mappingController {
     }
   };
 
-  static deleteSubscription_mappingData = async (req: Request, res: Response) => {
+  static deleteSubscription_mappingData = async (
+    req: Request,
+    res: Response
+  ) => {
     const { loggedInUser, masterUserID } = req;
     try {
       const Subscription_mapping_id = req.params.id;
 
-      const result = await subscription_mappingLib.deleteSubscription_mappingData({
-        subscription_mapping_id: Subscription_mapping_id,
-      });
+      const result =
+        await subscription_mappingLib.deleteSubscription_mappingData({
+          subscription_mapping_id: Subscription_mapping_id,
+        });
       if (!result) throw new Error(Messages.SOMETHING_WENT_WRONG);
       res.locals.message = Messages.DELETED;
       ResponseHandler.JSONSUCCESS(req, res);
@@ -102,14 +115,31 @@ class Subscription_mappingController {
     }
   };
 
-  static getSubscription_mappingDataById = async (req: Request, res: Response) => {
+  static getSubscription_mappingDataById = async (
+    req: Request,
+    res: Response
+  ) => {
     const { loggedInUser, masterUserID } = req;
     try {
       const Subscription_mapping_id = req.params.id;
 
-      const data = await subscription_mappingLib.getSubscription_mappingDataById({
-        subscription_mapping_id: Subscription_mapping_id,
-      });
+      let data: any =
+        await subscription_mappingLib.getSubscription_mappingDataById({
+          subscription_mapping_id: Subscription_mapping_id,
+        });
+
+        data = JSON.parse(JSON.stringify(data));
+        const customerdata = await customerLib.getCustomerDataById({
+          customer_id: data.customer_id,
+        });
+        data.customer_data = customerdata;
+
+        const subscriptiondata = await subscriptionLib.getSubscriptionDataById({
+          subscription_id: data.subscription_id,
+        });
+        data.subscription_data = subscriptiondata;
+ 
+
       if (!data) res.locals.message = Messages.NO_DATA;
 
       res.locals.data = data;
@@ -131,13 +161,39 @@ class Subscription_mappingController {
     }
   };
 
-  static getAllSubscription_mappingData = async (req: Request, res: Response) => {
+  static getAllSubscription_mappingData = async (
+    req: Request,
+    res: Response
+  ) => {
     const { loggedInUser, masterUserID } = req;
     try {
-      const data = await subscription_mappingLib.getAllSubscription_mappingData({});
-      if (!data) res.locals.message = Messages.NO_DATA;
+      const data = await subscription_mappingLib.getAllSubscription_mappingData(
+        {}
+      );
+      
+      const all_data = await Promise.all(
+        data.map(async (item: any) => {
 
-      res.locals.data = data;
+          item = JSON.parse(JSON.stringify(item));
+
+          const customerdata = await customerLib.getCustomerDataById({
+            customer_id: item.customer_id,
+          });
+          item.customer_data = customerdata;
+
+          const subscriptiondata = await subscriptionLib.getSubscriptionDataById({
+            subscription_id: item.subscription_id,
+          });
+          item.subscription_data = subscriptiondata;
+          
+         
+          return item;
+        })
+      );
+
+      if (!all_data) res.locals.message = Messages.NO_DATA;
+
+      res.locals.data = all_data;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (e) {
       let datalog = {
