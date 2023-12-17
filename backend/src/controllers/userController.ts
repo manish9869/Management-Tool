@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as ResponseHandler from "../helpers/response.handler";
 import Messages from "../common/constants";
-import * as userLib from "../modules/User/User.lib";
+import * as userLib from "../modules/user/user.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
 import { generatePassword } from "../helpers/auth.helpers";

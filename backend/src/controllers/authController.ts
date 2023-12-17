@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as ResponseHandler from "../helpers/response.handler";
 import Messages from "../common/constants";
-import * as userLib from "../modules/User/User.lib";
+import * as userLib from "../modules/User/user.lib";
 import { generate2faAuthCode, verify2faAuthCode } from "../utility/2fa";
 import { CheckPassword, generateJWT } from "../helpers/auth.helpers";
 import * as HttpStatus from "http-status-codes";

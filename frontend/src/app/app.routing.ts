@@ -1,19 +1,33 @@
 import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { Routes, RouterModule } from "@angular/router";
+import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.component";
+import { BrowserModule } from "@angular/platform-browser";
+import { P404Component } from "./pages/error/404.component";
+import { P500Component } from "./pages/error/500.component";
+import { AuthGuard } from "./pages/auth/auth.guard";
 
-// Import Containers
-import { DefaultLayoutComponent } from "./containers";
-import { AuthGuard } from "./views/auth/auth.guard";
-
-import { P404Component } from "./views/error/404.component";
-import { P500Component } from "./views/error/500.component";
-
-export const routes: Routes = [
+const routes: Routes = [
   {
     path: "",
     redirectTo: "dashboard",
     pathMatch: "full",
   },
+  {
+    path: "",
+    component: AdminLayoutComponent,
+    children: [
+      {
+        path: "",
+        loadChildren: () =>
+          import("src/app/layouts/admin-layout/admin-layout.module").then(
+            (m) => m.AdminLayoutModule
+          ),
+      },
+    ],
+    //canActivate: [AuthGuard],
+  },
+
   {
     path: "404",
     component: P404Component,
@@ -31,44 +45,44 @@ export const routes: Routes = [
   {
     path: "auth",
     loadChildren: () =>
-      import("./views/auth/auth.module").then((m) => m.AuthModule),
+      import("./pages/auth/auth.module").then((m) => m.AuthModule),
   },
+
   {
     path: "",
-    component: DefaultLayoutComponent,
+    component: AdminLayoutComponent,
     data: {
       title: "Home",
     },
     children: [
-      {
-        path: "dashboard",
-        loadChildren: () =>
-          import("./views/dashboard/dashboard.module").then(
-            (m) => m.DashboardModule
-          ),
-      },
-      {
-        path: "customer",
-        loadChildren: () =>
-          import("./views/customer/customer.module").then(
-            (m) => m.CustomerModule
-          ),
-      },
-      {
-        path: "product",
-        loadChildren: () =>
-          import("./views/product Master/product.module").then(
-            (m) => m.ProductModule
-          ),
-      },
+      // {
+      //   path: "dashboard",
+      //   loadChildren: () =>
+      //     import("./views/dashboard/dashboard.module").then(
+      //       (m) => m.DashboardModule
+      //     ),
+      // },
+      // {
+      //   path: "customer",
+      //   loadChildren: () =>
+      //     import("./views/customer/customer.module").then(
+      //       (m) => m.CustomerModule
+      //     ),
+      // }
     ],
-    canActivate: [],
+    canActivate: [AuthGuard],
   },
   { path: "**", component: P404Component },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: "legacy" })],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    RouterModule.forRoot(routes, {
+      useHash: true,
+    }),
+  ],
   exports: [RouterModule],
   providers: [AuthGuard],
 })

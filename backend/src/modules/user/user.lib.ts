@@ -1,4 +1,4 @@
-import User from "../../models/User";
+import User from "../../models/user";
 
 export const addUser = async (obj) => {
   const UserObj = new User(obj);

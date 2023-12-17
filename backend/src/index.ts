@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connection from "./config/connection";
 import * as EnvHandler from "./helpers/environment.handler";
-
 import auth from "./routes/auth";
 import customer from "./routes/customer";
 import user from "./routes/user";
