@@ -40,33 +40,18 @@ export const updateAppointment = async (condition, updatedData) => {
   return updatedAppointment;
 };
 export const getAppointmentById = async (condition = {}) => {
-  try {
-    const appointment = await CustomerAppointment.findOne(condition);
-    return appointment;
-  } catch (error) {
-    console.error("Error fetching appointment:", error);
-    throw new Error("Failed to fetch appointment");
-  }
+  const appointment = await CustomerAppointment.findOne(condition);
+  return appointment;
 };
 
 export const getAllAppointments = async (condition = {}) => {
-  try {
-    const appointments = await CustomerAppointment.find(condition).sort({
-      id: -1,
-    });
-    return appointments;
-  } catch (error) {
-    console.error("Error fetching appointments:", error);
-    throw new Error("Failed to fetch appointments");
-  }
+  const appointments = await CustomerAppointment.find(condition).sort({
+    id: -1,
+  });
+  return appointments;
 };
 
 export const deleteAppointment = async (condition = {}) => {
-  try {
-    const deletionResult = await CustomerAppointment.deleteOne(condition);
-    return deletionResult;
-  } catch (error) {
-    console.error("Error deleting appointment:", error);
-    throw new Error("Failed to delete appointment");
-  }
+  const deletionResult = await CustomerAppointment.deleteOne(condition);
+  return deletionResult;
 };
