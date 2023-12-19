@@ -1,13 +1,17 @@
 import * as mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const CustomerSchema = new Schema(
+const Staff_membersSchema = new Schema(
   {
-    customer_id: {
+    staff_member_id: {
       type: Number,
       unique: true,
     },
     fullname: {
+      type: String,
+      default: null,
+    },
+    position: {
       type: String,
       default: null,
     },
@@ -44,16 +48,16 @@ const CustomerSchema = new Schema(
   }
 );
 
-CustomerSchema.set("toObject", {
+Staff_membersSchema.set("toObject", {
   virtuals: true,
 });
-CustomerSchema.set("toJSON", {
+Staff_membersSchema.set("toJSON", {
   virtuals: true,
 });
 
-CustomerSchema.pre("validate", autonIncrement);
+Staff_membersSchema.pre("validate", autonIncrement);
 
-const Customer = mongoose.model("customer", CustomerSchema);
+const Staff_members = mongoose.model("staff_member", Staff_membersSchema);
 
 /**
  * auto increment
@@ -62,12 +66,12 @@ const Customer = mongoose.model("customer", CustomerSchema);
 function autonIncrement(next) {
   const self = this;
   if (self.isNew) {
-    Customer.findOne({})
+    Staff_members.findOne({})
       .sort({ _id: -1 })
       .limit(1)
       .then((newObj: any) => {
-        self.customer_id =
-          newObj && newObj.customer_id ? newObj.customer_id + 1 : 1;
+        self.staff_member_id =
+          newObj && newObj.staff_member_id ? newObj.staff_member_id + 1 : 1;
         next();
       })
       .catch((err) => {
@@ -78,4 +82,4 @@ function autonIncrement(next) {
   }
 }
 
-export default Customer;
+export default Staff_members;

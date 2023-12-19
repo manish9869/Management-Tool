@@ -29,6 +29,8 @@ export class CustomerService {
                 fullname: data.fullname,
                 email: data.email,
                 address: data.address,
+                mobile: data.mobile,
+                alt_mobile: data.alt_mobile,
                 DOB: data.DOB ? moment(data.DOB).format("DD-MMM-YYYY") : "NA",
               };
             }),

@@ -13,6 +13,7 @@ import { ToastrService } from "ngx-toastr";
 import Messages from "src/app/comman/constants";
 import { CustomTooltip } from "../../helpers/custom-tooltip.component";
 import { ButtonRendererComponent } from "../../helpers/button.renderer.component";
+import { mobileNumberValidator } from "src/app/comman/validator";
 
 // Row Data Interface
 interface IRow {
@@ -51,8 +52,8 @@ export class CustomerComponent implements OnInit {
       tooltipComponent: CustomTooltip,
       tooltipComponentParams: { color: "#ececec" },
     },
+    { headerName: "Mobile", field: "mobile" },
     { headerName: "Email", field: "email" },
-    { field: "DOB" },
     {
       field: "Actions",
       cellRenderer: ButtonRendererComponent,
@@ -86,7 +87,17 @@ export class CustomerComponent implements OnInit {
       }),
 
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.minLength(3)],
+        validators: [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.email,
+        ],
+      }),
+      mobile: new FormControl(null, {
+        validators: [Validators.required, mobileNumberValidator()],
+      }),
+      altMobile: new FormControl(null, {
+        validators: [Validators.required, mobileNumberValidator()],
       }),
       DOB: new FormControl(null, {
         validators: [Validators.required],
@@ -124,8 +135,10 @@ export class CustomerComponent implements OnInit {
       const customer_data = {
         fullname: this.form.value.fullname.trim(),
         email: this.form.value.email.trim(),
+        mobile: this.form.value.mobile.trim(),
+        alt_mobile: this.form.value.altMobile.trim(),
         address: this.form.value.address.trim(),
-        DOB: this.form.value.DOB,
+        DOB: this.form.value.DOB.trim(),
       };
 
       this.customerService
@@ -138,8 +151,10 @@ export class CustomerComponent implements OnInit {
       const customer_data = {
         fullname: this.form.value.fullname.trim(),
         email: this.form.value.email.trim(),
+        mobile: this.form.value.mobile.trim(),
+        alt_mobile: this.form.value.altMobile.trim(),
         address: this.form.value.address.trim(),
-        DOB: this.form.value.DOB,
+        DOB: this.form.value.DOB.trim(),
       };
 
       this.customerService
@@ -192,14 +207,23 @@ export class CustomerComponent implements OnInit {
     this.mode = "edit";
     this.isLoading = true;
     this.customer_id = customer_id;
+
     this.customerService.getCustomer(customer_id).subscribe((data: any) => {
       this.isLoading = false;
-
+      console.log("data", data.data);
       this.form.setValue({
-        fullname: data.data.fullname,
-        email: data.data.email,
-        address: data.data.address,
-        DOB: formatDate(data.data.DOB, "yyyy-MM-dd", "en"),
+        fullname: data.data.fullname
+          ? data.data.fullname.trim()
+          : data.data.fullname,
+        email: data.data.email ? data.data.email.trim() : data.data.email,
+        mobile: data.data.mobile ? data.data.mobile.trim() : data.data.mobile,
+        altMobile: data.data.alt_mobile
+          ? data.data.alt_mobile.trim()
+          : data.data.alt_mobile,
+        address: data.data.address
+          ? data.data.address.trim()
+          : data.data.address,
+        DOB: formatDate(data.data.DOB.trim(), "yyyy-MM-dd", "en"),
       });
     });
   }

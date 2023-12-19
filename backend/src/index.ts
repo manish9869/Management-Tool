@@ -7,8 +7,8 @@ import * as EnvHandler from "./helpers/environment.handler";
 import auth from "./routes/auth";
 import customer from "./routes/customer";
 import user from "./routes/user";
-import subscription from "./routes/subscription";
-import subscription_mapping from "./routes/subscription_mapping";
+import staff from "./routes/staff-members";
+import appointment from "./routes/appointment";
 
 const app = express();
 dotenv.config();
@@ -26,26 +26,25 @@ connection;
 // allow cross origin
 app.use(cors());
 
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Headers', '*');
-//   res.header(
-//     'Access-Control-Allow-Methods',
-//     'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-//   );
-//   // res.header(
-//   //   'Access-Control-Allow-Headers',
-//   //   'Origin, X-Requested-With, Content-Type, Accept, x-access-token',
-//   // );
-//   next();
-// });
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, x-access-token"
+  );
+  next();
+});
 
 app.use("/auth", auth);
 app.use("/user", user);
 app.use("/customer", customer);
-app.use("/subscription", subscription);
-app.use("/subscription-mapping", subscription_mapping);
-app.use("/customer", customer);
+app.use("/staff-members", staff);
+app.use("/appointment", appointment);
 
 app.get("/", (req, res) => {
   res.send("Hey there!!!");

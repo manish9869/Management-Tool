@@ -29,6 +29,12 @@ export const ROUTES: RouteInfo[] = [
     sub_menu: [],
   },
   {
+    link_name: "Customer Appointment",
+    link: "/customer/customer-appointment",
+    icon: "ni ni-chart-pie-35 text-orange",
+    sub_menu: [],
+  },
+  {
     link_name: "Manage Customer",
     link: null,
     icon: "ni-single-02 text-yellow",
@@ -36,6 +42,29 @@ export const ROUTES: RouteInfo[] = [
       {
         link_name: "Add Customer",
         link: "/customer/manage-customer",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+      {
+        link_name: "View Customer",
+        link: "/customer/view-customer",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+    ],
+    isOpen: false,
+  },
+  {
+    link_name: "Manage Staff",
+    link: null,
+    icon: "ni-single-02 text-yellow",
+    sub_menu: [
+      {
+        link_name: "Add Staff Members",
+        link: "/staff/manage-staff-members",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+      {
+        link_name: "View Staff Members",
+        link: "/staff/view-staff-members",
         icon: "fa-solid fa-user-plus text-primary",
       },
     ],
@@ -53,7 +82,7 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         link_name: "Register",
-        link: "/auth/regiter",
+        link: "/auth/register",
         icon: "ni-bullet-list-67 text-red",
       },
     ],

@@ -10,7 +10,6 @@ import { RouterModule } from "@angular/router";
 
 import { AppComponent } from "./app.component";
 import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.component";
-import { AuthLayoutComponent } from "./layouts/auth-layout/auth-layout.component";
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
@@ -18,7 +17,7 @@ import { AppRoutingModule } from "./app.routing";
 import { ComponentsModule } from "./components/components.module";
 import { AuthInterceptor } from "./pages/auth/auth-interceptor";
 import { ToastrModule } from "ngx-toastr";
-
+import { AuthModule } from "./pages/auth/auth.module";
 @NgModule({
   imports: [
     BrowserAnimationsModule,
@@ -28,9 +27,10 @@ import { ToastrModule } from "ngx-toastr";
     NgbModule,
     RouterModule,
     AppRoutingModule,
+    AuthModule,
     ToastrModule.forRoot(),
   ],
-  declarations: [AppComponent, AdminLayoutComponent, AuthLayoutComponent],
+  declarations: [AppComponent, AdminLayoutComponent],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
