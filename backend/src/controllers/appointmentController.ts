@@ -15,6 +15,8 @@ class AppointmentController {
         customer_id: input.customer_id,
         staff_member_id: input.staff_member_id,
         appointment_date: input.appointment_date,
+        reason: input.reason,
+        status: "scheduled",
         created_user_id: loggedInUser,
       };
       const data = await appointmentLib.addAppointment(obj);
@@ -42,6 +44,8 @@ class AppointmentController {
         customer_id: input.customer_id,
         staff_member_id: input.staff_member_id,
         appointment_date: input.appointment_date,
+        reason: input.reason,
+        status: input.status,
         updated_user_id: loggedInUser,
       };
 

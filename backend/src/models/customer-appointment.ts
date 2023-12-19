@@ -43,7 +43,14 @@ const CustomerAppointmentSchema = new Schema(
           `Appointment conflict or within next 30 minutes for ${props.value}.`,
       },
     },
-
+    reason: {
+      type: String,
+      default: null,
+    },
+    status: {
+      type: String,
+      default: null,
+    },
     created_user_id: {
       type: Number,
     },

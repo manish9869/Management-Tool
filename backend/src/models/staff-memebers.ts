@@ -15,6 +15,18 @@ const Staff_membersSchema = new Schema(
       type: String,
       default: null,
     },
+    qualification: {
+      type: String,
+      default: null,
+    },
+    specialization: {
+      type: String,
+      default: null,
+    },
+    consultation_fee: {
+      type: Number,
+      unique: true,
+    },
     email: {
       type: String,
       default: null,
