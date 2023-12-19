@@ -16,7 +16,6 @@ class MedicalConditionController {
         description: input.description,
         symptoms: input.symptoms,
         type: input.type,
-        // Add other fields based on your schema
       };
 
       const data = await medicalConditionLib.addMedicalCondition(obj);
@@ -49,7 +48,6 @@ class MedicalConditionController {
         description: input.description,
         symptoms: input.symptoms,
         type: input.type,
-        // Add other fields based on your schema
       };
 
       await medicalConditionLib.updateMedicalCondition(conditionId, obj);
