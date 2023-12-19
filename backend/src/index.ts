@@ -9,6 +9,8 @@ import customer from "./routes/customer";
 import user from "./routes/user";
 import staff from "./routes/staff-members";
 import appointment from "./routes/appointment";
+import treatment from "./routes/treatment";
+import medicalCondition from "./routes/medical-condition";
 
 const app = express();
 dotenv.config();
@@ -17,8 +19,6 @@ const port = EnvHandler.envPORT() || 3001;
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
-
-//ser
 
 //Call connection
 connection;
@@ -45,6 +45,8 @@ app.use("/user", user);
 app.use("/customer", customer);
 app.use("/staff-members", staff);
 app.use("/appointment", appointment);
+app.use("/treatment", treatment);
+app.use("/medical-condition", medicalCondition);
 
 app.get("/", (req, res) => {
   res.send("Hey there!!!");
