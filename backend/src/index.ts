@@ -11,6 +11,7 @@ import staff from "./routes/staff-members";
 import appointment from "./routes/appointment";
 import treatment from "./routes/treatment";
 import medicalCondition from "./routes/medical-condition";
+import medicine from "./routes/medicine";
 
 const app = express();
 dotenv.config();
@@ -47,6 +48,7 @@ app.use("/staff-members", staff);
 app.use("/appointment", appointment);
 app.use("/treatment", treatment);
 app.use("/medical-condition", medicalCondition);
+app.use("/medicine", medicine);
 
 app.get("/", (req, res) => {
   res.send("Hey there!!!");
