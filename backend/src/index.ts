@@ -12,6 +12,7 @@ import appointment from "./routes/appointment";
 import treatment from "./routes/treatment";
 import medicalCondition from "./routes/medical-condition";
 import medicine from "./routes/medicine";
+import caseHistory from "./routes/case-history";
 
 const app = express();
 dotenv.config();
@@ -49,6 +50,7 @@ app.use("/appointment", appointment);
 app.use("/treatment", treatment);
 app.use("/medical-condition", medicalCondition);
 app.use("/medicine", medicine);
+app.use("/case-history", caseHistory);
 
 app.get("/", (req, res) => {
   res.send("Hey there!!!");
