@@ -15,7 +15,12 @@ class CaseHistoryController {
         customer_id: input.customer_id,
         case_date: input.case_date,
         notes: input.notes,
-        // Other relevant properties related to case history
+        condition_ids: input.condition_ids,
+        treatment_ids: input.treatment_ids,
+        medicine_ids: input.medicine_ids,
+        dental_history: input.dental_history,
+        medical_history: input.medical_history,
+        case_documents: input.case_documents,
         created_user_id: loggedInUser,
       };
 
@@ -48,7 +53,12 @@ class CaseHistoryController {
         customer_id: input.customer_id,
         case_date: input.case_date,
         notes: input.notes,
-        // Other relevant properties related to case history update
+        condition_ids: input.condition_ids,
+        treatment_ids: input.treatment_ids,
+        medicine_ids: input.medicine_ids,
+        dental_history: input.dental_history,
+        medical_history: input.medical_history,
+        case_documents: input.case_documents,
         updated_user_id: loggedInUser,
       };
 
