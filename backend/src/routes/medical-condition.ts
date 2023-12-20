@@ -15,6 +15,7 @@ router.get(
   MedicalConditionController.getAllMedicalConditions
 );
 router.post("/", validateJwt, MedicalConditionController.addMedicalCondition);
+
 router.patch(
   "/:id",
   validateJwt,

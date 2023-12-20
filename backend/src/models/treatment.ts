@@ -25,6 +25,14 @@ const TreatmentSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  created_user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user", // Reference to the Customer model
+  },
+  updated_user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user", // Reference to the Customer model
+  },
 });
 
 TreatmentSchema.set("toObject", {
@@ -36,7 +44,7 @@ TreatmentSchema.set("toJSON", {
 
 TreatmentSchema.pre("validate", autonIncrement);
 
-const Treatment = mongoose.model("Treatment", TreatmentSchema);
+const Treatment = mongoose.model("treatment", TreatmentSchema);
 
 function autonIncrement(next) {
   const self = this;

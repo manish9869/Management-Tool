@@ -13,10 +13,16 @@ export const updateCustomerData = async (condition, obj) =>
   });
 
 export const getCustomerDataById = async (condition = {}) =>
-  Customer.findOne(condition);
+  Customer.findOne(condition)
+    .populate("created_user_id")
+    .populate("updated_user_id")
+    .sort({ id: -1 });
 
 export const getAllCustomerData = async (condition = {}) =>
-  Customer.find(condition).sort({ id: -1 });
+  Customer.find(condition)
+    .populate("created_user_id")
+    .populate("updated_user_id")
+    .sort({ id: -1 });
 
 export const deleteCustomerData = async (condition = {}) =>
   Customer.deleteOne(condition);

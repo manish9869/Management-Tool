@@ -4,14 +4,14 @@ import { validateJwt } from "../middlewares/validateJWT";
 
 const router = express.Router();
 
-router.get("/:id", AppointmentController.getAppointmentById);
+router.get("/:id", validateJwt, AppointmentController.getAppointmentById);
 
-router.get("/", AppointmentController.getAllAppointments);
+router.get("/", validateJwt, AppointmentController.getAllAppointments);
 
-router.post("/", AppointmentController.addAppointmentData);
+router.post("/", validateJwt, AppointmentController.addAppointmentData);
 
-router.patch("/:id", AppointmentController.updateAppointmentData);
+router.patch("/:id", validateJwt, AppointmentController.updateAppointmentData);
 
-router.delete("/:id", AppointmentController.deleteAppointmentData);
+router.delete("/:id", validateJwt, AppointmentController.deleteAppointmentData);
 
 export default router;

@@ -8,10 +8,12 @@ const CustomerAppointmentSchema = new Schema(
       unique: true,
     },
     customer_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "customer", // Reference to the Customer model
     },
     staff_member_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "staff_member", // Reference to the Customer model
     },
     appointment_date: {
       type: Date,
@@ -52,11 +54,12 @@ const CustomerAppointmentSchema = new Schema(
       default: null,
     },
     created_user_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
     },
     updated_user_id: {
-      type: Number,
-      default: null,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
     },
   },
   {

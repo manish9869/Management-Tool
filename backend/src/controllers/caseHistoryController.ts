@@ -4,20 +4,43 @@ import Messages from "../common/constants";
 import * as caseHistoryLib from "../modules/case-history/case-history.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
+import mongoose from "mongoose";
 
 class CaseHistoryController {
   static addCaseHistoryData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {
+      let medicineIds = [];
+      let treatmentIds = [];
+      let conditionIds = [];
       const input = req.body;
-
+      if (input.medicine_ids) {
+        medicineIds = input.medicine_ids.map((id) =>
+          mongoose.Types.ObjectId.createFromHexString(id)
+        );
+      }
+      if (input.treatment_ids) {
+        treatmentIds = input.treatment_ids.map((id) =>
+          mongoose.Types.ObjectId.createFromHexString(id)
+        );
+      }
+      if (input.condition_ids) {
+        conditionIds = input.condition_ids.map((id) =>
+          mongoose.Types.ObjectId.createFromHexString(id)
+        );
+      }
       const obj = {
-        customer_id: input.customer_id,
+        customer_id: mongoose.Types.ObjectId.createFromHexString(
+          input.customer_id
+        ),
+        staff_member_id: mongoose.Types.ObjectId.createFromHexString(
+          input.staff_member_id
+        ),
         case_date: input.case_date,
         notes: input.notes,
-        condition_ids: input.condition_ids,
-        treatment_ids: input.treatment_ids,
-        medicine_ids: input.medicine_ids,
+        condition_ids: conditionIds,
+        treatment_ids: treatmentIds,
+        medicine_ids: medicineIds,
         dental_history: input.dental_history,
         medical_history: input.medical_history,
         case_documents: input.case_documents,
@@ -46,16 +69,38 @@ class CaseHistoryController {
   static updateCaseHistoryData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {
-      const input = req.body;
       const case_id = req.params.id;
-
+      let medicineIds = [];
+      let treatmentIds = [];
+      let conditionIds = [];
+      const input = req.body;
+      if (input.medicine_ids) {
+        medicineIds = input.medicine_ids.map((id) =>
+          mongoose.Types.ObjectId.createFromHexString(id)
+        );
+      }
+      if (input.treatment_ids) {
+        treatmentIds = input.treatment_ids.map((id) =>
+          mongoose.Types.ObjectId.createFromHexString(id)
+        );
+      }
+      if (input.condition_ids) {
+        conditionIds = input.condition_ids.map((id) =>
+          mongoose.Types.ObjectId.createFromHexString(id)
+        );
+      }
       const obj = {
-        customer_id: input.customer_id,
+        customer_id: mongoose.Types.ObjectId.createFromHexString(
+          input.customer_id
+        ),
+        staff_member_id: mongoose.Types.ObjectId.createFromHexString(
+          input.staff_member_id
+        ),
         case_date: input.case_date,
         notes: input.notes,
-        condition_ids: input.condition_ids,
-        treatment_ids: input.treatment_ids,
-        medicine_ids: input.medicine_ids,
+        condition_ids: conditionIds,
+        treatment_ids: treatmentIds,
+        medicine_ids: medicineIds,
         dental_history: input.dental_history,
         medical_history: input.medical_history,
         case_documents: input.case_documents,
@@ -87,7 +132,7 @@ class CaseHistoryController {
   };
 
   static deleteCaseHistoryData = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const case_id = req.params.id;
 
@@ -105,7 +150,6 @@ class CaseHistoryController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
       res.locals.errors = e.message;
@@ -114,7 +158,7 @@ class CaseHistoryController {
   };
 
   static getCaseHistoryById = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const case_id = req.params.id;
 
@@ -133,7 +177,6 @@ class CaseHistoryController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
 
@@ -143,7 +186,7 @@ class CaseHistoryController {
   };
 
   static getAllCaseHistoryData = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const data = await caseHistoryLib.getAllCaseHistoryData({});
       if (!data) res.locals.message = Messages.NO_DATA;
@@ -158,7 +201,6 @@ class CaseHistoryController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
       res.locals.errors = e.message;

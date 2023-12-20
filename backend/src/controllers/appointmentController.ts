@@ -4,6 +4,7 @@ import Messages from "../common/constants";
 import * as appointmentLib from "../modules/appointments/appointment.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
+import mongoose from "mongoose";
 
 class AppointmentController {
   static addAppointmentData = async (req: Request, res: Response) => {
@@ -12,8 +13,12 @@ class AppointmentController {
       const input = req.body;
 
       const obj = {
-        customer_id: input.customer_id,
-        staff_member_id: input.staff_member_id,
+        customer_id: mongoose.Types.ObjectId.createFromHexString(
+          input.customer_id
+        ),
+        staff_member_id: mongoose.Types.ObjectId.createFromHexString(
+          input.staff_member_id
+        ),
         appointment_date: input.appointment_date,
         reason: input.reason,
         status: "scheduled",
@@ -41,8 +46,12 @@ class AppointmentController {
       const appointment_id = req.params.id;
 
       const obj = {
-        customer_id: input.customer_id,
-        staff_member_id: input.staff_member_id,
+        customer_id: mongoose.Types.ObjectId.createFromHexString(
+          input.customer_id
+        ),
+        staff_member_id: mongoose.Types.ObjectId.createFromHexString(
+          input.staff_member_id
+        ),
         appointment_date: input.appointment_date,
         reason: input.reason,
         status: input.status,

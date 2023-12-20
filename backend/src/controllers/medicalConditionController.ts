@@ -16,6 +16,7 @@ class MedicalConditionController {
         description: input.description,
         symptoms: input.symptoms,
         type: input.type,
+        created_user_id: loggedInUser,
       };
 
       const data = await medicalConditionLib.addMedicalCondition(obj);
@@ -48,6 +49,7 @@ class MedicalConditionController {
         description: input.description,
         symptoms: input.symptoms,
         type: input.type,
+        updated_user_id: loggedInUser,
       };
 
       await medicalConditionLib.updateMedicalCondition(conditionId, obj);

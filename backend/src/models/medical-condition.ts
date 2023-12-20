@@ -18,6 +18,14 @@ const MedicalConditionSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  created_user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user", // Reference to the Customer model
+  },
+  updated_user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user", // Reference to the Customer model
+  },
 });
 
 MedicalConditionSchema.set("toObject", {
@@ -30,7 +38,7 @@ MedicalConditionSchema.set("toJSON", {
 MedicalConditionSchema.pre("validate", autonIncrement);
 
 const MedicalCondition = mongoose.model(
-  "MedicalCondition",
+  "medical_condition",
   MedicalConditionSchema
 );
 

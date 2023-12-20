@@ -13,6 +13,14 @@ const MedicineSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  created_user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user", // Reference to the Customer model
+  },
+  updated_user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user", // Reference to the Customer model
+  },
 });
 
 MedicineSchema.set("toObject", {
@@ -24,7 +32,7 @@ MedicineSchema.set("toJSON", {
 
 MedicineSchema.pre("validate", autonIncrement);
 
-const Medicine = mongoose.model("Medicine", MedicineSchema);
+const Medicine = mongoose.model("medicine", MedicineSchema);
 
 function autonIncrement(next) {
   const self = this;

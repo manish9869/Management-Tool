@@ -5,6 +5,7 @@ import * as dotenv from "dotenv";
 import * as ResponseHandler from "../helpers/response.handler";
 import Messages from "../common/constants";
 import * as EnvHandler from "../helpers/environment.handler";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -28,10 +29,13 @@ export const validateJwt = async (
     // Validate the token
     payload = <any>jwt.verify(token, jwtSecret);
 
+    console.log("payload", payload);
     // get logged in user details from db
 
-    req.loggedInUser = payload.id;
-    next();
+    (req.loggedInUser = mongoose.Types.ObjectId.createFromHexString(
+      payload.id
+    )),
+      next();
   } catch (e) {
     res.locals.errorCode = HttpStatus.UNAUTHORIZED;
     res.locals.errors = e.message;

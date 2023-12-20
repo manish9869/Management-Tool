@@ -41,13 +41,15 @@ class AuthController {
 
           // Generate JWT, valid for 1 hour
           const token: string = generateJWT({
+            id: user["_id"],
             userId: user["user_id"],
-            email: input.email,
+            email: user["user_email"],
             role: user["role_id"],
           });
 
           //Send the jwt in the response
           const data: any = {
+            id: user["_id"],
             token,
             user_name: user["user_name"],
             name: user["name"],

@@ -13,10 +13,26 @@ export const updateCaseHistoryData = async (condition, obj) =>
   });
 
 export const getCaseHistoryById = async (condition = {}) =>
-  CaseHistory.findOne(condition);
+  CaseHistory.findOne(condition)
+    .populate("customer_id")
+    .populate("staff_member_id")
+    .populate("condition_ids")
+    .populate("treatment_ids")
+    .populate("medicine_ids")
+    .populate("created_user_id")
+    .populate("updated_user_id")
+    .sort({ id: -1 });
 
 export const getAllCaseHistoryData = async (condition = {}) =>
-  CaseHistory.find(condition).sort({ id: -1 });
+  CaseHistory.find(condition)
+    .populate("customer_id")
+    .populate("staff_member_id")
+    .populate("condition_ids")
+    .populate("treatment_ids")
+    .populate("medicine_ids")
+    .populate("created_user_id")
+    .populate("updated_user_id")
+    .sort({ id: -1 });
 
 export const deleteCaseHistoryData = async (condition = {}) =>
   CaseHistory.deleteOne(condition);

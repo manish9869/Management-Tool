@@ -14,7 +14,7 @@ class MedicineController {
       const medicineData = {
         name: input.name,
         description: input.description,
-        // Add other fields from the request body
+        created_user_id: loggedInUser,
       };
 
       const data = await medicineLib.addMedicine(medicineData);
@@ -47,8 +47,10 @@ class MedicineController {
       const medicineData = {
         name: input.name,
         description: input.description,
-        // Add other fields from the request body
+        updated_user_id: loggedInUser,
       };
+
+      console.log("medicineData", medicineData);
 
       await medicineLib.updateMedicineData(
         { medicine_id: medicineId },

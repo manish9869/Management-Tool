@@ -103,7 +103,7 @@ class StaffMemberController {
   };
 
   static deleteStaffMember = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const staffMemberId = req.params.id;
 
@@ -121,7 +121,6 @@ class StaffMemberController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
 
       await errorlogs.addErrorLogs(logData);
@@ -131,7 +130,7 @@ class StaffMemberController {
   };
 
   static getStaffMemberById = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const staffMemberId = req.params.id;
 
@@ -150,7 +149,6 @@ class StaffMemberController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
 
       await errorlogs.addErrorLogs(logData);
@@ -160,7 +158,7 @@ class StaffMemberController {
   };
 
   static getAllStaffMembers = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const allStaffMembers = await staffMemberLib.getAllStaffMembers();
       if (!allStaffMembers) res.locals.message = Messages.NO_DATA;
@@ -175,7 +173,6 @@ class StaffMemberController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
 
       await errorlogs.addErrorLogs(logData);

@@ -4,6 +4,7 @@ import Messages from "../common/constants";
 import * as treatmentLib from "../modules/treatment/treatment.lib"; // Adjust the path based on your folder structure
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
+import mongoose from "mongoose";
 
 class TreatmentController {
   static addTreatment = async (req: Request, res: Response) => {
@@ -17,7 +18,7 @@ class TreatmentController {
         cost: input.cost,
         duration: input.duration,
         type: input.type,
-        // Add other fields based on your schema
+        created_user_id: loggedInUser,
       };
 
       const data = await treatmentLib.addTreatment(obj);
@@ -51,7 +52,7 @@ class TreatmentController {
         cost: input.cost,
         duration: input.duration,
         type: input.type,
-        // Add other fields based on your schema
+        updated_user_id: loggedInUser,
       };
 
       await treatmentLib.updateTreatment(treatmentId, obj);

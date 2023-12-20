@@ -48,11 +48,12 @@ const Staff_membersSchema = new Schema(
       default: null,
     },
     created_user_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
     },
     updated_user_id: {
-      type: Number,
-      default: null,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
     },
   },
   {

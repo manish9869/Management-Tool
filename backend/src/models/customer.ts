@@ -32,10 +32,13 @@ const CustomerSchema = new Schema(
       default: null,
     },
     created_user_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
+      default: null,
     },
     updated_user_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
       default: null,
     },
   },

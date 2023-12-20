@@ -8,8 +8,12 @@ const CaseHistorySchema = new Schema(
       unique: true,
     },
     customer_id: {
-      type: Number,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "customer", // Reference to the Customer model
+    },
+    staff_member_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "staff_member", // Reference to the Customer model
     },
     case_date: {
       type: Date,
@@ -20,20 +24,20 @@ const CaseHistorySchema = new Schema(
     },
     condition_ids: [
       {
-        type: Number,
-        ref: "MedicalCondition", // Reference to the MedicalCondition model
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "medical_condition", // Reference to the MedicalCondition model
       },
     ],
     treatment_ids: [
       {
-        type: Number,
-        ref: "Treatment", // Reference to the Treatment model
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "treatment", // Reference to the Treatment model
       },
     ],
     medicine_ids: [
       {
-        type: Number,
-        ref: "Medicine", // Reference to the Medicine model
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "medicine", // Reference to the Medicine model
       },
     ],
 
@@ -47,6 +51,14 @@ const CaseHistorySchema = new Schema(
         documentUrl: String,
       },
     ],
+    created_user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
+    },
+    updated_user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
+    },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
@@ -62,7 +74,7 @@ CaseHistorySchema.set("toJSON", {
 
 CaseHistorySchema.pre("validate", autonIncrement);
 
-const CaseHistory = mongoose.model("casehistory", CaseHistorySchema);
+const CaseHistory = mongoose.model("case_history", CaseHistorySchema);
 
 /**
  * auto increment

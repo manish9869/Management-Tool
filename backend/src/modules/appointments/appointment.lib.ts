@@ -40,14 +40,19 @@ export const updateAppointment = async (condition, updatedData) => {
   return updatedAppointment;
 };
 export const getAppointmentById = async (condition = {}) => {
-  const appointment = await CustomerAppointment.findOne(condition);
+  const appointment = await CustomerAppointment.findOne(condition)
+    .populate("customer_id")
+    .populate("staff_member_id");
   return appointment;
 };
 
 export const getAllAppointments = async (condition = {}) => {
-  const appointments = await CustomerAppointment.find(condition).sort({
-    id: -1,
-  });
+  const appointments = await CustomerAppointment.find(condition)
+    .populate("customer_id")
+    .populate("staff_member_id")
+    .populate("created_user_id")
+    .populate("updated_user_id");
+
   return appointments;
 };
 
