@@ -19,6 +19,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   getToken() {
+    this.getAuthData();
     if (this.userdata) this.token = this.userdata.token;
     return this.token;
   }
@@ -147,6 +148,7 @@ export class AuthService {
 
   private getAuthData() {
     const userdata = localStorage.getItem("userdata");
+    this.userdata = JSON.parse(userdata);
     const expirationDate = localStorage.getItem("expiration");
     if (!userdata || !expirationDate) {
       return;

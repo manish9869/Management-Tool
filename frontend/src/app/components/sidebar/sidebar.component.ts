@@ -35,6 +35,12 @@ export const ROUTES: RouteInfo[] = [
     sub_menu: [],
   },
   {
+    link_name: "Reminders",
+    link: "/customer/customer-appointment",
+    icon: "ni ni-chart-pie-35 text-orange",
+    sub_menu: [],
+  },
+  {
     link_name: "Manage Customer",
     link: null,
     icon: "ni-single-02 text-yellow",
@@ -49,22 +55,78 @@ export const ROUTES: RouteInfo[] = [
         link: "/customer/view-customer",
         icon: "fa-solid fa-user-plus text-primary",
       },
+      {
+        link_name: "Add Case History",
+        link: "/staff/view-staff-members",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+      {
+        link_name: "View Case History",
+        link: "/staff/view-staff-members",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+      {
+        link_name: "Manage Invoice",
+        link: "/staff/view-staff-members",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
     ],
     isOpen: false,
   },
   {
     link_name: "Manage Staff",
     link: null,
-    icon: "ni-single-02 text-yellow",
+    icon: "fa-solid fa-user-nurse",
     sub_menu: [
       {
         link_name: "Add Staff Members",
         link: "/staff/manage-staff-members",
         icon: "fa-solid fa-user-plus text-primary",
       },
+    ],
+    isOpen: false,
+  },
+  {
+    link_name: "Manage Expense",
+    link: null,
+    icon: "fa-solid fa-receipt",
+    sub_menu: [
       {
-        link_name: "View Staff Members",
+        link_name: "Add Expense",
+        link: "/staff/manage-staff-members",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+      {
+        link_name: "View Expense",
         link: "/staff/view-staff-members",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+      {
+        link_name: "Revenue Tracking",
+        link: "/staff/view-staff-members",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+    ],
+    isOpen: false,
+  },
+  {
+    link_name: "Master Data",
+    link: null,
+    icon: "ni-single-02 text-yellow",
+    sub_menu: [
+      {
+        link_name: "Medical Condition",
+        link: "/master-data/medical-condition",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+      {
+        link_name: "Treatment",
+        link: "/master-data/treatment",
+        icon: "fa-solid fa-user-plus text-primary",
+      },
+      {
+        link_name: "Medicine",
+        link: "/master-data/medicine",
         icon: "fa-solid fa-user-plus text-primary",
       },
     ],

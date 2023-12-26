@@ -1,61 +1,71 @@
-import { environment } from "../../../environments/environment";
+import { environment } from "./../../../environments/environment";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
 import * as moment from "moment";
-const BACKEND_URL = environment.apiUrl + "/staff-members";
+const BACKEND_URL = environment.apiUrl + "/staff-members"; // Assuming the API endpoint for staff members
 
 @Injectable({ providedIn: "root" })
-export class StaffMembersService {
-  // private customers: any = [];
-  // private CustomersUpdated = new Subject<{
-  //   customers: any;
-  // }>();
-  // constructor(private http: HttpClient, private router: Router) {}
-  // async getCustomers() {
-  //   this.http
-  //     .get(BACKEND_URL)
-  //     .pipe(
-  //       map((resData: any) => {
-  //         return {
-  //           customers: resData.data.map((data) => {
-  //             return {
-  //               customer_id: data.customer_id,
-  //               fullname: data.fullname,
-  //               email: data.email,
-  //               address: data.address,
-  //               mobile: data.mobile,
-  //               alt_mobile: data.alt_mobile,
-  //               DOB: data.DOB ? moment(data.DOB).format("DD-MMM-YYYY") : "NA",
-  //             };
-  //           }),
-  //         };
-  //       })
-  //     )
-  //     .subscribe((data: any) => {
-  //       this.customers = data.customers;
-  //       this.CustomersUpdated.next({
-  //         customers: [...this.customers],
-  //       });
-  //     });
-  // }
-  // getCustomerUpdateListener() {
-  //   return this.CustomersUpdated.asObservable();
-  // }
-  // getCustomer(id: string) {
-  //   return this.http.get(BACKEND_URL + "/" + id);
-  // }
-  // addCustomer(customerObj) {
-  //   const CustomerData = customerObj;
-  //   return this.http.post(BACKEND_URL, CustomerData);
-  // }
-  // updateCustomer(customerObj, id) {
-  //   const CustomerData = customerObj;
-  //   return this.http.patch(BACKEND_URL + "/" + id, CustomerData);
-  // }
-  // deleteCustomer(CustomerId: string) {
-  //   return this.http.delete(BACKEND_URL + "/" + CustomerId);
-  // }
+export class StaffMemberService {
+  private staffMembers: any = [];
+
+  private StaffMembersUpdated = new Subject<{
+    staffMembers: any;
+  }>();
+
+  constructor(private http: HttpClient, private router: Router) {}
+
+  async getStaffMembers() {
+    this.http
+      .get(BACKEND_URL)
+      .pipe(
+        map((resData: any) => {
+          return {
+            staffMembers: resData.data.map((data) => {
+              return {
+                staff_member_id: data.staff_member_id,
+                fullname: data.fullname,
+                email: data.email,
+                address: data.address,
+                mobile: data.mobile,
+                alt_mobile: data.alt_mobile,
+                DOB: data.DOB ? moment(data.DOB).format("DD-MMM-YYYY") : "NA",
+                position: data.position,
+                specialization: data.specialization,
+              };
+            }),
+          };
+        })
+      )
+      .subscribe((data: any) => {
+        this.staffMembers = data.staffMembers;
+        this.StaffMembersUpdated.next({
+          staffMembers: [...this.staffMembers],
+        });
+      });
+  }
+
+  getStaffMemberUpdateListener() {
+    return this.StaffMembersUpdated.asObservable();
+  }
+
+  getStaffMember(id: string) {
+    return this.http.get(BACKEND_URL + "/" + id);
+  }
+
+  addStaffMember(staffMemberObj) {
+    const StaffMemberData = staffMemberObj;
+    return this.http.post(BACKEND_URL, StaffMemberData);
+  }
+
+  updateStaffMember(staffMemberObj, id) {
+    const StaffMemberData = staffMemberObj;
+    return this.http.patch(BACKEND_URL + "/" + id, StaffMemberData);
+  }
+
+  deleteStaffMember(staffMemberId: string) {
+    return this.http.delete(BACKEND_URL + "/" + staffMemberId);
+  }
 }

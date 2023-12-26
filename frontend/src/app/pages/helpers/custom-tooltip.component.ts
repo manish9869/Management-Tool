@@ -17,7 +17,7 @@ import { ITooltipParams } from "ag-grid-community";
     `
       :host {
         position: absolute;
-        width: 200px;
+        width: 230px;
         height: 70px;
         pointer-events: none;
         transition: opacity 1s;
@@ -27,9 +27,17 @@ import { ITooltipParams } from "ag-grid-community";
         opacity: 0;
       }
 
+      .custom-tooltip {
+        padding: 5px;
+      }
+
       .custom-tooltip p {
         margin: 5px;
         white-space: nowrap;
+      }
+
+      .custom-tooltip span {
+        text-align: center;
       }
 
       .custom-tooltip p:first-of-type {

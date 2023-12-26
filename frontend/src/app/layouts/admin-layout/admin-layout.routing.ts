@@ -20,6 +20,13 @@ export const AdminLayoutRoutes: Routes = [
             (m) => m.StaffMemberModule
           ),
       },
+      {
+        path: "master-data",
+        loadChildren: () =>
+          import("src/app/pages/master-data/master-data.module").then(
+            (m) => m.MasterDataModule
+          ),
+      },
     ],
     // canActivate: [AuthGuard],
   },

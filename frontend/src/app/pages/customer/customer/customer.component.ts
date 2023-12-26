@@ -15,16 +15,6 @@ import { CustomTooltip } from "../../helpers/custom-tooltip.component";
 import { ButtonRendererComponent } from "../../helpers/button.renderer.component";
 import { mobileNumberValidator } from "src/app/comman/validator";
 
-// Row Data Interface
-interface IRow {
-  mission: string;
-  company: string;
-  location: string;
-  date: string;
-  rocket: string;
-  price: number;
-  successful: boolean;
-}
 @Component({
   selector: "app-customer",
   templateUrl: "./customer.component.html",
