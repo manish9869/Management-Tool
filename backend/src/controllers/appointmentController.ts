@@ -20,6 +20,7 @@ class AppointmentController {
           input.staff_member_id
         ),
         appointment_date: input.appointment_date,
+        duration: input.duration,
         reason: input.reason,
         status: "scheduled",
         created_user_id: loggedInUser,
@@ -54,6 +55,7 @@ class AppointmentController {
         ),
         appointment_date: input.appointment_date,
         reason: input.reason,
+        duration: input.duration,
         status: input.status,
         updated_user_id: loggedInUser,
       };

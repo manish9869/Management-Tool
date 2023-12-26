@@ -20,34 +20,43 @@ const CustomerAppointmentSchema = new Schema(
       default: null,
       validate: {
         validator: async function (value) {
+          const self = this;
           // Check if an appointment exists for the same staff_member_id and appointment_date
-          const existingAppointment = await this.constructor.findOne({
-            staff_member_id: this.staff_member_id,
+          const existingAppointment = await self.constructor.findOne({
+            staff_member_id: self.staff_member_id,
             appointment_date: value,
           });
-
           if (existingAppointment) {
-            return false; // Return false if an appointment for the same date-time already exists
-          } else {
-            // Check if the staff member has any other appointment within the next 30 minutes
-            const nextAppointments = await this.constructor.find({
-              staff_member_id: this.staff_member_id,
-              appointment_date: {
-                $gt: new Date(), // Get appointments after the current time
-                $lt: new Date(new Date().getTime() + 30 * 60000), // 30 minutes in milliseconds
-              },
-            });
+            throw new Error(
+              `An appointment already exists for this staff member at the specified date and time at ${existingAppointment.appointment_date} for ${existingAppointment.duration} minutes`
+            );
+          }
 
-            return nextAppointments.length === 0; // Return true if no appointments within the next 30 minutes
+          // Fetch older appointments before the provided appointment_date
+          const olderAppointments = await self.constructor.find({
+            staff_member_id: self.staff_member_id,
+            appointment_date: { $lt: value },
+          });
+          // Check for overlap by adding duration from input params in appointment date and time
+          for (const appointment of olderAppointments) {
+            const appointmentEndTime = new Date(
+              appointment.appointment_date.getTime() +
+                appointment.duration * 60000
+            );
+            if (appointmentEndTime > value) {
+              throw new Error(
+                `The appointment date-time overlaps with an older appointment for the staff at ${appointment.appointment_date} for ${appointment.duration} minutes`
+              );
+            }
           }
         },
-        message: (props) =>
-          `Appointment conflict or within next 30 minutes for ${props.value}.`,
+        message: (props) => `${props.value}.`,
       },
     },
+
     duration: {
       type: Number,
-      default: 30,
+      default: null,
     },
     reason: {
       type: String,
