@@ -35,8 +35,8 @@ export const ROUTES: RouteInfo[] = [
     sub_menu: [],
   },
   {
-    link_name: "Reminders",
-    link: "/customer/customer-appointment",
+    link_name: "Reminder",
+    link: "/reminder",
     icon: "ni ni-chart-pie-35 text-orange",
     sub_menu: [],
   },
@@ -57,17 +57,17 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         link_name: "Add Case History",
-        link: "/staff/view-staff-members",
+        link: "/customer/case-history",
         icon: "fa-solid fa-user-plus text-primary",
       },
       {
         link_name: "View Case History",
-        link: "/staff/view-staff-members",
+        link: "/customer/view-case-history",
         icon: "fa-solid fa-user-plus text-primary",
       },
       {
         link_name: "Manage Invoice",
-        link: "/staff/view-staff-members",
+        link: "/customer/manage-invoice",
         icon: "fa-solid fa-user-plus text-primary",
       },
     ],

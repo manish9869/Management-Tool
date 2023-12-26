@@ -1,1 +1,202 @@
-<p>treatment works!</p>
+<div class="header bg-gradient-danger py-7 py-lg-8"></div>
+<div class="container custom-top">
+  <!-- Table -->
+  <div class="row">
+    <div class="col-lg-5">
+      <div class="card-wrapper">
+        <form
+          [formGroup]="form"
+          (ngSubmit)="onCreateTreatment()"
+          enctype="multipart/form-data"
+          class="form-horizontal"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong>Manage Treatment</strong> Form
+            </div>
+            <div class="card-body">
+              <!-- Name -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="name-input"
+                  >Name</label
+                >
+                <div class="col-md-8">
+                  <input
+                    type="text"
+                    id="name-input"
+                    name="name-input"
+                    class="form-control"
+                    placeholder="Name"
+                    formControlName="name"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.name.errors
+                    }"
+                  />
+                  <div
+                    *ngIf="submitted && f.name.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.name.errors.required">
+                      Please enter the Name
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cost -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="cost-input"
+                  >Cost</label
+                >
+                <div class="col-md-8">
+                  <input
+                    type="text"
+                    id="cost-input"
+                    name="cost-input"
+                    class="form-control"
+                    placeholder="Cost"
+                    formControlName="cost"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.cost.errors
+                    }"
+                  />
+                  <div
+                    *ngIf="submitted && f.cost.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.cost.errors.required">
+                      Please enter the Cost
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Duration -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="duration-input"
+                  >Duration</label
+                >
+                <div class="col-md-8">
+                  <input
+                    type="text"
+                    id="duration-input"
+                    name="duration-input"
+                    class="form-control"
+                    placeholder="Duration"
+                    formControlName="duration"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.duration.errors
+                    }"
+                  />
+                  <div
+                    *ngIf="submitted && f.duration.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.duration.errors.required">
+                      Please enter the Duration
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Type -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="type-input"
+                  >Type</label
+                >
+                <div class="col-md-8">
+                  <input
+                    type="text"
+                    id="type-input"
+                    name="type-input"
+                    class="form-control"
+                    placeholder="Type"
+                    formControlName="type"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.type.errors
+                    }"
+                  />
+                  <div
+                    *ngIf="submitted && f.type.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.type.errors.required">
+                      Please enter the Type
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="description-input"
+                  >Description</label
+                >
+                <div class="col-md-8">
+                  <textarea
+                    id="description-input"
+                    name="description-input"
+                    rows="4"
+                    class="form-control"
+                    placeholder="Description"
+                    formControlName="description"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.description.errors
+                    }"
+                  ></textarea>
+                  <div
+                    *ngIf="submitted && f.description.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.description.errors.required">
+                      Please enter the Description
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button
+                type="reset"
+                class="btn btn-sm btn-danger"
+                (click)="resetForm()"
+              >
+                <i class="fa fa-ban"></i> Reset
+              </button>
+              <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-dot-circle-o"></i> Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <div>
+        <div class="col-lg-5 custom-search-grid">
+          <input
+            type="text"
+            id="filter-text-box"
+            placeholder="Search"
+            (input)="onFilterTextBoxChanged()"
+            class="form-control custom-search-grid-input"
+          />
+        </div>
+      </div>
+
+      <ag-grid-angular
+        style="width: 100%; height: 520px"
+        class="ag-theme-quartz"
+        [columnDefs]="colDefs"
+        [defaultColDef]="defaultColDef"
+        [rowData]="treatmentsList"
+        [pagination]="true"
+        [paginationPageSize]="paginationPageSize"
+        [paginationPageSizeSelector]="paginationPageSizeSelector"
+        (gridReady)="onGridReady($event)"
+      >
+      </ag-grid-angular>
+    </div>
+  </div>
+</div>

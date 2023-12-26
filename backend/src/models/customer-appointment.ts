@@ -45,6 +45,10 @@ const CustomerAppointmentSchema = new Schema(
           `Appointment conflict or within next 30 minutes for ${props.value}.`,
       },
     },
+    duration: {
+      type: Number,
+      default: 30,
+    },
     reason: {
       type: String,
       default: null,
