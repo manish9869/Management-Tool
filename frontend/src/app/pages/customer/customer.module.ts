@@ -10,9 +10,11 @@ import { CustomerAppointmentComponent } from "./customer-appointment/customer-ap
 import { ManageInvoiceComponent } from "./manage-invoice/manage-invoice.component";
 import { CaseHistoryComponent } from "./case-history/case-history.component";
 import { ViewCaseHistoryComponent } from "./view-case-history/view-case-history.component";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 @NgModule({
   imports: [
+    NgSelectModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
