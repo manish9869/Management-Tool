@@ -25,19 +25,19 @@ export const ROUTES: RouteInfo[] = [
   {
     link_name: "Dashboard",
     link: "/dashboard",
-    icon: "ni ni-chart-pie-35 text-orange",
+    icon: "ni ni-chart-pie-35 text-red",
     sub_menu: [],
   },
   {
     link_name: "Customer Appointment",
     link: "/customer/customer-appointment",
-    icon: "ni ni-chart-pie-35 text-orange",
+    icon: "fa-solid fa-calendar-check text-indigo",
     sub_menu: [],
   },
   {
     link_name: "Reminder",
     link: "/reminder",
-    icon: "ni ni-chart-pie-35 text-orange",
+    icon: "fa-solid fa-bell text-green",
     sub_menu: [],
   },
   {
@@ -76,7 +76,7 @@ export const ROUTES: RouteInfo[] = [
   {
     link_name: "Manage Staff",
     link: null,
-    icon: "fa-solid fa-user-nurse",
+    icon: "fa-solid fa-user-nurse text-teal",
     sub_menu: [
       {
         link_name: "Add Staff Members",
@@ -89,7 +89,7 @@ export const ROUTES: RouteInfo[] = [
   {
     link_name: "Manage Expense",
     link: null,
-    icon: "fa-solid fa-receipt",
+    icon: "fa-solid fa-receipt text-purple",
     sub_menu: [
       {
         link_name: "Add Expense",
@@ -112,7 +112,7 @@ export const ROUTES: RouteInfo[] = [
   {
     link_name: "Master Data",
     link: null,
-    icon: "ni-single-02 text-yellow",
+    icon: "fa-solid fa-database text-danger",
     sub_menu: [
       {
         link_name: "Medical Condition",
@@ -135,7 +135,7 @@ export const ROUTES: RouteInfo[] = [
   {
     link_name: "Auth",
     link: null,
-    icon: "ni-bullet-list-67 text-red",
+    icon: "fa-solid fa-shield-halved text-red",
     sub_menu: [
       {
         link_name: "Login",

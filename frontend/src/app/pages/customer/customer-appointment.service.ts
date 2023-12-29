@@ -20,6 +20,7 @@ export class CustomerAppointmentService {
         return {
           appointments: resData.data.map((data) => {
             return {
+              appointment_id: data.appointment_id,
               customer_id: data.customer_id.customer_id,
               customer_name: data.customer_id.fullname,
               customer_mobile: data.customer_id.mobile,

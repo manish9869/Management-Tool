@@ -92,13 +92,13 @@ export class CustomerAppointmentComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      customer_id: new FormControl(null, {
+      customerId: new FormControl(null, {
         validators: [Validators.required],
       }),
-      staff_member_id: new FormControl(null, {
+      staffMemberId: new FormControl(null, {
         validators: [Validators.required],
       }),
-      appointment_date: new FormControl(null, {
+      appointmentDate: new FormControl(null, {
         validators: [Validators.required],
       }),
       duration: new FormControl(null, {
@@ -198,20 +198,20 @@ export class CustomerAppointmentComponent implements OnInit {
   onClick(e) {
     switch (e.type) {
       case "select":
-        this.onView(e.rowData.CustomerAppointmentId);
+        this.onView(e.rowData.appointment_id);
         break;
       case "edit":
-        this.onEdit(e.rowData.CustomerAppointmentId);
+        this.onEdit(e.rowData.appointment_id);
         break;
       case "delete":
-        this.deleteCustomerAppointment(e.rowData.CustomerAppointmentId);
+        this.deleteCustomerAppointment(e.rowData.appointment_id);
         break;
     }
   }
 
-  onView(CustomerAppointmentId: string) {
+  onView(appointment_id: string) {
     this.router.navigate(["/case-history/view"], {
-      queryParams: { CustomerAppointmentId: CustomerAppointmentId },
+      queryParams: { appointment_id: appointment_id },
     });
   }
 
@@ -222,28 +222,22 @@ export class CustomerAppointmentComponent implements OnInit {
 
     this.customerAppointmentService
       .getCustomerAppointment(CustomerAppointmentId)
-      .subscribe(
-        (data: any) => {
-          this.isLoading = false;
-          console.log("data", data.data);
-          this.form.patchValue({
-            customer_id: data.data.customer_id.customer_id,
-            staff_member_id: data.data.staff_member_id.staff_member_id,
-            appointment_date: formatDate(
-              data.data.appointment_date.trim(),
-              "yyyy-MM-dd",
-              "en"
-            ),
-            duration: data.data.duration,
-            reason: data.data.reason,
-            status: data.data.status,
-          });
-        },
-        (error) => {
-          this.isLoading = false;
-          console.error("Error fetching case history:", error);
-        }
-      );
+      .subscribe((data: any) => {
+        this.isLoading = false;
+        console.log("data", data.data);
+        this.form.patchValue({
+          customerId: data.data.customer_id.customer_id,
+          staffMemberId: data.data.staff_member_id.staff_member_id,
+          appointmentDate: formatDate(
+            data.data.appointment_date.trim(),
+            "yyyy-MM-dd",
+            "en"
+          ),
+          duration: data.data.duration,
+          reason: data.data.reason,
+          status: data.data.status,
+        });
+      });
   }
 
   ngOnDestroy() {
