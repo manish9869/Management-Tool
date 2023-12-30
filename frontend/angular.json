@@ -28,7 +28,11 @@
             "tsConfig": "src/tsconfig.app.json",
             "allowedCommonJsDependencies": ["chart.js"],
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss", "src/assets/scss/argon.scss"],
+            "styles": [
+              "node_modules/flatpickr/dist/flatpickr.min.css",
+              "src/styles.scss",
+              "src/assets/scss/argon.scss"
+            ],
             "scripts": [
               "node_modules/chart.js/dist/Chart.min.js",
               "node_modules/clipboard/dist/clipboard.min.js"

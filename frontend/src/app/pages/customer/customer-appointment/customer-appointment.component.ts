@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { formatDate } from "@angular/common";
@@ -10,19 +10,22 @@ import { CustomerService } from "../customer.service";
 import { StaffMemberService } from "../../staff-members/staff-members.service";
 import { CustomerAppointmentService } from "../customer-appointment.service";
 import Messages from "src/app/comman/constants";
-
+import { FlatpickrOptions } from "ng2-flatpickr";
 @Component({
   selector: "app-customer-appointment",
   templateUrl: "./customer-appointment.component.html",
   styleUrls: ["./customer-appointment.component.scss"],
 })
 export class CustomerAppointmentComponent implements OnInit {
+  @ViewChild("appointmentDateControl") appointmentDateControl: ElementRef;
+
   form: FormGroup;
   isLoading = false;
-  CustomerAppointmentId;
+  customerAppointmentId;
   appointmentList: any = [];
   customerList: any[] = [];
   staffMemberList: any[] = [];
+  appointmentDate;
   public mode = "create";
   public customerAppointmentSub: Subscription;
   submitted = false;
@@ -31,6 +34,21 @@ export class CustomerAppointmentComponent implements OnInit {
   public frameworkComponents;
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 20, 50, 100];
+
+  exampleOptions: FlatpickrOptions = {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    minDate: "today",
+    // onDayCreate: function (dObj, dStr, fp, dayElem) {
+    //   // Utilize dayElem.dateObj, which is the corresponding Date
+
+    //   // dummy logic
+    //   if (Math.random() < 0.15)
+    //     dayElem.innerHTML += "<span class='event'></span>";
+    //   else if (Math.random() > 0.85)
+    //     dayElem.innerHTML += "<span class='event busy'></span>";
+    // },
+  };
 
   colDefs = [
     {
@@ -59,9 +77,9 @@ export class CustomerAppointmentComponent implements OnInit {
   ];
 
   statusOptions: any[] = [
-    { id: "scheduled", name: "Scheduled" },
-    { id: "pending", name: "Pending" },
-    { id: "complete", name: "Complete" },
+    { id: "Scheduled", name: "Scheduled" },
+    { id: "Pending", name: "Pending" },
+    { id: "Complete", name: "Complete" },
   ];
 
   constructor(
@@ -129,6 +147,7 @@ export class CustomerAppointmentComponent implements OnInit {
       .subscribe((customerData: any) => {
         this.isLoading = false;
         this.customerList = customerData.customers;
+        console.log("this.customerList", this.customerList);
       });
   }
 
@@ -154,34 +173,77 @@ export class CustomerAppointmentComponent implements OnInit {
   }
 
   createCustomerAppointment() {
-    this.submitted = true;
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
+    try {
+      if (this.form.invalid) {
+        this.form.markAllAsTouched();
+        return;
+      }
+      this.submitted = true;
+      this.isLoading = true;
+      if (this.mode === "create") {
+        const appointment_data = {
+          customer_id: this.form.value.customerId,
+          staff_member_id: this.form.value.staffMemberId,
+          appointment_date: this.form.value.appointmentDate[0],
+          duration: this.form.value.duration,
+          reason: this.form.value.reason.trim(),
+          status: this.form.value.status.trim(),
+        };
+
+        this.customerAppointmentService
+          .addCustomerAppointment(appointment_data)
+          .subscribe((responseData) => {
+            this.toastr.success("", Messages.SAVED);
+            this.loadAppointmentsList();
+          });
+      } else {
+        const appointment_data = {
+          customer_id: this.form.value.customerId,
+          staff_member_id: this.form.value.staffMemberId,
+          appointment_date: this.form.value.appointmentDate[0],
+          duration: this.form.value.duration,
+          reason: this.form.value.reason.trim(),
+          status: this.form.value.status.trim(),
+        };
+
+        this.customerAppointmentSub = this.customerAppointmentService
+          .updateCustomerAppointment(
+            appointment_data,
+            this.customerAppointmentId
+          )
+          .subscribe({
+            next: (response) => {
+              // Handle successful response
+            },
+            error: (error) => {
+              this.toastr.error("", error.error.message);
+              // Handle error, possibly display an error message
+            },
+            complete: () => {
+              this.toastr.info("", Messages.UPDATED);
+              this.loadAppointmentsList();
+              // Handle complete if needed
+            },
+          });
+      }
+
+      this.resetForm();
+    } catch (error) {
+      this.toastr.error("", error);
     }
-    this.isLoading = true;
-
-    const CustomerAppointmentData = {
-      customer_id: this.form.value.customer_id,
-      staff_member_id: this.form.value.staff_member_id,
-      appointment_date: this.form.value.appointment_date,
-      duration: this.form.value.duration,
-      reason: this.form.value.reason,
-      status: this.form.value.status,
-    };
-
-    this.customerAppointmentService
-      .addCustomerAppointment(CustomerAppointmentData)
-      .subscribe((responseData) => {
-        this.toastr.success("", Messages.SAVED);
-        this.loadAppointmentsList();
-      });
-
-    this.resetForm();
   }
 
   resetForm() {
+    this.mode = "create";
+    this.appointmentDateControl["setDate"] = null;
+    this.form.value.appointmentDate = null;
+    this.appointmentDate = null;
+    this.form.clearValidators();
+    this.form.updateValueAndValidity();
     this.form.reset();
+    Object.keys(this.form.controls).forEach((field) => {
+      this.form.controls[field].setErrors(null);
+    });
     this.submitted = false;
   }
 
@@ -218,29 +280,26 @@ export class CustomerAppointmentComponent implements OnInit {
   onEdit(CustomerAppointmentId: string) {
     this.mode = "edit";
     this.isLoading = true;
-    this.CustomerAppointmentId = CustomerAppointmentId;
+    this.customerAppointmentId = CustomerAppointmentId;
 
     this.customerAppointmentService
       .getCustomerAppointment(CustomerAppointmentId)
       .subscribe((data: any) => {
         this.isLoading = false;
-        console.log("data", data.data);
+
         this.form.patchValue({
-          customerId: data.data.customer_id.customer_id,
-          staffMemberId: data.data.staff_member_id.staff_member_id,
-          appointmentDate: formatDate(
-            data.data.appointment_date.trim(),
-            "yyyy-MM-dd",
-            "en"
-          ),
+          customerId: data.data.customer_id._id,
+          staffMemberId: data.data.staff_member_id._id,
           duration: data.data.duration,
           reason: data.data.reason,
           status: data.data.status,
         });
+
+        this.appointmentDate = new Date(data.data.appointment_date);
       });
   }
 
   ngOnDestroy() {
-    this.customerAppointmentSub.unsubscribe();
+    if (this.customerAppointmentSub) this.customerAppointmentSub.unsubscribe();
   }
 }

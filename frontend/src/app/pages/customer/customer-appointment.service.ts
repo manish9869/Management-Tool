@@ -27,7 +27,7 @@ export class CustomerAppointmentService {
               staff_member_id: data.staff_member_id.staff_member_id,
               staff_member_name: data.staff_member_id.fullname,
               appointment_date: data.appointment_date
-                ? moment(data.appointment_date).format("DD-MMM-YYYY")
+                ? moment(data.appointment_date).format("DD-MMM-YYYY hh:mm A")
                 : "NA",
             };
           }),

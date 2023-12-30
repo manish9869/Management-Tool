@@ -25,6 +25,7 @@ export class CustomerService {
           return {
             customers: resData.data.map((data) => {
               return {
+                id: data._id,
                 customer_id: data.customer_id,
                 fullname: data.fullname,
                 email: data.email,

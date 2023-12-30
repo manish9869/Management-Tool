@@ -25,6 +25,7 @@ export class StaffMemberService {
           return {
             staffMembers: resData.data.map((data) => {
               return {
+                id: data._id,
                 staff_member_id: data.staff_member_id,
                 fullname: data.fullname,
                 email: data.email,

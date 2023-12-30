@@ -159,6 +159,7 @@ export class CustomerComponent implements OnInit {
   }
 
   resetForm() {
+    this.mode = "create";
     this.form.clearValidators();
     this.form.updateValueAndValidity();
     this.form.reset();
