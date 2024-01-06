@@ -21,6 +21,7 @@ export class TreatmentService {
           return {
             treatments: resData.data.map((data) => {
               return {
+                id: data._id,
                 treatment_id: data.treatment_id, // Updated field names
                 name: data.name,
                 description: data.description,

@@ -22,6 +22,7 @@ export class MedicineService {
           return {
             medicines: resData.data.map((data) => {
               return {
+                id: data._id,
                 medicine_id: data.medicine_id,
                 medicineName: data.name,
                 description: data.description,

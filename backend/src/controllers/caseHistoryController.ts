@@ -5,6 +5,7 @@ import * as caseHistoryLib from "../modules/case-history/case-history.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
 import mongoose from "mongoose";
+import { uploadFile } from "../helpers/fileUpload";
 
 class CaseHistoryController {
   static addCaseHistoryData = async (req: Request, res: Response) => {
@@ -203,6 +204,15 @@ class CaseHistoryController {
         created_user_id: loggedInUser,
       };
       await errorlogs.addErrorLogs(datalog);
+      res.locals.errors = e.message;
+      ResponseHandler.JSONERROR(req, res);
+    }
+  };
+
+  static uploadFile = async (req: Request, res: Response) => {
+    try {
+      uploadFile(req, res);
+    } catch (e) {
       res.locals.errors = e.message;
       ResponseHandler.JSONERROR(req, res);
     }

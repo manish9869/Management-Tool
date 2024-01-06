@@ -26,6 +26,7 @@ export class MedicalConditionService {
           return {
             medicalConditions: resData.data.map((data) => {
               return {
+                id: data._id,
                 condition_id: data.condition_id,
                 name: data.name,
                 description: data.description,

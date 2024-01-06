@@ -31,6 +31,14 @@ const CustomerSchema = new Schema(
       type: Date,
       default: null,
     },
+    abha_card: {
+      type: String,
+      default: null,
+    },
+    insurance_policy: {
+      type: String,
+      default: null,
+    },
     created_user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user", // Reference to the Customer model

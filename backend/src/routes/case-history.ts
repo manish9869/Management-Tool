@@ -4,6 +4,8 @@ import { validateJwt } from "../middlewares/validateJWT";
 
 const router = express.Router();
 
+router.post("/upload", validateJwt, CaseHistoryController.uploadFile);
+
 router.post("/", validateJwt, CaseHistoryController.addCaseHistoryData);
 
 router.patch("/:id", validateJwt, CaseHistoryController.updateCaseHistoryData);

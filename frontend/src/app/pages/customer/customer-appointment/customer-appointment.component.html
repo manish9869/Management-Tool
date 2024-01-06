@@ -26,13 +26,10 @@
                     name="customer-id-input"
                     formControlName="customerId"
                     placeholder="Select Customer"
+                    [items]="customerList"
+                    bindLabel="fullname"
+                    bindValue="id"
                   >
-                    <ng-option
-                      *ngFor="let customer of customerList"
-                      [value]="customer.id"
-                    >
-                      {{ customer.fullname }}</ng-option
-                    >
                   </ng-select>
                 </div>
               </div>
@@ -50,13 +47,10 @@
                     name="staff-member-id-input"
                     placeholder="Select Staff Member"
                     formControlName="staffMemberId"
+                    [items]="staffMemberList"
+                    bindLabel="fullname"
+                    bindValue="id"
                   >
-                    <ng-option
-                      *ngFor="let staffMember of staffMemberList"
-                      [value]="staffMember.id"
-                    >
-                      {{ staffMember.fullname }}</ng-option
-                    >
                   </ng-select>
                 </div>
               </div>

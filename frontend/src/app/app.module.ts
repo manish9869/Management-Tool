@@ -16,8 +16,10 @@ import { AuthInterceptor } from "./pages/auth/auth-interceptor";
 import { ToastrModule } from "ngx-toastr";
 import { AuthModule } from "./pages/auth/auth.module";
 import { TagInputModule } from "ngx-chips";
+import { NgxEditorModule } from "ngx-editor";
 @NgModule({
   imports: [
+    NgxEditorModule,
     TagInputModule,
     BrowserAnimationsModule,
     FormsModule,

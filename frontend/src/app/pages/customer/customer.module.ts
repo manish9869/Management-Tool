@@ -12,9 +12,13 @@ import { ViewCaseHistoryComponent } from "./view-case-history/view-case-history.
 import { NgSelectModule } from "@ng-select/ng-select";
 import { Ng2FlatpickrModule } from "ng2-flatpickr";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { NgxEditorModule } from "ngx-editor";
+import { FilePickerModule } from "ngx-awesome-uploader";
 
 @NgModule({
   imports: [
+    FilePickerModule,
+    NgxEditorModule,
     Ng2FlatpickrModule,
     NgSelectModule,
     CommonModule,

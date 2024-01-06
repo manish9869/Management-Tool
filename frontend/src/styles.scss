@@ -100,3 +100,12 @@ html:not(.auth-layout) .main-content {
 .event.busy {
   background: #f64747;
 }
+
+.NgxEditor__Content {
+  min-height: 120px;
+}
+
+.file-drop-wrapper {
+  padding-top: 17px !important;
+  padding-bottom: 17px !important;
+}

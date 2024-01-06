@@ -13,13 +13,20 @@ import treatment from "./routes/treatment";
 import medicalCondition from "./routes/medical-condition";
 import medicine from "./routes/medicine";
 import caseHistory from "./routes/case-history";
+import path from "path";
+import { FILE_FOLDERS } from "./common/common";
 
 const app = express();
 dotenv.config();
 const port = EnvHandler.envPORT() || 3001;
 
 app.use(bodyParser.json({ limit: "50mb" }));
-app.use(express.static("public"));
+// Define the directory where your images are stored
+const imagesDirectory = path.join(__dirname, `./../../case-files`);
+
+// Serve static files from the 'case-files' directory
+app.use("/images", express.static(imagesDirectory));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //Call connection
