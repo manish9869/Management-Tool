@@ -305,29 +305,63 @@
                   </div>
                 </div>
               </div>
-              <!-- Case Documents (Upload Control) -->
-              <div class="col-md-6">
-                <label
-                  class="col-md-12 col-form-label"
-                  for="case-documents-input"
-                  >Case Documents</label
-                >
-                <div class="col-md-12">
-                  <!-- Your file upload control here -->
 
-                  <ngx-awesome-uploader
-                    [adapter]="adapter"
-                    [enableCropper]="false"
-                    [fileMaxSize]="200"
-                    (uploadSuccess)="uploadSuccess($event)"
-                    (validationError)="onValidationError($event)"
-                    [fileExtensions]="['pdf', 'jpg', 'jpeg', 'png']"
-                    [accept]="'.jpg, .png, .pdf, .jpeg'"
-                    [uploadType]="'multi'"
+              <div class="form-group row">
+                <!-- Medical History -->
+                <div class="form-group col-md-6">
+                  <label class="col-md-12 col-form-label" for="notes-input"
+                    >Notes</label
                   >
-                  </ngx-awesome-uploader>
+                  <div class="col-md-12">
+                    <ngx-editor-menu [editor]="notes" [toolbar]="toolbar">
+                    </ngx-editor-menu>
 
-                  <!-- <input
+                    <ngx-editor
+                      id="notes-input"
+                      name="notes-input"
+                      [editor]="notes"
+                      [spellcheck]="true"
+                      placeholder="Notes"
+                      formControlName="notes"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.notes.errors
+                      }"
+                    ></ngx-editor>
+
+                    <div
+                      *ngIf="submitted && f.notes.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.notes.errors.required">
+                        Please enter the Notes
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Case Documents (Upload Control) -->
+                <div class="col-md-6">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="case-documents-input"
+                    >Case Documents</label
+                  >
+                  <div class="col-md-12">
+                    <!-- Your file upload control here -->
+
+                    <ngx-awesome-uploader
+                      [adapter]="adapter"
+                      [enableCropper]="false"
+                      [fileMaxSize]="200"
+                      (uploadSuccess)="uploadSuccess($event)"
+                      (validationError)="onValidationError($event)"
+                      [fileExtensions]="['pdf', 'jpg', 'jpeg', 'png']"
+                      [accept]="'.jpg, .png, .pdf, .jpeg'"
+                      [uploadType]="'multi'"
+                      formControlName="caseDocuments"
+                    >
+                    </ngx-awesome-uploader>
+
+                    <!-- <input
                     type="file"
                     id="case-documents-input"
                     name="case-documents-input"
@@ -337,12 +371,13 @@
                       'is-invalid': submitted && f.case_documents.errors
                     }"
                   /> -->
-                  <div
-                    *ngIf="submitted && f.case_documents.errors"
-                    class="invalid-feedback"
-                  >
-                    <div *ngIf="f.case_documents.errors.required">
-                      Please upload the Case Documents
+                    <div
+                      *ngIf="submitted && f.case_documents.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.case_documents.errors.required">
+                        Please upload the Case Documents
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -362,6 +397,31 @@
             </div>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-wrapper">
+        <div class="card">
+          <div class="card-header"><strong>Case History</strong> List</div>
+          <div class="card-body">
+            <ag-grid-angular
+              [autoSizeStrategy]="autoSizeStrategy"
+              style="width: 100%; height: 520px"
+              class="ag-theme-quartz"
+              [columnDefs]="colDefs"
+              [defaultColDef]="defaultColDef"
+              [tooltipShowDelay]="tooltipShowDelay"
+              [rowData]="caseHistoryList"
+              [pagination]="true"
+              [paginationPageSize]="paginationPageSize"
+              [paginationPageSizeSelector]="paginationPageSizeSelector"
+            >
+            </ag-grid-angular>
+          </div>
+        </div>
       </div>
     </div>
   </div>

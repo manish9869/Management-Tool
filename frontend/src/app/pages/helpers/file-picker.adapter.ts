@@ -3,6 +3,7 @@ import {
   HttpClient,
   HttpEvent,
   HttpEventType,
+  HttpHeaders,
 } from "@angular/common/http";
 import { catchError, map } from "rxjs/operators";
 import { Observable, of } from "rxjs";
@@ -12,6 +13,8 @@ import {
   UploadStatus,
   FilePreviewModel,
 } from "ngx-awesome-uploader";
+import { environment } from "src/environments/environment";
+const BACKEND_URL = environment.apiUrl + "/case-history";
 
 export class FilePicker extends FilePickerAdapter {
   constructor(private http: HttpClient) {
@@ -22,39 +25,51 @@ export class FilePicker extends FilePickerAdapter {
   ): Observable<UploadResponse | undefined> {
     const form = new FormData();
     form.append("file", fileItem.file);
-    const api = "https://ngx-awesome-uploader-2.free.beeceptor.com/upload";
-    const req = new HttpRequest("POST", api, form, { reportProgress: true });
+
+    let userdata: any = localStorage.getItem("userdata");
+    userdata = JSON.parse(userdata);
+    let authToken = userdata.token;
+    const headers = authToken
+      ? new HttpHeaders().set("x-access-token", authToken)
+      : new HttpHeaders();
+
+    const req = new HttpRequest("POST", `${BACKEND_URL}/upload`, form, {
+      reportProgress: true,
+      headers: headers,
+    });
+
     return this.http.request(req).pipe(
-      map((res: HttpEvent<any>) => {
-        if (res.type === HttpEventType.Response) {
-          const responseFromBackend = res.body;
-          return {
-            body: responseFromBackend,
-            status: UploadStatus.UPLOADED,
-          };
-        } else if (res.type === HttpEventType.UploadProgress && res.total) {
-          /** Compute and show the % done: */
-          const uploadProgress = +Math.round((100 * res.loaded) / res.total);
-          return {
-            status: UploadStatus.IN_PROGRESS,
-            progress: uploadProgress,
-          };
-        } else {
-          return undefined;
+      map((event: HttpEvent<any>) => {
+        switch (event.type) {
+          case HttpEventType.UploadProgress:
+            if (event.total) {
+              const progress = Math.round((100 * event.loaded) / event.total);
+              return { status: UploadStatus.IN_PROGRESS, progress };
+            }
+            break;
+          case HttpEventType.Response:
+            const responseFromBackend = event.body;
+            return { body: responseFromBackend, status: UploadStatus.UPLOADED };
+          default:
+            return undefined;
         }
       }),
-      catchError((er) => {
-        console.log(er);
-        return of({ status: UploadStatus.ERROR, body: er });
+      catchError((error) => {
+        console.error("Upload error:", error);
+        return of({ status: UploadStatus.ERROR, body: error });
       })
     );
   }
   public removeFile(fileItem: FilePreviewModel): Observable<any> {
-    const id = 50;
-    const responseFromBackend = fileItem.uploadResponse;
-    console.log(fileItem);
-    const removeApi =
-      "https://run.mocky.io/v3/dedf88ec-7ce8-429a-829b-bd2fc55352bc";
-    return this.http.post(removeApi, { id });
+    let userdata: any = localStorage.getItem("userdata");
+    userdata = JSON.parse(userdata);
+    let authToken = userdata.token;
+    const headers = authToken
+      ? new HttpHeaders().set("x-access-token", authToken)
+      : new HttpHeaders();
+    const fileName = fileItem.uploadResponse.data.files[0].fileName;
+
+    const removeApi = `${BACKEND_URL}/delete-image/${fileName}`;
+    return this.http.delete(removeApi, { headers: headers });
   }
 }

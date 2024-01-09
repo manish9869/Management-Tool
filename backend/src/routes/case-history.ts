@@ -10,6 +10,12 @@ router.post("/", validateJwt, CaseHistoryController.addCaseHistoryData);
 
 router.patch("/:id", validateJwt, CaseHistoryController.updateCaseHistoryData);
 
+router.delete(
+  "/delete-image/:imageName",
+  validateJwt,
+  CaseHistoryController.deleteFile
+);
+
 router.delete("/:id", validateJwt, CaseHistoryController.deleteCaseHistoryData);
 
 router.get("/:id", validateJwt, CaseHistoryController.getCaseHistoryById);

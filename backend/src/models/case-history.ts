@@ -48,7 +48,8 @@ const CaseHistorySchema = new Schema(
     case_documents: [
       {
         documentType: String,
-        documentUrl: String,
+        documentName: String,
+        documentFolder: String,
       },
     ],
     created_user_id: {

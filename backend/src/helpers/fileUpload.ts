@@ -56,15 +56,23 @@ export const uploadFile = async (req, res) => {
     return ResponseHandler.JSONERROR(req, res);
   }
 };
-export const deleteScript = async (fileName) => {
+export const deleteFile = async (req, res) => {
   try {
+    const { imageName } = req.params;
+
     const filePath = path.join(
       __dirname,
-      `./../../../ ${FILE_FOLDERS.CASE_FILES}/`,
-      fileName
+      `./../../../${FILE_FOLDERS.CASE_FILES}/${imageName}`
     );
-    const result = fs.unlinkSync(filePath);
-    return result;
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath); // Delete the file from the server
+
+      res.locals.message = Messages.DELETED;
+      return ResponseHandler.JSONSUCCESS(req, res);
+    } else {
+      res.locals.errors = Messages.NO_FILE_UPLOADED;
+      return ResponseHandler.JSONERROR(req, res);
+    }
   } catch (e) {
     throw new Error(Messages.SOMETHING_WENT_WRONG);
   }

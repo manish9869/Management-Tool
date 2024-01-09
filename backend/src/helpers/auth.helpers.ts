@@ -6,7 +6,6 @@ const saltRounds = 10;
 dotenv.config();
 
 export const generateJWT = (payload: any) => {
-  console.log("payload", payload);
   const token = jwt.sign(
     { id: payload.id, emailid: payload.user_email, role: payload.role },
     process.env.JWT_SECRET,

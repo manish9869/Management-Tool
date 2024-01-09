@@ -14,10 +14,15 @@ import { CaseHistoryService } from "../case-history.service";
 import { MedicalConditionService } from "../../master-data/medical-condition.service";
 import { TreatmentService } from "../../master-data/treatment.service";
 import { MedicineService } from "../../master-data/medicine.service";
-import { Editor, Toolbar } from "ngx-editor";
+import { Editor, Toolbar, toHTML } from "ngx-editor";
 import { FilePicker } from "../../helpers/file-picker.adapter";
 import { HttpClient } from "@angular/common/http";
 import { ValidationError } from "ngx-awesome-uploader";
+import {
+  SizeColumnsToContentStrategy,
+  SizeColumnsToFitGridStrategy,
+  SizeColumnsToFitProvidedWidthStrategy,
+} from "ag-grid-community";
 
 @Component({
   selector: "app-case-history",
@@ -26,7 +31,6 @@ import { ValidationError } from "ngx-awesome-uploader";
 })
 export class CaseHistoryComponent implements OnInit {
   @ViewChild("caseDateControl") caseDateControl: ElementRef;
-
   adapter = new FilePicker(this.http);
   form: FormGroup;
   isLoading = false;
@@ -37,6 +41,7 @@ export class CaseHistoryComponent implements OnInit {
   medicineList: any = [];
   treatmentList: any = [];
   staffMemberList: any[] = [];
+  caseDocuments: any[] = [];
   caseDate;
   public mode = "create";
   public caseHistorySub: Subscription;
@@ -49,10 +54,16 @@ export class CaseHistoryComponent implements OnInit {
   public frameworkComponents;
   public paginationPageSize = 10;
   public paginationPageSizeSelector: number[] | boolean = [10, 20, 50, 100];
-
+  notes: Editor;
   dentalHistory: Editor;
   medicalHistory: Editor;
   html = "";
+  public autoSizeStrategy:
+    | SizeColumnsToFitGridStrategy
+    | SizeColumnsToFitProvidedWidthStrategy
+    | SizeColumnsToContentStrategy = {
+    type: "fitCellContents",
+  };
 
   toolbar: Toolbar = [
     ["bold", "italic"],
@@ -126,15 +137,13 @@ export class CaseHistoryComponent implements OnInit {
       case_date: new FormControl(null, {
         validators: [Validators.required],
       }),
-      notes: new FormControl(null, {
-        validators: [Validators.required],
-      }),
-      condition_ids: new FormControl(null),
-      treatment_ids: new FormControl(null),
-      medicine_ids: new FormControl(null),
-      dental_history: new FormControl(null),
-      medical_history: new FormControl(null),
-      case_documents: new FormControl(null),
+      notes: new FormControl(null),
+      conditionIds: new FormControl(null),
+      treatmentIds: new FormControl(null),
+      medicineIds: new FormControl(null),
+      dentalHistory: new FormControl(null),
+      medicalHistory: new FormControl(null),
+      caseDocuments: new FormControl(null),
     });
 
     this.loadCaseHistorysList();
@@ -147,6 +156,7 @@ export class CaseHistoryComponent implements OnInit {
 
     this.medicalHistory = new Editor();
     this.dentalHistory = new Editor();
+    this.notes = new Editor();
   }
 
   get f() {
@@ -227,16 +237,16 @@ export class CaseHistoryComponent implements OnInit {
 
       if (this.mode === "create") {
         const caseHistoryData = {
-          customer_id: this.form.value.customer_id,
-          staff_member_id: this.form.value.staff_member_id,
-          case_date: this.form.value.case_date,
-          notes: this.form.value.notes,
-          condition_ids: this.form.value.condition_ids,
-          treatment_ids: this.form.value.treatment_ids,
-          medicine_ids: this.form.value.medicine_ids,
-          dental_history: this.form.value.dental_history,
-          medical_history: this.form.value.medical_history,
-          case_documents: this.form.value.case_documents,
+          customer_id: this.form.value.customerId,
+          staff_member_id: this.form.value.staffMemberId,
+          case_date: this.form.value.case_date[0],
+          notes: toHTML(this.form.value.notes),
+          condition_ids: this.form.value.conditionIds,
+          treatment_ids: this.form.value.treatmentIds,
+          medicine_ids: this.form.value.medicineIds,
+          dental_history: toHTML(this.form.value.dentalHistory),
+          medical_history: toHTML(this.form.value.medicalHistory),
+          case_documents: this.caseDocuments,
         };
         this.caseHistorySub = this.caseHistoryService
           .addCaseHistory(caseHistoryData)
@@ -256,16 +266,16 @@ export class CaseHistoryComponent implements OnInit {
           });
       } else {
         const caseHistoryData = {
-          customer_id: this.form.value.customer_id,
-          staff_member_id: this.form.value.staff_member_id,
-          case_date: this.form.value.case_date,
-          notes: this.form.value.notes,
-          condition_ids: this.form.value.condition_ids,
-          treatment_ids: this.form.value.treatment_ids,
-          medicine_ids: this.form.value.medicine_ids,
-          dental_history: this.form.value.dental_history,
-          medical_history: this.form.value.medical_history,
-          case_documents: this.form.value.case_documents,
+          customer_id: this.form.value.customerId,
+          staff_member_id: this.form.value.staffMemberId,
+          case_date: this.form.value.case_date[0],
+          notes: toHTML(this.form.value.notes),
+          condition_ids: this.form.value.conditionIds,
+          treatment_ids: this.form.value.treatmentIds,
+          medicine_ids: this.form.value.medicineIds,
+          dental_history: toHTML(this.form.value.dentalHistory),
+          medical_history: toHTML(this.form.value.medicalHistory),
+          case_documents: this.caseDocuments,
         };
 
         this.caseHistorySub = this.caseHistoryService
@@ -293,7 +303,17 @@ export class CaseHistoryComponent implements OnInit {
   }
 
   public uploadSuccess(event): void {
-    console.log(event);
+    console.log("event", event);
+    if (event) {
+      let fileName = event.uploadResponse.data.files[0].fileName;
+      let folderName = event.uploadResponse.data.files[0].filePath;
+      let fileType = event.file.type;
+      this.caseDocuments.push({
+        documentType: fileType,
+        documentName: fileName,
+        documentFolder: folderName,
+      });
+    }
   }
 
   public onValidationError(error: ValidationError): void {
@@ -372,5 +392,6 @@ export class CaseHistoryComponent implements OnInit {
 
     this.medicalHistory.destroy();
     this.dentalHistory.destroy();
+    this.notes.destroy();
   }
 }
