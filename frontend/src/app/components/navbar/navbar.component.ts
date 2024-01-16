@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
     var titlee = this.location.prepareExternalUrl(this.location.path());
 
     if (titlee.charAt(0) === "#") {
-      titlee = titlee.slice(1);
+      titlee = titlee.slice(1).split("?")[0];
     }
 
     const titleName = this.findNestedObj(this.listTitles, "link", titlee);

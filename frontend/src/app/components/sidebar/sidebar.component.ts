@@ -179,6 +179,10 @@ export const titleRoutes = [
         link: "/customer/case-history",
       },
       {
+        link_name: "View Case History",
+        link: "/customer/view-case-history",
+      },
+      {
         link_name: "Manage Invoice",
         link: "/customer/manage-invoice",
       },
