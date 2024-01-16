@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as ResponseHandler from "../helpers/response.handler";
 import Messages from "../common/constants";
-import * as userLib from "../modules/User/User.lib";
+import * as userLib from "../modules/User/user.lib";
 import { generate2faAuthCode, verify2faAuthCode } from "../utility/2fa";
 import { CheckPassword, generateJWT } from "../helpers/auth.helpers";
 import * as HttpStatus from "http-status-codes";
@@ -41,13 +41,15 @@ class AuthController {
 
           // Generate JWT, valid for 1 hour
           const token: string = generateJWT({
+            id: user["_id"],
             userId: user["user_id"],
-            email: input.email,
+            email: user["user_email"],
             role: user["role_id"],
           });
 
           //Send the jwt in the response
           const data: any = {
+            id: user["_id"],
             token,
             user_name: user["user_name"],
             name: user["name"],

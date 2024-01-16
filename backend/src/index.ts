@@ -4,19 +4,29 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connection from "./config/connection";
 import * as EnvHandler from "./helpers/environment.handler";
-
 import auth from "./routes/auth";
 import customer from "./routes/customer";
 import user from "./routes/user";
-import subscription from "./routes/subscription";
-import subscription_mapping from "./routes/subscription_mapping";
+import staff from "./routes/staff-members";
+import appointment from "./routes/appointment";
+import treatment from "./routes/treatment";
+import medicalCondition from "./routes/medical-condition";
+import medicine from "./routes/medicine";
+import caseHistory from "./routes/case-history";
+import path from "path";
+import { FILE_FOLDERS } from "./common/common";
 
 const app = express();
 dotenv.config();
 const port = EnvHandler.envPORT() || 3001;
 
 app.use(bodyParser.json({ limit: "50mb" }));
-app.use(express.static("public"));
+// Define the directory where your images are stored
+const imagesDirectory = path.join(__dirname, `./../../case-files`);
+
+// Serve static files from the 'case-files' directory
+app.use("/images", express.static(imagesDirectory));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //Call connection
@@ -25,26 +35,29 @@ connection;
 // allow cross origin
 app.use(cors());
 
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Headers', '*');
-//   res.header(
-//     'Access-Control-Allow-Methods',
-//     'GET, POST, OPTIONS, PUT, PATCH, DELETE',
-//   );
-//   // res.header(
-//   //   'Access-Control-Allow-Headers',
-//   //   'Origin, X-Requested-With, Content-Type, Accept, x-access-token',
-//   // );
-//   next();
-// });
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, x-access-token"
+  );
+  next();
+});
 
 app.use("/auth", auth);
 app.use("/user", user);
 app.use("/customer", customer);
-app.use("/subscription", subscription);
-app.use("/subscription-mapping", subscription_mapping);
-app.use("/customer", customer);
+app.use("/staff-members", staff);
+app.use("/appointment", appointment);
+app.use("/treatment", treatment);
+app.use("/medical-condition", medicalCondition);
+app.use("/medicine", medicine);
+app.use("/case-history", caseHistory);
 
 app.get("/", (req, res) => {
   res.send("Hey there!!!");

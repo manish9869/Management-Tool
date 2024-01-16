@@ -1,0 +1,84 @@
+/* Navbar and Accordion styles */
+.navbar-nav {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-nav .nav-item {
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.navbar-nav .nav-item .accordion {
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  background-color: white;
+  position: relative;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 0.65rem 1.5rem;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 0.8rem;
+}
+
+.ni {
+  min-width: 2.25rem;
+  font-size: 0.9375rem;
+  line-height: 1.5rem;
+}
+
+.navbar-nav .nav-item .accordion .arrow {
+  position: absolute;
+  right: 10%;
+  top: 50%;
+  transition: transform 0.3s ease-out;
+  transform: rotate(90deg);
+}
+
+.navbar-nav .nav-item .accordion.active .arrow {
+  transform: rotate(180deg);
+  color: #5e72e4;
+}
+
+.navbar-nav .nav-item .panel {
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.navbar-nav .nav-item .panel li {
+  padding: 0px 12px;
+}
+
+.navbar-nav .nav-item .panel li a {
+  text-decoration: none;
+  display: block;
+}
+
+.navbar-nav .nav-item .panel.active {
+  max-height: 500px; /* Set the maximum height as needed */
+}
+.nav-link {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 0.65rem 1.5rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.navbar-vertical .navbar-nav .nav-link {
+  font-size: 0.8rem;
+}
+
+.active {
+  color: rgba(0, 0, 0, 0.7) !important;
+}

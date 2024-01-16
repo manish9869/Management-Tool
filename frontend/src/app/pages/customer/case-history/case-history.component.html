@@ -1,0 +1,392 @@
+<div class="header bg-gradient-danger py-7 py-lg-8"></div>
+<div class="container custom-top">
+  <!-- Table -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-wrapper">
+        <form
+          [formGroup]="form"
+          (ngSubmit)="createCaseHistory()"
+          enctype="multipart/form-data"
+          class="form-horizontal"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong>Manage Case History</strong> Form
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <!-- Customer ID Dropdown -->
+                <div class="form-group col-md-4">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="customer-id-input"
+                    >Select Customer</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      id="customer-id-input"
+                      name="customer-id-input"
+                      formControlName="customerId"
+                      placeholder="Select Customer"
+                      [items]="customerList"
+                      bindLabel="fullname"
+                      bindValue="id"
+                    >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <!-- Staff Member ID Dropdown -->
+                <div class="form-group col-md-4">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="staff-member-id-input"
+                    >Select Staff</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      id="staff-member-id-input"
+                      name="staff-member-id-input"
+                      placeholder="Select Staff Member"
+                      formControlName="staffMemberId"
+                      [items]="staffMemberList"
+                      bindLabel="fullname"
+                      bindValue="id"
+                    >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <!-- Case Date -->
+                <div class="form-group col-md-4">
+                  <label class="col-md-12 col-form-label" for="case-date-input"
+                    >Case Date</label
+                  >
+                  <div class="col-md-12">
+                    <ng2-flatpickr
+                      id="case-date-input"
+                      name="case-date-input"
+                      placeholder="Case Date"
+                      formControlName="case_date"
+                      [config]="exampleOptions"
+                      [setDate]="caseDate"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.case_date.errors
+                      }"
+                      #caseDateControl
+                    ></ng2-flatpickr>
+                    <div
+                      *ngIf="submitted && f.case_date.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.case_date.errors.required">
+                        Please enter the Case Date
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="condition-ids-input"
+                    >Select Condition</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      id="condition-ids-input"
+                      name="condition-id-input"
+                      placeholder="Select Condition"
+                      formControlName="conditionIds"
+                      [multiple]="true"
+                      [items]="conditionList"
+                      bindLabel="name"
+                      bindValue="id"
+                      [(ngModel)]="selectedCondition"
+                    >
+                    </ng-select>
+
+                    <div
+                      *ngIf="submitted && f.conditionIds.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.conditionIds.errors.required">
+                        Please enter the Condition IDs
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Treatment IDs -->
+                <div class="form-group col-md-4">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="treatment-ids-input"
+                    >Select Treatment</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      id="treatment-ids-input"
+                      name="treatment-id-input"
+                      placeholder="Select Treatment"
+                      formControlName="treatmentIds"
+                      [multiple]="true"
+                      [items]="treatmentList"
+                      bindLabel="name"
+                      bindValue="id"
+                      [(ngModel)]="selectedtreatment"
+                    >
+                    </ng-select>
+
+                    <div
+                      *ngIf="submitted && f.treatmentIds.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.treatmentIds.errors.required">
+                        Please enter the Treatment IDs
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Medicine IDs -->
+                <div class="form-group col-md-4">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="medicine-ids-input"
+                    >Select Medicine</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      id="medicine-ids-input"
+                      name="medicine-id-input"
+                      placeholder="Select Medicine"
+                      formControlName="medicineIds"
+                      [multiple]="true"
+                      [items]="medicineList"
+                      bindLabel="medicineName"
+                      bindValue="id"
+                      [(ngModel)]="selectedMedicine"
+                    >
+                    </ng-select>
+
+                    <div
+                      *ngIf="submitted && f.medicineIds.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.medicineIds.errors.required">
+                        Please enter the Medicine IDs
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <!-- Dental History -->
+                <div class="form-group col-md-6">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="dental-history-input"
+                    >Dental History</label
+                  >
+                  <div class="col-md-12">
+                    <ngx-editor-menu
+                      [editor]="dentalHistory"
+                      [toolbar]="toolbar"
+                    >
+                    </ngx-editor-menu>
+                    <ngx-editor
+                      id="dental-history-input"
+                      name="dental-history-input"
+                      [editor]="dentalHistory"
+                      placeholder="Dental History"
+                      formControlName="dentalHistory"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.dentalHistory.errors
+                      }"
+                    ></ngx-editor>
+
+                    <div
+                      *ngIf="submitted && f.dentalHistory.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.dentalHistory.errors.required">
+                        Please enter the Dental History
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Medical History -->
+                <div class="form-group col-md-6">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="medical-history-input"
+                    >Medical History</label
+                  >
+                  <div class="col-md-12">
+                    <ngx-editor-menu
+                      [editor]="medicalHistory"
+                      [toolbar]="toolbar"
+                    >
+                    </ngx-editor-menu>
+
+                    <ngx-editor
+                      id="medical-history-input"
+                      name="medical-history-input"
+                      [editor]="medicalHistory"
+                      [spellcheck]="true"
+                      placeholder="Medical History"
+                      formControlName="medicalHistory"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.medicalHistory.errors
+                      }"
+                    ></ngx-editor>
+
+                    <div
+                      *ngIf="submitted && f.medicalHistory.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.medicalHistory.errors.required">
+                        Please enter the Medical History
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <!-- Medical History -->
+                <div class="form-group col-md-6">
+                  <label class="col-md-12 col-form-label" for="notes-input"
+                    >Notes</label
+                  >
+                  <div class="col-md-12">
+                    <ngx-editor-menu [editor]="notes" [toolbar]="toolbar">
+                    </ngx-editor-menu>
+
+                    <ngx-editor
+                      id="notes-input"
+                      name="notes-input"
+                      [editor]="notes"
+                      [spellcheck]="true"
+                      placeholder="Notes"
+                      formControlName="notes"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.notes.errors
+                      }"
+                    ></ngx-editor>
+
+                    <div
+                      *ngIf="submitted && f.notes.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.notes.errors.required">
+                        Please enter the Notes
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Case Documents (Upload Control) -->
+                <div class="col-md-6">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="case-documents-input"
+                    >Case Documents</label
+                  >
+                  <div class="col-md-12">
+                    <!-- Your file upload control here -->
+
+                    <ngx-awesome-uploader
+                      [adapter]="adapter"
+                      [enableCropper]="false"
+                      [fileMaxSize]="200"
+                      (uploadSuccess)="uploadSuccess($event)"
+                      (validationError)="onValidationError($event)"
+                      [fileExtensions]="['pdf', 'jpg', 'jpeg', 'png']"
+                      [accept]="'.jpg, .png, .pdf, .jpeg'"
+                      [uploadType]="'multi'"
+                      formControlName="caseDocuments"
+                    >
+                    </ngx-awesome-uploader>
+
+                    <div
+                      *ngIf="submitted && f.case_documents.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.case_documents.errors.required">
+                        Please upload the Case Documents
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="form-group row"
+                *ngIf="caseDocuments && caseDocuments.length > 0"
+              >
+                <div class="col-md-6">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="case-documents-input"
+                    >Uploaded Documents</label
+                  >
+                  <div class="col-md-12">
+                    <div class="img-wrap" *ngFor="let image of caseDocuments">
+                      <span
+                        class="close"
+                        (click)="onDeleteImage(image.documentName)"
+                        >&times;</span
+                      >
+                      <img [src]="image.url" width="100" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button
+                type="reset"
+                class="btn btn-sm btn-danger"
+                (click)="resetForm()"
+              >
+                <i class="fa fa-ban"></i> Reset
+              </button>
+              <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-dot-circle-o"></i> Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-wrapper">
+        <div class="card">
+          <div class="card-header"><strong>Case History</strong> List</div>
+          <div class="card-body">
+            <ag-grid-angular
+              [autoSizeStrategy]="autoSizeStrategy"
+              style="width: 100%; height: 520px"
+              class="ag-theme-quartz"
+              [columnDefs]="colDefs"
+              [defaultColDef]="defaultColDef"
+              [tooltipShowDelay]="tooltipShowDelay"
+              [rowData]="caseHistoryList"
+              [pagination]="true"
+              [paginationPageSize]="paginationPageSize"
+              [paginationPageSizeSelector]="paginationPageSizeSelector"
+            >
+            </ag-grid-angular>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

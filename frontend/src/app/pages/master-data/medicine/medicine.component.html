@@ -1,0 +1,100 @@
+<div class="header bg-gradient-danger py-7 py-lg-8"></div>
+<div class="container custom-top">
+  <!-- Table -->
+  <div class="row">
+    <div class="col-lg-5">
+      <div class="card-wrapper">
+        <form
+          [formGroup]="medicineForm"
+          (ngSubmit)="onCreateMedicine()"
+          enctype="multipart/form-data"
+          class="form-horizontal"
+        >
+          <div class="card">
+            <div class="card-header"><strong>Manage Medicine</strong> Form</div>
+            <div class="card-body">
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input"
+                  >Medicine Name</label
+                >
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    id="text-input"
+                    name="text-input"
+                    class="form-control"
+                    placeholder="Medicine Name"
+                    formControlName="medicineName"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.medicineName.errors
+                    }"
+                  />
+                  <div
+                    *ngIf="submitted && f.medicineName.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.medicineName.errors.required">
+                      Please enter the Medicine Name
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="textarea-input"
+                  >Description</label
+                >
+                <div class="col-md-9">
+                  <textarea
+                    id="textarea-input"
+                    name="textarea-input"
+                    rows="4"
+                    class="form-control"
+                    placeholder="Please enter Description"
+                    formControlName="description"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.description.errors
+                    }"
+                  ></textarea>
+                  <div
+                    *ngIf="submitted && f.description.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.description.errors.required">
+                      Please enter the Description
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button
+                type="reset"
+                class="btn btn-sm btn-danger"
+                (click)="resetMedicineForm()"
+              >
+                <i class="fa fa-ban"></i> Reset
+              </button>
+              <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-dot-circle-o"></i> Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <ag-grid-angular
+        style="width: 100%; height: 520px"
+        class="ag-theme-quartz"
+        [columnDefs]="colDefs"
+        [defaultColDef]="defaultColDef"
+        [rowData]="medicineList"
+        [pagination]="true"
+        [paginationPageSize]="paginationPageSize"
+        [paginationPageSizeSelector]="paginationPageSizeSelector"
+      >
+      </ag-grid-angular>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,209 @@
+<div class="header bg-gradient-danger py-7 py-lg-8"></div>
+<div class="container custom-top">
+  <!-- Table -->
+  <div class="row">
+    <div class="col-lg-5">
+      <div class="card-wrapper">
+        <form
+          [formGroup]="form"
+          (ngSubmit)="createCustomerAppointment()"
+          enctype="multipart/form-data"
+          class="form-horizontal"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong>Manage Appointment</strong> Form
+            </div>
+            <div class="card-body">
+              <!-- Customer ID Dropdown -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="customer-id-input"
+                  >Customer ID</label
+                >
+                <div class="col-md-8">
+                  <ng-select
+                    id="customer-id-input"
+                    name="customer-id-input"
+                    formControlName="customerId"
+                    placeholder="Select Customer"
+                    [items]="customerList"
+                    bindLabel="fullname"
+                    bindValue="id"
+                  >
+                  </ng-select>
+                </div>
+              </div>
+
+              <!-- Staff Member ID Dropdown -->
+              <div class="form-group row">
+                <label
+                  class="col-md-4 col-form-label"
+                  for="staff-member-id-input"
+                  >Staff Member ID</label
+                >
+                <div class="col-md-8">
+                  <ng-select
+                    id="staff-member-id-input"
+                    name="staff-member-id-input"
+                    placeholder="Select Staff Member"
+                    formControlName="staffMemberId"
+                    [items]="staffMemberList"
+                    bindLabel="fullname"
+                    bindValue="id"
+                  >
+                  </ng-select>
+                </div>
+              </div>
+
+              <!-- Appointment Date -->
+              <div class="form-group row">
+                <label
+                  class="col-md-4 col-form-label"
+                  for="appointment-date-input"
+                  >Appointment Date</label
+                >
+                <div class="col-md-8">
+                  <!-- <input
+                    class="form-control"
+                    id="appointment-date-input"
+                    type="date"
+                    name="appointment-date-input"
+                    placeholder="Appointment Date"
+                    formControlName="appointmentDate"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.appointmentDate.errors
+                    }"
+                  /> -->
+
+                  <ng2-flatpickr
+                    id="appointment-date-input"
+                    name="appointment-date-input"
+                    placeholder="Appointment Date"
+                    formControlName="appointmentDate"
+                    [config]="exampleOptions"
+                    [setDate]="appointmentDate"
+                    [ngClass]="{
+                      'is-invalid': submitted && f.appointmentDate.errors
+                    }"
+                    #appointmentDateControl
+                  ></ng2-flatpickr>
+                  <div
+                    *ngIf="submitted && f.appointmentDate.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.appointmentDate.errors.required">
+                      Please enter the Appointment Date
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Duration -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="duration-input"
+                  >Duration</label
+                >
+                <div class="col-md-8">
+                  <input
+                    type="text"
+                    id="duration-input"
+                    name="duration-input"
+                    class="form-control"
+                    placeholder="Duration"
+                    formControlName="duration"
+                    [ngClass]="{ 'is-invalid': submitted && f.duration.errors }"
+                  />
+                  <div
+                    *ngIf="submitted && f.duration.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.duration.errors.required">
+                      Please enter the Duration
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reason -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="reason-input"
+                  >Reason</label
+                >
+                <div class="col-md-8">
+                  <textarea
+                    id="reason-input"
+                    name="reason-input"
+                    rows="4"
+                    class="form-control"
+                    placeholder="Reason"
+                    formControlName="reason"
+                    [ngClass]="{ 'is-invalid': submitted && f.reason.errors }"
+                  ></textarea>
+                  <div
+                    *ngIf="submitted && f.reason.errors"
+                    class="invalid-feedback"
+                  >
+                    <div *ngIf="f.reason.errors.required">
+                      Please enter the Reason
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Status Dropdown -->
+              <div class="form-group row">
+                <label class="col-md-4 col-form-label" for="status-input"
+                  >Status</label
+                >
+                <div class="col-md-8">
+                  <ng-select
+                    appearance="outline"
+                    id="status-id-input"
+                    name="status-id-input"
+                    formControlName="status"
+                    placeholder="Select Status"
+                    [searchable]="false"
+                  >
+                    <ng-option
+                      *ngFor="let options of statusOptions"
+                      [value]="options.name"
+                    >
+                      {{ options.name }}</ng-option
+                    >
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button
+                type="reset"
+                class="btn btn-sm btn-danger"
+                (click)="resetForm()"
+              >
+                <i class="fa fa-ban"></i> Reset
+              </button>
+              <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-dot-circle-o"></i> Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-7">
+      <ag-grid-angular
+        style="width: 100%; height: 520px"
+        class="ag-theme-quartz"
+        [columnDefs]="colDefs"
+        [defaultColDef]="defaultColDef"
+        [tooltipShowDelay]="tooltipShowDelay"
+        [rowData]="appointmentList"
+        [pagination]="true"
+        [paginationPageSize]="paginationPageSize"
+        [paginationPageSizeSelector]="paginationPageSizeSelector"
+      >
+      </ag-grid-angular>
+    </div>
+  </div>
+</div>

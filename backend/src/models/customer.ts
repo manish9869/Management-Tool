@@ -7,12 +7,19 @@ const CustomerSchema = new Schema(
       type: Number,
       unique: true,
     },
-
     fullname: {
       type: String,
       default: null,
     },
     email: {
+      type: String,
+      default: null,
+    },
+    mobile: {
+      type: String,
+      default: null,
+    },
+    alt_mobile: {
       type: String,
       default: null,
     },
@@ -24,11 +31,22 @@ const CustomerSchema = new Schema(
       type: Date,
       default: null,
     },
+    abha_card: {
+      type: String,
+      default: null,
+    },
+    insurance_policy: {
+      type: String,
+      default: null,
+    },
     created_user_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
+      default: null,
     },
     updated_user_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
       default: null,
     },
   },

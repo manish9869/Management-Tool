@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import * as jwt from "jsonwebtoken";
-import * as HttpStatus from 'http-status-codes';
-import * as dotenv from 'dotenv';
-import * as ResponseHandler from '../helpers/response.handler';
-import Messages from '../common/constants';
-import * as EnvHandler from '../helpers/environment.handler';
+import * as HttpStatus from "http-status-codes";
+import * as dotenv from "dotenv";
+import * as ResponseHandler from "../helpers/response.handler";
+import Messages from "../common/constants";
+import * as EnvHandler from "../helpers/environment.handler";
+import mongoose from "mongoose";
 
 dotenv.config();
 
@@ -14,7 +15,11 @@ dotenv.config();
  * @param res
  * @param next
  */
-export const validateJwt = async (req: Request, res: Response, next: NextFunction) => {
+export const validateJwt = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     // Get the jwt token from the headers
     const token = <string>req.headers["x-access-token"];
@@ -26,8 +31,10 @@ export const validateJwt = async (req: Request, res: Response, next: NextFunctio
 
     // get logged in user details from db
 
-    req.loggedInUser = payload.id;
-    next();
+    (req.loggedInUser = mongoose.Types.ObjectId.createFromHexString(
+      payload.id
+    )),
+      next();
   } catch (e) {
     res.locals.errorCode = HttpStatus.UNAUTHORIZED;
     res.locals.errors = e.message;

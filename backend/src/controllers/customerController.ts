@@ -4,17 +4,20 @@ import Messages from "../common/constants";
 import * as customerLib from "../modules/customer/customer.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
+import mongoose from "mongoose";
 class CustomerController {
   static addCustomerData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {
       const input = req.body;
-
+      console.log("loggedInUser", loggedInUser);
       const obj = {
         fullname: input.fullname,
         email: input.email,
         address: input.address,
         DOB: input.DOB,
+        mobile: input.mobile,
+        alt_mobile: input.alt_mobile,
         created_user_id: loggedInUser,
       };
       const data = await customerLib.addCustomer(obj);
@@ -47,6 +50,8 @@ class CustomerController {
         email: input.email,
         address: input.address,
         DOB: input.DOB,
+        mobile: input.mobile,
+        alt_mobile: input.alt_mobile,
         updated_user_id: loggedInUser,
       };
       await customerLib.updateCustomerData({ customer_id: customer_id }, obj);
@@ -74,7 +79,7 @@ class CustomerController {
   };
 
   static deleteCustomerData = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const customer_id = req.params.id;
 
@@ -92,7 +97,6 @@ class CustomerController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
       res.locals.errors = e.message;
@@ -101,7 +105,7 @@ class CustomerController {
   };
 
   static getCustomerDataById = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const customer_id = req.params.id;
 
@@ -120,7 +124,6 @@ class CustomerController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
 
@@ -130,7 +133,7 @@ class CustomerController {
   };
 
   static getAllCustomerData = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const data = await customerLib.getAllCustomerData({});
       if (!data) res.locals.message = Messages.NO_DATA;
@@ -145,7 +148,6 @@ class CustomerController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
       res.locals.errors = e.message;

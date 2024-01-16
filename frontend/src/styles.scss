@@ -1,0 +1,127 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "ag-grid-community/styles/ag-grid.css";
+/* Quartz Theme Specific CSS */
+@import "ag-grid-community/styles/ag-theme-quartz.css";
+
+// regular style toast
+@import "ngx-toastr/toastr";
+
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+@import "./assets/scss/custom/material_green.css";
+
+/* For WebKit (Chrome, Safari, newer versions of Opera) */
+/* Customize the scrollbar width and color */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Customize the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Customize the scrollbar handle */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
+  border: transparent;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(155, 155, 155, 0.7);
+}
+
+.ag-column-last {
+  overflow: hidden;
+  align-items: center;
+  justify-content: left;
+  display: flex;
+}
+
+.ag-header.ag-header-allow-overflow .ag-header-row {
+  color: #525f7f;
+  background-color: #f6f9fc;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.ag-cell-value {
+  font-size: 0.8rem;
+}
+.ag-row {
+  color: #525f7f;
+}
+.col-form-label {
+  font-size: 0.85rem !important;
+  font-weight: 600;
+}
+
+.custom-top {
+  margin-top: -10rem !important;
+}
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #e9ecef !important;
+}
+
+.navbar-vertical.navbar-expand-md {
+  max-width: 240px !important;
+}
+
+html:not(.auth-layout) .main-content {
+  margin-left: 240px !important;
+}
+
+.custom-search-grid {
+  padding: 0 !important;
+  margin-bottom: 5px !important;
+}
+
+.custom-search-grid-input {
+  height: 30px !important;
+}
+
+.event {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 150px;
+  bottom: 3px;
+  left: calc(50% - 1.5px);
+  content: " ";
+  display: block;
+  background: #3d8eb9;
+}
+
+.event.busy {
+  background: #f64747;
+}
+
+.NgxEditor__Content {
+  min-height: 120px;
+}
+
+.file-drop-wrapper {
+  padding-top: 17px !important;
+  padding-bottom: 17px !important;
+}
+
+.img-wrap {
+  position: relative;
+  display: inline-block;
+  font-size: 0;
+  margin-right: 45px;
+}
+.img-wrap .close {
+  position: absolute;
+  top: -15px;
+  right: -20px;
+  padding: 2px 2px 2px;
+  cursor: pointer;
+  font-size: 25px;
+  line-height: 10px;
+}

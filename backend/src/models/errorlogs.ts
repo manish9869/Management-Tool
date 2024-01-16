@@ -32,7 +32,8 @@ const ErrorLogsSchema = new Schema(
       default: null,
     },
     created_user_id: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user", // Reference to the Customer model
     },
   },
   {

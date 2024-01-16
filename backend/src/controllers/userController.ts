@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import * as ResponseHandler from "../helpers/response.handler";
 import Messages from "../common/constants";
-import * as userLib from "../modules/User/User.lib";
+import * as userLib from "../modules/user/user.lib";
 import moment from "moment";
 import * as errorlogs from "../modules/errorlogs/errorlogs.lib";
 import { generatePassword } from "../helpers/auth.helpers";
+import mongoose from "mongoose";
 class UserController {
   static addUserData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
@@ -78,7 +79,7 @@ class UserController {
   };
 
   static deleteUserData = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const user_id = req.params.id;
 
@@ -96,7 +97,6 @@ class UserController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
       res.locals.errors = e.message;
@@ -105,7 +105,7 @@ class UserController {
   };
 
   static getUserDataById = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const user_id = req.params.id;
 
@@ -124,7 +124,6 @@ class UserController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
 
@@ -134,7 +133,7 @@ class UserController {
   };
 
   static getAllUserData = async (req: Request, res: Response) => {
-    const { loggedInUser, masterUserID } = req;
+    const { loggedInUser } = req;
     try {
       const data = await userLib.getAllUserData({});
       if (!data) res.locals.message = Messages.NO_DATA;
@@ -149,7 +148,6 @@ class UserController {
         req_body: req.body && JSON.stringify(req.body),
         createddate: moment(new Date()).format(),
         created_user_id: loggedInUser,
-        master_user_id: masterUserID,
       };
       await errorlogs.addErrorLogs(datalog);
       res.locals.errors = e.message;
