@@ -8,6 +8,12 @@ router.post("/upload", validateJwt, CaseHistoryController.uploadFile);
 
 router.post("/", validateJwt, CaseHistoryController.addCaseHistoryData);
 
+router.patch(
+  "/update-media/:id",
+  validateJwt,
+  CaseHistoryController.updateCaseHistoryMediaData
+);
+
 router.patch("/:id", validateJwt, CaseHistoryController.updateCaseHistoryData);
 
 router.delete(

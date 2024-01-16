@@ -43,14 +43,14 @@ const routes: Routes = [
         path: "case-history",
         component: CaseHistoryComponent,
         data: {
-          title: "Customer Appointment",
+          title: "Customer Case History",
         },
       },
       {
         path: "view-case-history",
         component: ViewCaseHistoryComponent,
         data: {
-          title: "Customer Appointment",
+          title: "View Case History",
         },
       },
       {

@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
-import { formatDate } from "@angular/common";
 import { Subscription } from "rxjs";
 import { ButtonRendererComponent } from "../../helpers/button.renderer.component";
 import { Router } from "@angular/router";
@@ -14,7 +13,7 @@ import { CaseHistoryService } from "../case-history.service";
 import { MedicalConditionService } from "../../master-data/medical-condition.service";
 import { TreatmentService } from "../../master-data/treatment.service";
 import { MedicineService } from "../../master-data/medicine.service";
-import { Editor, Toolbar, toHTML } from "ngx-editor";
+import { Editor, Toolbar, toDoc, toHTML } from "ngx-editor";
 import { FilePicker } from "../../helpers/file-picker.adapter";
 import { HttpClient } from "@angular/common/http";
 import { ValidationError } from "ngx-awesome-uploader";
@@ -42,6 +41,9 @@ export class CaseHistoryComponent implements OnInit {
   treatmentList: any = [];
   staffMemberList: any[] = [];
   caseDocuments: any[] = [];
+  selectedCondition = [];
+  selectedtreatment = [];
+  selectedMedicine = [];
   caseDate;
   public mode = "create";
   public caseHistorySub: Subscription;
@@ -92,6 +94,27 @@ export class CaseHistoryComponent implements OnInit {
       field: "staff_member_name",
     },
     {
+      headerName: "Conditions",
+      field: "conditions",
+      maxWidth: 180,
+      wrapText: true,
+      autoHeight: true,
+    },
+    {
+      headerName: "Treatments",
+      field: "treatments",
+      maxWidth: 180,
+      wrapText: true,
+      autoHeight: true,
+    },
+    {
+      headerName: "Medicines",
+      field: "medicines",
+      maxWidth: 180,
+      wrapText: true,
+      autoHeight: true,
+    },
+    {
       headerName: "Date",
       field: "case_date",
     },
@@ -128,15 +151,9 @@ export class CaseHistoryComponent implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      customerId: new FormControl(null, {
-        validators: [Validators.required],
-      }),
-      staffMemberId: new FormControl(null, {
-        validators: [Validators.required],
-      }),
-      case_date: new FormControl(null, {
-        validators: [Validators.required],
-      }),
+      customerId: new FormControl(null),
+      staffMemberId: new FormControl(null),
+      case_date: new FormControl(null),
       notes: new FormControl(null),
       conditionIds: new FormControl(null),
       treatmentIds: new FormControl(null),
@@ -221,7 +238,6 @@ export class CaseHistoryComponent implements OnInit {
       .getCaseHistoryList()
       .subscribe((caseData: any) => {
         this.isLoading = false;
-        console.log("caseData", caseData);
         this.caseHistoryList = caseData.caseHistory;
       });
   }
@@ -312,6 +328,7 @@ export class CaseHistoryComponent implements OnInit {
         documentType: fileType,
         documentName: fileName,
         documentFolder: folderName,
+        url: event.uploadResponse.data.files[0].url,
       });
     }
   }
@@ -357,7 +374,11 @@ export class CaseHistoryComponent implements OnInit {
   }
 
   onView(case_id: string) {
-    // ... (existing logic)
+    this.caseHistoryId = case_id;
+
+    this.router.navigate(["/customer/view-case-history"], {
+      queryParams: { staffMemberId: case_id },
+    });
   }
 
   onEdit(caseHistoryId: string) {
@@ -369,22 +390,53 @@ export class CaseHistoryComponent implements OnInit {
       .getCaseHistoryById(caseHistoryId)
       .subscribe((data: any) => {
         this.isLoading = false;
-
+        console.log("data", data);
         this.form.patchValue({
-          customer_id: this.form.value.customerId,
-          staff_member_id: this.form.value.staffMemberId,
-          case_date: this.form.value.caseDate,
-          notes: this.form.value.notes,
-          condition_ids: this.form.value.conditionIds,
-          treatment_ids: this.form.value.treatmentIds,
-          medicine_ids: this.form.value.medicineIds,
-          dental_history: this.form.value.dental_history,
-          medical_history: this.form.value.medical_history,
-          case_documents: this.form.value.case_documents,
+          customerId: data.customer_id,
+          staffMemberId: data.staff_member_id,
+          notes: toDoc(data.notes),
+          dentalHistory: toDoc(data.dental_history),
+          medicalHistory: toDoc(data.medical_history),
         });
-
-        this.caseDate = new Date(data.data.case_date);
+        this.caseDate = this.caseDate = new Date(data.case_date);
+        this.selectedCondition = data.conditions;
+        this.selectedMedicine = data.medicines;
+        this.selectedtreatment = data.treatments;
+        this.caseDocuments = data.case_documents;
       });
+  }
+
+  onDeleteImage(fileName) {
+    this.caseHistoryService.removeUploadedFile(fileName).subscribe(
+      () => {
+        console.log("caseDocuments", this.caseDocuments);
+        this.caseDocuments = this.caseDocuments.filter(
+          (document) => document.documentName !== fileName
+        );
+
+        const caseHistoryData = {
+          case_documents: this.caseDocuments,
+        };
+
+        console.log(
+          "caseDocuments input ",
+          caseHistoryData,
+          this.caseHistoryId
+        );
+        this.caseHistorySub = this.caseHistoryService
+          .updateCaseHistoryMediaData(caseHistoryData, this.caseHistoryId)
+          .subscribe({
+            next: (response) => {},
+            error: (error) => {},
+            complete: () => {
+              this.toastr.success("", Messages.DELETED);
+            },
+          });
+      },
+      () => {
+        this.isLoading = false;
+      }
+    );
   }
 
   ngOnDestroy() {

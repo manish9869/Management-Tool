@@ -29,7 +29,6 @@ export const validateJwt = async (
     // Validate the token
     payload = <any>jwt.verify(token, jwtSecret);
 
-    console.log("payload", payload);
     // get logged in user details from db
 
     (req.loggedInUser = mongoose.Types.ObjectId.createFromHexString(

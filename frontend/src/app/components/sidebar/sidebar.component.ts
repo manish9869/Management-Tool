@@ -61,11 +61,6 @@ export const ROUTES: RouteInfo[] = [
         icon: "fa-solid fa-user-plus text-primary",
       },
       {
-        link_name: "View Case History",
-        link: "/customer/view-case-history",
-        icon: "fa-solid fa-user-plus text-primary",
-      },
-      {
         link_name: "Manage Invoice",
         link: "/customer/manage-invoice",
         icon: "fa-solid fa-user-plus text-primary",
@@ -93,17 +88,17 @@ export const ROUTES: RouteInfo[] = [
     sub_menu: [
       {
         link_name: "Add Expense",
-        link: "/staff/manage-staff-members",
+        link: "/expense/manage-expense-tracker",
         icon: "fa-solid fa-user-plus text-primary",
       },
       {
         link_name: "View Expense",
-        link: "/staff/view-staff-members",
+        link: "/expense/view-expense",
         icon: "fa-solid fa-user-plus text-primary",
       },
       {
         link_name: "Revenue Tracking",
-        link: "/staff/view-staff-members",
+        link: "/expense/revenue-tracker",
         icon: "fa-solid fa-user-plus text-primary",
       },
     ],
@@ -146,6 +141,111 @@ export const ROUTES: RouteInfo[] = [
         link_name: "Register",
         link: "/auth/register",
         icon: "ni-bullet-list-67 text-red",
+      },
+    ],
+  },
+];
+
+export const titleRoutes = [
+  {
+    link_name: "Dashboard",
+    link: "/dashboard",
+    sub_menu: [],
+  },
+  {
+    link_name: "Customer Appointment",
+    link: "/customer/customer-appointment",
+    sub_menu: [],
+  },
+  {
+    link_name: "Reminder",
+    link: "/reminder",
+    sub_menu: [],
+  },
+  {
+    link_name: "Manage Customer",
+    link: null,
+    sub_menu: [
+      {
+        link_name: "Add Customer",
+        link: "/customer/manage-customer",
+      },
+      {
+        link_name: "View Customer",
+        link: "/customer/view-customer",
+      },
+      {
+        link_name: "Add Case History",
+        link: "/customer/case-history",
+      },
+      {
+        link_name: "Manage Invoice",
+        link: "/customer/manage-invoice",
+      },
+    ],
+  },
+  {
+    link_name: "Manage Staff",
+    link: null,
+    sub_menu: [
+      {
+        link_name: "Add Staff Members",
+        link: "/staff/manage-staff-members",
+      },
+      {
+        link_name: "View Staff Members",
+        link: "/staff/view-staff-members",
+      },
+    ],
+  },
+  {
+    link_name: "Manage Expense",
+    link: null,
+    icon: "fa-solid fa-receipt text-purple",
+    sub_menu: [
+      {
+        link_name: "Add Expense",
+        link: "/expense/manage-expense-tracker",
+      },
+      {
+        link_name: "View Expense",
+        link: "/expense/view-expense",
+      },
+      {
+        link_name: "Revenue Tracking",
+        link: "/expense/revenue-tracker",
+      },
+    ],
+  },
+  {
+    link_name: "Master Data",
+    link: null,
+    sub_menu: [
+      {
+        link_name: "Medical Condition",
+        link: "/master-data/medical-condition",
+      },
+      {
+        link_name: "Treatment",
+        link: "/master-data/treatment",
+      },
+      {
+        link_name: "Medicine",
+        link: "/master-data/medicine",
+      },
+    ],
+  },
+  {
+    link_name: "Auth",
+    link: null,
+    sub_menu: [
+      {
+        link_name: "Login",
+        link: "/auth/login",
+      },
+      {
+        link_name: "Register",
+        link: "/auth/register",
       },
     ],
   },

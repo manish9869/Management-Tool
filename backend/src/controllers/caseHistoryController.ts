@@ -132,6 +132,40 @@ class CaseHistoryController {
     }
   };
 
+  static updateCaseHistoryMediaData = async (req: Request, res: Response) => {
+    const { loggedInUser } = req;
+    try {
+      const case_id = req.params.id;
+      const input = req.body;
+      const obj = {
+        case_documents: input.case_documents,
+        updated_user_id: loggedInUser,
+      };
+
+      await caseHistoryLib.updateCaseHistoryData({ case_id: case_id }, obj);
+
+      const data = await caseHistoryLib.getCaseHistoryById({
+        case_id: case_id,
+      });
+
+      res.locals.data = data;
+      res.locals.message = Messages.UPDATED;
+      ResponseHandler.JSONSUCCESS(req, res);
+    } catch (e) {
+      let datalog = {
+        pagename: "CaseHistoryController",
+        function_name: "updateCaseHistoryData",
+        error_message: e,
+        req_body: req.body && JSON.stringify(req.body),
+        createddate: moment(new Date()).format(),
+        created_user_id: loggedInUser,
+      };
+      await errorlogs.addErrorLogs(datalog);
+      res.locals.errors = e.message;
+      ResponseHandler.JSONERROR(req, res);
+    }
+  };
+
   static deleteCaseHistoryData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {
@@ -220,7 +254,7 @@ class CaseHistoryController {
 
   static deleteFile = async (req: Request, res: Response) => {
     try {
-      const result = deleteFile(req, res);
+      deleteFile(req, res);
     } catch (e) {
       res.locals.errors = e.message;
       ResponseHandler.JSONERROR(req, res);

@@ -104,19 +104,10 @@
                       [items]="conditionList"
                       bindLabel="name"
                       bindValue="id"
+                      [(ngModel)]="selectedCondition"
                     >
                     </ng-select>
-                    <!-- <input
-                    type="text"
-                    id="condition-ids-input"
-                    name="condition-ids-input"
-                    class="form-control"
-                    placeholder="Condition IDs"
-                    formControlName="conditionIds"
-                    [ngClass]="{
-                      'is-invalid': submitted && f.conditionIds.errors
-                    }"
-                  /> -->
+
                     <div
                       *ngIf="submitted && f.conditionIds.errors"
                       class="invalid-feedback"
@@ -145,19 +136,10 @@
                       [items]="treatmentList"
                       bindLabel="name"
                       bindValue="id"
+                      [(ngModel)]="selectedtreatment"
                     >
                     </ng-select>
-                    <!-- <input
-                    type="text"
-                    id="treatment-ids-input"
-                    name="treatment-ids-input"
-                    class="form-control"
-                    placeholder="Treatment IDs"
-                    formControlName="treatmentIds"
-                    [ngClass]="{
-                      'is-invalid': submitted && f.treatmentIds.errors
-                    }"
-                  /> -->
+
                     <div
                       *ngIf="submitted && f.treatmentIds.errors"
                       class="invalid-feedback"
@@ -186,19 +168,10 @@
                       [items]="medicineList"
                       bindLabel="medicineName"
                       bindValue="id"
+                      [(ngModel)]="selectedMedicine"
                     >
                     </ng-select>
-                    <!-- <input
-                    type="text"
-                    id="medicine-ids-input"
-                    name="medicine-ids-input"
-                    class="form-control"
-                    placeholder="Medicine IDs"
-                    formControlName="medicineIds"
-                    [ngClass]="{
-                      'is-invalid': submitted && f.medicineIds.errors
-                    }"
-                  /> -->
+
                     <div
                       *ngIf="submitted && f.medicineIds.errors"
                       class="invalid-feedback"
@@ -235,17 +208,6 @@
                       }"
                     ></ngx-editor>
 
-                    <!-- <textarea
-                    id="dental-history-input"
-                    name="dental-history-input"
-                    rows="4"
-                    class="form-control"
-                    placeholder="Dental History"
-                    formControlName="dentalHistory"
-                    [ngClass]="{
-                      'is-invalid': submitted && f.dentalHistory.errors
-                    }"
-                  ></textarea> -->
                     <div
                       *ngIf="submitted && f.dentalHistory.errors"
                       class="invalid-feedback"
@@ -283,17 +245,6 @@
                       }"
                     ></ngx-editor>
 
-                    <!-- <textarea
-                    id="medical-history-input"
-                    name="medical-history-input"
-                    rows="4"
-                    class="form-control"
-                    placeholder="Medical History"
-                    formControlName="medicalHistory"
-                    [ngClass]="{
-                      'is-invalid': submitted && f.medicalHistory.errors
-                    }"
-                  ></textarea> -->
                     <div
                       *ngIf="submitted && f.medicalHistory.errors"
                       class="invalid-feedback"
@@ -361,16 +312,6 @@
                     >
                     </ngx-awesome-uploader>
 
-                    <!-- <input
-                    type="file"
-                    id="case-documents-input"
-                    name="case-documents-input"
-                    class="form-control"
-                    formControlName="case_documents"
-                    [ngClass]="{
-                      'is-invalid': submitted && f.case_documents.errors
-                    }"
-                  /> -->
                     <div
                       *ngIf="submitted && f.case_documents.errors"
                       class="invalid-feedback"
@@ -378,6 +319,29 @@
                       <div *ngIf="f.case_documents.errors.required">
                         Please upload the Case Documents
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="form-group row"
+                *ngIf="caseDocuments && caseDocuments.length > 0"
+              >
+                <div class="col-md-6">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="case-documents-input"
+                    >Uploaded Documents</label
+                  >
+                  <div class="col-md-12">
+                    <div class="img-wrap" *ngFor="let image of caseDocuments">
+                      <span
+                        class="close"
+                        (click)="onDeleteImage(image.documentName)"
+                        >&times;</span
+                      >
+                      <img [src]="image.url" width="100" />
                     </div>
                   </div>
                 </div>

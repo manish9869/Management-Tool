@@ -21,6 +21,13 @@ export const AdminLayoutRoutes: Routes = [
           ),
       },
       {
+        path: "expense",
+        loadChildren: () =>
+          import("src/app/pages/expense-tracker/expense-tracker.module").then(
+            (m) => m.ExpenseTrackerModule
+          ),
+      },
+      {
         path: "master-data",
         loadChildren: () =>
           import("src/app/pages/master-data/master-data.module").then(

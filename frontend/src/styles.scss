@@ -109,3 +109,19 @@ html:not(.auth-layout) .main-content {
   padding-top: 17px !important;
   padding-bottom: 17px !important;
 }
+
+.img-wrap {
+  position: relative;
+  display: inline-block;
+  font-size: 0;
+  margin-right: 45px;
+}
+.img-wrap .close {
+  position: absolute;
+  top: -15px;
+  right: -20px;
+  padding: 2px 2px 2px;
+  cursor: pointer;
+  font-size: 25px;
+  line-height: 10px;
+}
