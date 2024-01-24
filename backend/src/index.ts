@@ -13,8 +13,8 @@ import treatment from "./routes/treatment";
 import medicalCondition from "./routes/medical-condition";
 import medicine from "./routes/medicine";
 import caseHistory from "./routes/case-history";
+import invoice from "./routes/invoice";
 import path from "path";
-import { FILE_FOLDERS } from "./common/common";
 
 const app = express();
 dotenv.config();
@@ -58,6 +58,7 @@ app.use("/treatment", treatment);
 app.use("/medical-condition", medicalCondition);
 app.use("/medicine", medicine);
 app.use("/case-history", caseHistory);
+app.use("/invoices", invoice);
 
 app.get("/", (req, res) => {
   res.send("Hey there!!!");

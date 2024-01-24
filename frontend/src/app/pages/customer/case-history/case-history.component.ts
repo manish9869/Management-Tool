@@ -144,7 +144,6 @@ export class CaseHistoryComponent implements OnInit {
     public treatmentService: TreatmentService,
     public medicineService: MedicineService,
     private toastr: ToastrService,
-    private config: NgSelectConfig,
     private router: Router,
     private http: HttpClient
   ) {}
@@ -398,7 +397,7 @@ export class CaseHistoryComponent implements OnInit {
           dentalHistory: toDoc(data.dental_history),
           medicalHistory: toDoc(data.medical_history),
         });
-        this.caseDate = this.caseDate = new Date(data.case_date);
+        this.caseDate = new Date(data.case_date);
         this.selectedCondition = data.conditions;
         this.selectedMedicine = data.medicines;
         this.selectedtreatment = data.treatments;

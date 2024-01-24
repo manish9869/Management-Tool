@@ -1,1 +1,132 @@
-<p>manage-invoice works!</p>
+<div class="header bg-gradient-danger py-7 py-lg-8"></div>
+<div class="container custom-top">
+  <!-- Table -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-wrapper">
+        <form
+          [formGroup]="form"
+          (ngSubmit)="createInvoice()"
+          enctype="multipart/form-data"
+          class="form-horizontal"
+        >
+          <div class="card">
+            <div class="card-header">
+              <strong>Manage Case History</strong> Form
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <!-- Customer ID Dropdown -->
+                <div class="form-group col-md-4">
+                  <label
+                    class="col-md-12 col-form-label"
+                    for="customer-id-input"
+                    >Select Customer</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      id="customer-id-input"
+                      name="customer-id-input"
+                      formControlName="customerId"
+                      placeholder="Select Customer"
+                      [items]="customerList"
+                      bindLabel="fullname"
+                      bindValue="id"
+                    >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <!-- Case History ID Dropdown -->
+                <div class="form-group col-md-4">
+                  <label class="col-md-12 col-form-label" for="case-id-input"
+                    >Select Case</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      id="case-id-input"
+                      name="case-id-input"
+                      placeholder="Select Staff Member"
+                      formControlName="caseHistoryId"
+                      [items]="caseHistoryList"
+                      bindLabel="fullname"
+                      bindValue="id"
+                    >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <!-- Case Date -->
+                <div class="form-group col-md-4">
+                  <label class="col-md-12 col-form-label" for="case-date-input"
+                    >Invoice Date</label
+                  >
+                  <div class="col-md-12">
+                    <ng2-flatpickr
+                      id="case-date-input"
+                      name="case-date-input"
+                      placeholder="Invoice Date"
+                      formControlName="invoice_date"
+                      [config]="exampleOptions"
+                      [setDate]="invoiceDate"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.invoice_date.errors
+                      }"
+                      #invoiceDateControl
+                    ></ng2-flatpickr>
+                    <div
+                      *ngIf="submitted && f.invoice_date.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.invoice_date.errors.required">
+                        Please enter the Invoice Date
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div></div>
+            </div>
+            <div class="card-footer">
+              <button
+                type="reset"
+                class="btn btn-sm btn-danger"
+                (click)="resetForm()"
+              >
+                <i class="fa fa-ban"></i> Reset
+              </button>
+              <button type="submit" class="btn btn-sm btn-primary">
+                <i class="fa fa-dot-circle-o"></i> Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-wrapper">
+        <div class="card">
+          <div class="card-header"><strong>Invoice</strong> List</div>
+          <div class="card-body">
+            <ag-grid-angular
+              [autoSizeStrategy]="autoSizeStrategy"
+              style="width: 100%; height: 520px"
+              class="ag-theme-quartz"
+              [columnDefs]="colDefs"
+              [defaultColDef]="defaultColDef"
+              [tooltipShowDelay]="tooltipShowDelay"
+              [rowData]="invoiceList"
+              [pagination]="true"
+              [paginationPageSize]="paginationPageSize"
+              [paginationPageSizeSelector]="paginationPageSizeSelector"
+            >
+            </ag-grid-angular>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
