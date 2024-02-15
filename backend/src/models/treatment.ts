@@ -14,8 +14,8 @@ const TreatmentSchema = new mongoose.Schema({
     default: null,
   },
   cost: {
-    type: Number,
-    default: null,
+    type: mongoose.Schema.Types.Decimal128,
+    default: 0.0,
   },
   duration: {
     type: String,

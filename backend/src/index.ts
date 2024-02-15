@@ -20,12 +20,21 @@ const app = express();
 dotenv.config();
 const port = EnvHandler.envPORT() || 3001;
 
+app.set("view engine", "ejs");
+
 app.use(bodyParser.json({ limit: "50mb" }));
+
+// Define the directory where your images are stored
+const templateDirectory = path.join(__dirname, `./templates`);
+
 // Define the directory where your images are stored
 const imagesDirectory = path.join(__dirname, `./../../case-files`);
 
 // Serve static files from the 'case-files' directory
 app.use("/images", express.static(imagesDirectory));
+
+// Serve static files from the 'case-files' directory
+app.use("/template", express.static(templateDirectory));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 

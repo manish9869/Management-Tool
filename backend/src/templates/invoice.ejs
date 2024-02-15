@@ -1,0 +1,147 @@
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="http://localhost:3000/template/style.css" />
+    <title>Invoice..!</title>
+  </head>
+
+  <body>
+    <section>
+      <div class="invoice">
+        <div class="top_line"></div>
+        <div class="header">
+          <div class="i_row">
+            <div class="i_logo">
+              <p>Star Smile Dental Care</p>
+              <p>& Implant Center</p>
+            </div>
+            <div class="i_title">
+              <p class="p_title text_right"><%= date %></p>
+              <div class="i_number">
+                <p class="p_title">INVOICE NO: <%= invoiceNumber %></p>
+              </div>
+            </div>
+          </div>
+          <div class="i_row">
+            <div class="i_number">
+              <p class="p_title">
+                <%= senderName %> <br />
+                <span>Contact No: <%= senderContact %></span>
+              </p>
+            </div>
+            <div class="i_address text_right">
+              <p>TO</p>
+              <p class="p_title">
+                <%= receiverName %> <br />
+                <span>Contact No: <%= receiverContact %></span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="body">
+          <table class="table align-items-center">
+            <thead class="thead-light bg-custom">
+              <tr class="border-bottom">
+                <th class="border border-left border-top" style="width: 70%">
+                  Treatments
+                </th>
+                <th class="border border-right border-top" style="width: 30%">
+                  Treatments Cost
+                </th>
+              </tr>
+            </thead>
+            <tbody class="list">
+              <% treatments.forEach(treatment => { %>
+              <tr>
+                <td class="border border-left"><%= treatment.name %></td>
+                <td class="border border-right"><%= treatment.cost %></td>
+              </tr>
+              <% }) %>
+
+              <tr class="tax-row border-top">
+                <td class="border border-left text-right">
+                  <strong>Sub Total</strong>
+                </td>
+                <td class="border border-right"><%= subTotal %></td>
+              </tr>
+              <tr>
+                <td class="border border-left text-right">
+                  Discount <%= discount %> %
+                </td>
+                <td class="border border-right" style="color: green">
+                  - <%= totalDiscountAmount %>
+                </td>
+              </tr>
+              <tr>
+                <td class="border border-left text-right">Tax <%= tax %>%</td>
+                <td class="border border-right"><%= totaltaxAmount %></td>
+              </tr>
+
+              <tr class="total-row border-top border-left">
+                <td class="border border-left text-right">Total Amount</td>
+                <td class="border border-right"><%= totalAmount %></td>
+              </tr>
+
+              <% if (paidAmount) { %>
+              <tr class="total-row">
+                <td class="border border-left text-right">Amount Paid</td>
+                <td class="border border-right" style="color: red">
+                  - <%= paidAmount %>
+                </td>
+              </tr>
+              <% } %> <% if (paidAmount || totalPaidAmount) { %>
+              <tr class="total-row border-bottom">
+                <td class="border border-left text-right">Amount Due</td>
+                <td class="border border-right"><%= amountDue %></td>
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer">
+          <div class="i_row dvconditions">
+            <div class="i_col w_50">
+              <p class="p_title">Medical Condition</p>
+              <div>
+                <% medicalConditions.forEach(condition => { %>
+                <span class="badge badge-secondary"><%= condition.name %></span>
+                <% }) %>
+              </div>
+            </div>
+            <div class="i_col w_50 text_right">
+              <p class="p_title notes">Medicines</p>
+              <div class="dvmedicines">
+                <% medicines.forEach(medicine => { %>
+                <span class="badge badge-secondary"><%= medicine.name %></span>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+          <div class="i_row">
+            <div class="i_col w_50">
+              <p class="p_title">Payment Method</p>
+              <p>Payment Mode: <%= paymentMode %></p>
+            </div>
+            <div class="i_col w_50 text_right">
+              <p class="p_title notes">Note</p>
+              <p class="notes"><%= note %></p>
+            </div>
+          </div>
+
+          <div class="i_row">
+            <div class="i_col w_50"></div>
+            <div class="i_col w_50 text_right">
+              <p class="signature">Signature</p>
+            </div>
+          </div>
+        </div>
+        <div class="bottom_line"></div>
+      </div>
+    </section>
+  </body>
+</html>

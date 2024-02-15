@@ -32,6 +32,7 @@
                       [items]="customerList"
                       bindLabel="fullname"
                       bindValue="id"
+                      (change)="loadCaseHistorysList($event)"
                     >
                     </ng-select>
                   </div>
@@ -46,17 +47,273 @@
                     <ng-select
                       id="case-id-input"
                       name="case-id-input"
-                      placeholder="Select Staff Member"
+                      placeholder="Select Case"
                       formControlName="caseHistoryId"
                       [items]="caseHistoryList"
-                      bindLabel="fullname"
+                      bindLabel="case_date"
                       bindValue="id"
+                      [readonly]="isDisable"
+                      (change)="loadCaseHistory($event)"
                     >
                     </ng-select>
                   </div>
                 </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div
+                    class="card bg-secondary alignDivs"
+                    *ngIf="conditionData"
+                  >
+                    <div class="card-body">
+                      <h5 class="card-title">Medical Condition</h5>
 
-                <!-- Case Date -->
+                      <div class="alignDivs" *ngIf="conditionData">
+                        <div *ngFor="let case of conditionData">
+                          <span
+                            class="badge badge-pill badge-custom text-white"
+                          >
+                            {{ case.name }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div
+                    class="card bg-secondary alignDivs"
+                    *ngIf="treatmentData"
+                  >
+                    <div class="card-body">
+                      <h5 class="card-title">Treatment</h5>
+                      <div class="alignDivs" *ngIf="treatmentData">
+                        <div *ngFor="let case of treatmentData">
+                          <span
+                            class="badge badge-pill badge-custom text-white"
+                          >
+                            {{ case.name }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-secondary alignDivs" *ngIf="medicineData">
+                    <div class="card-body">
+                      <h5 class="card-title">Medicine</h5>
+                      <div class="alignDivs" *ngIf="medicineData">
+                        <div *ngFor="let case of medicineData">
+                          <span
+                            class="badge badge-pill badge-custom text-white"
+                          >
+                            {{ case.name }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row justify-content-center" *ngIf="treatmentData">
+                <div class="col-md-9 mt-4 mb-4 align-items-center">
+                  <div class="card bg-secondary text-center mx-auto">
+                    <div class="card-header">
+                      <div class="align-items-center">
+                        <strong>Treatment Cost</strong>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <table
+                        class="table align-items-center table-flush invoice-table"
+                      >
+                        <thead class="thead-light">
+                          <tr>
+                            <th
+                              class="border bg-success text-white total-row"
+                              style="width: 70%"
+                            >
+                              Treatments
+                            </th>
+                            <th
+                              class="border bg-success text-white total-row"
+                              style="width: 30%"
+                            >
+                              Treatments Cost
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody class="list">
+                          <tr *ngFor="let case of treatmentData">
+                            <td class="border">{{ case.name }}</td>
+                            <td class="border">
+                              ₹ {{ case.cost.$numberDecimal }}/-
+                            </td>
+                          </tr>
+
+                          <tr class="tax-row">
+                            <td class="border text-right">Sub Total</td>
+                            <td>
+                              ₹ {{ invoiceSubTotal | number : "1.2-2" }}/-
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="border text-right">Discount</td>
+                            <td style="color: green">
+                              - ₹ {{ discountTotal | number : "1.2-2" }}/-
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="border text-right">Tax 13%</td>
+                            <td>₹ {{ calculatedTax | number : "1.2-2" }}/-</td>
+                          </tr>
+
+                          <tr class="total-row">
+                            <td class="border text-right">Total Amount</td>
+                            <td>₹ {{ invoiceTotal | number : "1.2-2" }}/-</td>
+                          </tr>
+                          <tr class="total-row" *ngIf="totalPaidAmount">
+                            <td class="border text-right">Total Paid Amount</td>
+                            <td style="color: red">
+                              - ₹ {{ totalPaidAmount | number : "1.2-2" }}/-
+                            </td>
+                          </tr>
+                          <tr class="total-row" *ngIf="paidAmount">
+                            <td class="border text-right">Amount Paid</td>
+                            <td>₹ {{ paidAmount | number : "1.2-2" }}/-</td>
+                          </tr>
+                          <tr
+                            class="total-row"
+                            *ngIf="paidAmount || totalPaidAmount"
+                          >
+                            <td class="border text-right">Amount Due</td>
+                            <td>
+                              ₹ {{ pendingTotalAmount | number : "1.2-2" }}/-
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row justify-content-center" *ngIf="pastPayments">
+                <div class="col-md-10 mt-4 mb-4 align-items-center">
+                  <div class="card bg-secondary text-center mx-auto">
+                    <div class="card-header">
+                      <strong>Payment History</strong>
+                    </div>
+                    <div class="card-body">
+                      <table
+                        class="table align-items-center table-flush invoice-table"
+                      >
+                        <thead class="thead-light">
+                          <tr>
+                            <th
+                              class="border bg-success text-white total-row"
+                              style="width: 70%"
+                            >
+                              Invoice Number
+                            </th>
+                            <th
+                              class="border bg-success text-white total-row"
+                              style="width: 70%"
+                            >
+                              Payment Dates
+                            </th>
+                            <th
+                              class="border bg-success text-white total-row"
+                              style="width: 30%"
+                            >
+                              Amount Paid
+                            </th>
+                            <th
+                              class="border bg-success text-white total-row"
+                              style="width: 30%"
+                            >
+                              View Invoice
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody class="list">
+                          <tr *ngFor="let payment of pastPayments">
+                            <td class="border">{{ payment.invoiceNumber }}</td>
+                            <td class="border">
+                              {{ payment.issueDate | date : "fullDate" }}
+                              {{ payment.issueDate | date : "shortTime" }}
+                            </td>
+                            <td class="border">₹ {{ payment.amountPaid }}/-</td>
+                            <td class="border">View</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label class="col-md-12 col-form-label" for="case-date-input"
+                    >Discount</label
+                  >
+                  <div class="col-md-12">
+                    <input
+                      type="number"
+                      id="text-input"
+                      name="text-input"
+                      class="form-control"
+                      placeholder="Discount"
+                      formControlName="discount"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.discount.errors
+                      }"
+                      (input)="applyDiscount($event)"
+                      maxlength="2"
+                    />
+
+                    <div
+                      *ngIf="submitted && f.discount.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.discount.errors.required">
+                        Please enter the discount
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label class="col-md-12 col-form-label" for="case-date-input"
+                    >Amount Paid</label
+                  >
+                  <div class="col-md-12">
+                    <input
+                      type="number"
+                      id="text-input"
+                      name="text-input"
+                      class="form-control"
+                      placeholder="Amount Paid"
+                      formControlName="amountPaid"
+                      (input)="calculatePendingAmount()"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.amountPaid.errors
+                      }"
+                    />
+
+                    <div
+                      *ngIf="submitted && f.amountPaid.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.amountPaid.errors.required">
+                        Please enter the Amount Paid
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="form-group col-md-4">
                   <label class="col-md-12 col-form-label" for="case-date-input"
                     >Invoice Date</label
@@ -66,26 +323,105 @@
                       id="case-date-input"
                       name="case-date-input"
                       placeholder="Invoice Date"
-                      formControlName="invoice_date"
-                      [config]="exampleOptions"
+                      formControlName="issueDate"
+                      [config]="inoviceDateOptions"
                       [setDate]="invoiceDate"
                       [ngClass]="{
-                        'is-invalid': submitted && f.invoice_date.errors
+                        'is-invalid': submitted && f.issueDate.errors
                       }"
                       #invoiceDateControl
                     ></ng2-flatpickr>
                     <div
-                      *ngIf="submitted && f.invoice_date.errors"
+                      *ngIf="submitted && f.issueDate.errors"
                       class="invalid-feedback"
                     >
-                      <div *ngIf="f.invoice_date.errors.required">
+                      <div *ngIf="f.issueDate.errors.required">
                         Please enter the Invoice Date
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div></div>
+
+              <div class="row">
+                <div class="form-group col-md-4">
+                  <label class="col-md-12 col-form-label" for="status-input"
+                    >Payment Mode</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      appearance="outline"
+                      id="status-id-input"
+                      name="status-id-input"
+                      formControlName="paymentMode"
+                      placeholder="Select Payment Mode"
+                      [searchable]="false"
+                    >
+                      <ng-option
+                        *ngFor="let options of paymentOptions"
+                        [value]="options.name"
+                      >
+                        {{ options.name }}</ng-option
+                      >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label class="col-md-12 col-form-label" for="status-input"
+                    >Status</label
+                  >
+                  <div class="col-md-12">
+                    <ng-select
+                      appearance="outline"
+                      id="status-id-input"
+                      name="status-id-input"
+                      formControlName="status"
+                      placeholder="Select Status"
+                      [searchable]="false"
+                      (change)="onSelectedPaymentStatus($event)"
+                    >
+                      <ng-option
+                        *ngFor="let options of statusOptions"
+                        [value]="options.name"
+                      >
+                        {{ options.name }}</ng-option
+                      >
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div
+                  class="form-group col-md-4"
+                  *ngIf="isPaymentStatusSelected"
+                >
+                  <label class="col-md-12 col-form-label" for="case-date-input"
+                    >Due Date</label
+                  >
+                  <div class="col-md-12">
+                    <ng2-flatpickr
+                      id="case-date-input"
+                      name="case-date-input"
+                      placeholder="Due Date"
+                      formControlName="dueDate"
+                      [config]="dueDateOptions"
+                      [setDate]="dueDate"
+                      [ngClass]="{
+                        'is-invalid': submitted && f.dueDate.errors
+                      }"
+                      #dueDateControl
+                    ></ng2-flatpickr>
+                    <div
+                      *ngIf="submitted && f.dueDate.errors"
+                      class="invalid-feedback"
+                    >
+                      <div *ngIf="f.dueDate.errors.required">
+                        Please enter the Due Date
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="card-footer">
               <button

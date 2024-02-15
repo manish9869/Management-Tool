@@ -8,13 +8,13 @@ import { Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import Messages from "src/app/comman/constants";
 import { ManageInvoiceService } from "../manage-invoice.service";
-import { ButtonRendererComponent } from "../../helpers/button.renderer.component";
 import {
   SizeColumnsToContentStrategy,
   SizeColumnsToFitGridStrategy,
   SizeColumnsToFitProvidedWidthStrategy,
 } from "ag-grid-community";
 import { FlatpickrOptions } from "ng2-flatpickr";
+import { InvoiceDownloadRendererComponent } from "../../helpers/invoice-download.renderer.component";
 
 @Component({
   selector: "app-manage-invoice",
@@ -23,14 +23,32 @@ import { FlatpickrOptions } from "ng2-flatpickr";
 })
 export class ManageInvoiceComponent implements OnInit {
   @ViewChild("invoiceDateControl") invoiceDateControl: ElementRef;
+  @ViewChild("dueDateControl") dueDateControl: ElementRef;
   form: FormGroup;
   isLoading = false;
   submitted = false;
+  isDisable = true;
+  isPaymentStatusSelected: boolean = false;
+  treatmentData;
+  medicineData;
+  conditionData;
   invoiceDate;
+  dueDate;
   invoiceId;
+  isDiscountApplied: boolean = false;
+  invoiceTax: number = 13.0;
+  invoiceTotal: number = 0.0;
+  calculatedTax: number = 0.0;
+  invoiceSubTotal: number = 0.0;
+  discountTotal: number = 0.0;
+  pendingTotalAmount: number = 0.0;
+  totalPaidAmount: number = 0.0;
+  finalBalanceAmount: number = 0.0;
+  paidAmount: number = 0.0;
   invoiceList: any[] = [];
   customerList: any[] = [];
   caseHistoryList: any = [];
+  pastPayments;
   public mode = "create";
   public caseHistorySub: Subscription;
   public customerSub: Subscription;
@@ -45,19 +63,34 @@ export class ManageInvoiceComponent implements OnInit {
     | SizeColumnsToContentStrategy = {
     type: "fitCellContents",
   };
+
   colDefs = [
     {
       headerName: "Customer Name",
       field: "customer_name",
     },
-
     {
-      headerName: "Date",
-      field: "inoice_date",
+      headerName: "Invoice Number",
+      field: "invoiceNumber",
+      maxWidth: 180,
+      wrapText: true,
+      autoHeight: true,
+    },
+    {
+      headerName: "Total Amount",
+      field: "totalAmount",
+    },
+    {
+      headerName: "Issue Date",
+      field: "issueDate",
+    },
+    {
+      headerName: "Status",
+      field: "status",
     },
     {
       field: "Actions",
-      cellRenderer: ButtonRendererComponent,
+      cellRenderer: InvoiceDownloadRendererComponent,
       editable: false,
       sortable: false,
       resizable: false,
@@ -66,11 +99,33 @@ export class ManageInvoiceComponent implements OnInit {
       },
     },
   ];
-  exampleOptions: FlatpickrOptions = {
+
+  inoviceDateOptions: FlatpickrOptions = {
     enableTime: true,
     dateFormat: "Y-m-d H:i",
     maxDate: "today",
   };
+
+  dueDateOptions: FlatpickrOptions = {
+    enableTime: true,
+    dateFormat: "Y-m-d H:i",
+    minDate: "today",
+  };
+
+  paymentOptions: any[] = [
+    { id: "Credit Card", name: "Credit Card" },
+    { id: "Debit Card", name: "Debit Card" },
+    { id: "Bank Transfer", name: "Bank Transfer" },
+    { id: "Cash", name: "Cash" },
+    { id: "Other", name: "Other" },
+  ];
+
+  statusOptions: any[] = [
+    { id: "Paid", name: "Paid" },
+    { id: "Unpaid", name: "Unpaid" },
+    { id: "Partial", name: "Partial Payment" },
+  ];
+
   constructor(
     public caseHistoryService: CaseHistoryService,
     public customerService: CustomerService,
@@ -84,10 +139,14 @@ export class ManageInvoiceComponent implements OnInit {
     this.form = new FormGroup({
       customerId: new FormControl(null),
       caseHistoryId: new FormControl(null),
-      invoice_date: new FormControl(null),
+      issueDate: new FormControl(null),
+      discount: new FormControl({}),
+      paymentMode: new FormControl(null),
+      status: new FormControl(null),
+      amountPaid: new FormControl(null),
+      dueDate: new FormControl(null),
     });
     this.loadInvoiceList();
-    this.loadCaseHistorysList();
     this.loadCustomerList();
   }
 
@@ -100,9 +159,9 @@ export class ManageInvoiceComponent implements OnInit {
     this.manageInvoiceService.getInvoiceList();
     this.manageInvoiceService
       .getInvoiceUpdateListener()
-      .subscribe((invoices: any) => {
+      .subscribe((data: any) => {
         this.isLoading = false;
-        this.invoiceList = invoices;
+        this.invoiceList = data.invoices;
       });
   }
 
@@ -117,14 +176,124 @@ export class ManageInvoiceComponent implements OnInit {
       });
   }
 
-  loadCaseHistorysList() {
+  loadCaseHistorysList(customerId?: any) {
+    console.log("customerId", customerId);
+
     this.isLoading = true;
+    if (customerId) {
+      this.caseHistorySub = this.caseHistoryService
+        .getCaseHistoryName(customerId.id)
+        .subscribe((caseData: any) => {
+          this.isDisable = false;
+          this.isLoading = false;
+          this.caseHistoryList = caseData.caseHistory;
+        });
+    } else {
+      this.isDisable = true;
+    }
+  }
+
+  loadCaseHistory(caseId) {
+    console.log("caseId", caseId);
+    this.loadPastInvoices(caseId.id);
     this.caseHistorySub = this.caseHistoryService
-      .getCaseHistoryList()
+      .getCaseHistoryById(caseId.case_id)
       .subscribe((caseData: any) => {
         this.isLoading = false;
-        this.caseHistoryList = caseData.caseHistory;
+
+        console.log("caseData==================>", caseData);
+
+        this.treatmentData = caseData.treatment_ids;
+        this.medicineData = caseData.medicine_ids;
+        this.conditionData = caseData.condition_ids;
+
+        this.calculateInvoice(caseData.treatment_ids);
+
+        console.log(
+          "this.treatmentData==================>",
+          this.treatmentData
+        );
+        console.log("this.medicineData==================>", this.medicineData);
+        console.log(
+          "this.conditionData==================>",
+          this.conditionData
+        );
       });
+  }
+
+  loadPastInvoices(caseId) {
+    console.log("invoice caseId", caseId);
+    this.isLoading = true;
+    this.manageInvoiceService
+      .getInvoicesByCase(caseId)
+      .subscribe((data: any) => {
+        this.pastPayments = data.invoices;
+
+        data.invoices.map((invoice) => {
+          this.totalPaidAmount += parseFloat(invoice.amountPaid);
+          this.form.patchValue({
+            discount: invoice.discount,
+          });
+          this.form.controls["discount"].disable();
+
+          // invoice.pendingAmount;
+          // invoice.totalAmount;
+          // invoice.discount;
+          // invoice.totalDiscountAmount;
+          // invoice.tax;
+          // invoice.totaltaxAmount;
+        });
+      });
+  }
+
+  calculateInvoice(treatments) {
+    this.invoiceTotal = 0.0;
+    this.calculatedTax = 0.0;
+    this.invoiceSubTotal = 0.0;
+    this.discountTotal = 0.0;
+    treatments.map((treatment) => {
+      this.invoiceSubTotal += parseFloat(treatment.cost.$numberDecimal);
+    });
+    const discountPercentage = this.form.get("discount").value || 0;
+    if (discountPercentage > 0) {
+      const discountAmount = (this.invoiceSubTotal * discountPercentage) / 100;
+      this.discountTotal = discountAmount;
+      this.invoiceTotal = parseFloat(
+        (this.invoiceSubTotal - discountAmount).toFixed(2)
+      );
+    } else {
+      this.invoiceTotal = parseFloat(this.invoiceSubTotal.toFixed(2));
+    }
+    const taxRate = this.invoiceTax;
+    const taxAmount = parseFloat(
+      ((this.invoiceTotal * taxRate) / 100).toFixed(2)
+    );
+    this.calculatedTax = taxAmount;
+
+    this.invoiceTotal = parseFloat((this.invoiceTotal + taxAmount).toFixed(2));
+
+    if (this.totalPaidAmount > 0) {
+      this.finalBalanceAmount = parseFloat(
+        (this.invoiceTotal - this.totalPaidAmount).toFixed(2)
+      );
+    } else {
+      this.finalBalanceAmount = parseFloat(this.invoiceTotal.toFixed(2));
+    }
+    this.calculatePendingAmount();
+  }
+
+  applyDiscount(event: any) {
+    this.calculateInvoice(this.treatmentData);
+  }
+
+  calculatePendingAmount() {
+    this.pendingTotalAmount = 0.0;
+
+    this.paidAmount = 0.0;
+
+    this.paidAmount = this.form.get("amountPaid").value || 0;
+
+    this.pendingTotalAmount = this.finalBalanceAmount - this.paidAmount;
   }
 
   createInvoice() {
@@ -140,8 +309,20 @@ export class ManageInvoiceComponent implements OnInit {
         const invoiceData = {
           customer_id: this.form.value.customerId,
           case_id: this.form.value.caseHistoryId,
-          invoice_date: this.form.value.invoiceDate[0],
+          issueDate: this.form.value.issueDate[0],
+          discount: this.form.value.discount,
+          totalAmount: this.invoiceTotal,
+          status: this.form.value.status.trim(),
+          dueDate: this.form.value.dueDate[0],
+          paymentMode: this.form.value.paymentMode.trim(),
+          amountPaid: this.form.value.amountPaid,
+          totaltaxAmount: this.calculatedTax,
+          totalDiscountAmount: this.discountTotal,
+          pendingAmount: this.pendingTotalAmount,
+          taxt: this.invoiceTax,
         };
+
+        console.log("invoiceData=======>", invoiceData);
         this.caseHistorySub = this.manageInvoiceService
           .addInvoice(invoiceData)
           .subscribe({
@@ -154,7 +335,7 @@ export class ManageInvoiceComponent implements OnInit {
             },
             complete: () => {
               this.toastr.info("", Messages.SAVED);
-              this.loadCaseHistorysList();
+              this.loadInvoiceList();
               // Handle complete if needed
             },
           });
@@ -162,7 +343,17 @@ export class ManageInvoiceComponent implements OnInit {
         const invoiceData = {
           customer_id: this.form.value.customerId,
           case_id: this.form.value.caseHistoryId,
-          invoice_date: this.form.value.invoiceDate[0],
+          issueDate: this.form.value.issueDate[0],
+          discount: this.form.value.discount,
+          totalAmount: this.invoiceTotal,
+          status: this.form.value.status.trim(),
+          dueDate: this.form.value.dueDate[0],
+          paymentMode: this.form.value.paymentMode.trim(),
+          amountPaid: this.form.value.amountPaid,
+          totaltaxAmount: this.calculatedTax,
+          totalDiscountAmount: this.discountTotal,
+          pendingAmount: this.pendingTotalAmount,
+          taxt: this.invoiceTax,
         };
 
         this.caseHistorySub = this.manageInvoiceService
@@ -197,16 +388,29 @@ export class ManageInvoiceComponent implements OnInit {
     });
   }
 
+  onSelectedPaymentStatus(paymentStatus) {
+    if (paymentStatus === "Partial Payment") {
+      this.isPaymentStatusSelected = true;
+    } else {
+      this.isPaymentStatusSelected = false;
+    }
+
+    console.log("isPaymentStatusSelected", this.isPaymentStatusSelected);
+  }
+
   onClick(e) {
     switch (e.type) {
-      case "select":
+      case "download":
+        this.onDownload(e.rowData.case_id);
+        break;
+      case "view":
         this.onView(e.rowData.case_id);
         break;
       case "edit":
         this.onEdit(e.rowData.case_id);
         break;
       case "delete":
-        this.deleteInvoice(e.rowData.case_id);
+        this.deleteInvoice(e.rowData.invoice_id);
         break;
     }
   }
@@ -229,6 +433,9 @@ export class ManageInvoiceComponent implements OnInit {
       });
   }
 
+  async onDownload(invoice_id: string) {
+    this.invoiceId = invoice_id;
+  }
   onView(invoice_id: string) {
     this.invoiceId = invoice_id;
 
@@ -245,6 +452,12 @@ export class ManageInvoiceComponent implements OnInit {
     this.form.clearValidators();
     this.form.updateValueAndValidity();
     this.form.reset();
+    this.invoiceTotal = 0.0;
+    this.calculatedTax = 0.0;
+    this.invoiceSubTotal = 0.0;
+    this.discountTotal = 0.0;
+    this.pendingTotalAmount = 0.0;
+    this.paidAmount = 0.0;
     Object.keys(this.form.controls).forEach((field) => {
       this.form.controls[field].setErrors(null);
     });

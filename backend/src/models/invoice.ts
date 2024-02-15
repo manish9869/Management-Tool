@@ -21,15 +21,35 @@ const InvoiceSchema = new Schema(
       ref: "case_history",
     },
     discount: {
-      type: Number,
-      default: 0,
+      type: mongoose.Schema.Types.Decimal128,
+      default: 0.0,
+    },
+    totalDiscountAmount: {
+      type: mongoose.Schema.Types.Decimal128,
+      default: 0.0,
     },
     tax: {
-      type: Number,
+      type: mongoose.Schema.Types.Decimal128,
       default: 0,
     },
+    totaltaxAmount: {
+      type: mongoose.Schema.Types.Decimal128,
+      default: 0,
+      required: true,
+    },
     totalAmount: {
-      type: Number,
+      type: mongoose.Schema.Types.Decimal128,
+      default: 0.0,
+      required: true,
+    },
+    amountPaid: {
+      type: mongoose.Schema.Types.Decimal128,
+      default: 0.0,
+      required: true,
+    },
+    pendingAmount: {
+      type: mongoose.Schema.Types.Decimal128,
+      default: 0.0,
       required: true,
     },
     paymentMode: {
@@ -37,13 +57,10 @@ const InvoiceSchema = new Schema(
       enum: ["Credit Card", "Debit Card", "Bank Transfer", "Cash", "Other"],
       required: true,
     },
-    amountPaid: {
-      type: Number,
-      default: 0,
-    },
     issueDate: {
       type: Date,
       default: Date.now,
+      required: true,
     },
     dueDate: {
       type: Date,
@@ -51,8 +68,8 @@ const InvoiceSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["Draft", "Paid", "Overdue"],
-      default: "Draft",
+      enum: ["Unpaid", "Paid", "Partial Payment"],
+      default: "Unpaid",
       index: true,
     },
   },

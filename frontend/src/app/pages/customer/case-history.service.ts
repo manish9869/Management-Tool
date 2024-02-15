@@ -48,6 +48,27 @@ export class CaseHistoryService {
     );
   }
 
+  getCaseHistoryName(customerId) {
+    return this.http.get(BACKEND_URL + "/customer/" + customerId).pipe(
+      map((resData: any) => {
+        const caseHistory = resData.data.map((data, i) => {
+          return {
+            id: data.id,
+            case_id: data.case_id,
+            case_date: data.case_date
+              ? `Appointment ${++i} - ` +
+                moment(data.case_date).format("DD-MMM-YYYY hh:mm A")
+              : "NA",
+          };
+        });
+
+        return {
+          caseHistory,
+        };
+      })
+    );
+  }
+
   getCaseHistoryUpdateListener() {
     return this.caseHistoryUpdated.asObservable();
   }
@@ -74,6 +95,9 @@ export class CaseHistoryService {
           conditions,
           treatments,
           medicines,
+          condition_ids: data.condition_ids,
+          treatment_ids: data.treatment_ids,
+          medicine_ids: data.medicine_ids,
         };
       })
     );

@@ -12,6 +12,9 @@ export const updateCaseHistoryData = async (condition, obj) =>
     useFindAndModify: false,
   });
 
+export const getCaseHistoryByCustomerId = async (condition = {}) =>
+  CaseHistory.find(condition).sort({ id: -1 });
+
 export const getCaseHistoryById = async (condition = {}) =>
   CaseHistory.findOne(condition)
     .populate("customer_id")

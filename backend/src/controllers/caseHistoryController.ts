@@ -220,6 +220,34 @@ class CaseHistoryController {
     }
   };
 
+  static getCaseHistoryByCustomerId = async (req: Request, res: Response) => {
+    const { loggedInUser } = req;
+    try {
+      const customer_id = req.params.id;
+
+      const data = await caseHistoryLib.getCaseHistoryByCustomerId({
+        customer_id: customer_id,
+      });
+      if (!data) res.locals.message = Messages.NO_DATA;
+
+      res.locals.data = data;
+      ResponseHandler.JSONSUCCESS(req, res);
+    } catch (e) {
+      let datalog = {
+        pagename: "CaseHistoryController",
+        function_name: "getCaseHistoryByCustomerId",
+        error_message: e,
+        req_body: req.body && JSON.stringify(req.body),
+        createddate: moment(new Date()).format(),
+        created_user_id: loggedInUser,
+      };
+      await errorlogs.addErrorLogs(datalog);
+
+      res.locals.errors = e.message;
+      ResponseHandler.JSONERROR(req, res);
+    }
+  };
+
   static getAllCaseHistoryData = async (req: Request, res: Response) => {
     const { loggedInUser } = req;
     try {

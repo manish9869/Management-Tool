@@ -1,0 +1,36 @@
+.alignDivs {
+  display: flex;
+  margin-right: 5px;
+  flex-direction: row;
+}
+.badge {
+  margin-right: 5px;
+}
+
+.badge-custom {
+  background-color: #4172c6;
+}
+.table {
+  background-color: white;
+}
+
+.table .thead-light th {
+  font-size: 0.75rem;
+}
+
+.invoice-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.total-row {
+  font-weight: bold;
+}
+
+.p_title p {
+  text-align: justify;
+}

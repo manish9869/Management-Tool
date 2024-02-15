@@ -24,6 +24,12 @@ router.delete(
 
 router.delete("/:id", validateJwt, CaseHistoryController.deleteCaseHistoryData);
 
+router.get(
+  "/customer/:id",
+  validateJwt,
+  CaseHistoryController.getCaseHistoryByCustomerId
+);
+
 router.get("/:id", validateJwt, CaseHistoryController.getCaseHistoryById);
 
 router.get("/", validateJwt, CaseHistoryController.getAllCaseHistoryData);

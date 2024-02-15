@@ -1,0 +1,177 @@
+@import url("https://fonts.googleapis.com/css2?family=Redressed&family=Ubuntu:wght@400;700&display=swap");
+
+:root {
+  --bg-clr: #ead376;
+  --white: #fff;
+  --primary-clr: #2f2929;
+  --secondary-clr: #5265a7;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Ubuntu", sans-serif;
+}
+
+.invoice {
+  max-width: 100%;
+  height: auto;
+  background: var(--white);
+  padding: 30px 50px;
+  position: relative;
+  margin: 20px auto;
+  overflow: hidden;
+}
+
+.w_15 {
+  width: 15%;
+}
+
+.w_50 {
+  width: 50%;
+}
+
+.w_55 {
+  width: 55%;
+}
+
+.p_title {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.i_row {
+  display: flex;
+}
+
+.text_right {
+  text-align: right;
+}
+
+.invoice .header .i_row {
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.invoice .header .i_row:last-child {
+  align-items: flex-end;
+}
+
+.invoice .header .i_row .i_logo p {
+  font-family: "Redressed", cursive;
+}
+
+.invoice .header .i_row .i_logo p,
+.invoice .header .i_row .i_title h2 {
+  font-size: 32px;
+  line-height: 38px;
+  color: var(--secondary-clr);
+}
+
+.invoice .header .i_row .i_address .p_title span {
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.invoice .footer {
+  margin-top: 4rem;
+}
+
+.top_line,
+.bottom_line {
+  width: 25px;
+  height: 175px;
+  z-index: 1;
+  position: absolute;
+  background: var(--secondary-clr);
+}
+
+.bg-custom {
+  background: var(--secondary-clr);
+}
+
+.top_line {
+  top: 0;
+  left: 0;
+}
+
+.bottom_line {
+  bottom: 0;
+  right: 0;
+}
+
+.top_line:before,
+.bottom_line:before {
+  content: "";
+  position: absolute;
+  border: 13px solid;
+}
+
+.top_line:before {
+  bottom: 0;
+  left: 0px;
+  border-color: transparent var(--white) var(--white) transparent;
+}
+
+.bottom_line:before {
+  top: 0;
+  left: 0px;
+  border-color: var(--white) transparent transparent var(--white);
+}
+
+.table .thead-light th {
+  font-size: 0.95rem;
+}
+
+.invoice-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.total-row {
+  font-weight: bold;
+}
+
+.notes {
+  text-align: justify;
+}
+.social.pt-3 {
+  text-align: center;
+  border-top: solid 1px #ced4da;
+}
+
+.signature {
+  margin-top: 5rem;
+  margin-right: 5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.dvconditions {
+  margin-bottom: 3rem;
+}
+
+.dvmedicines {
+  text-align: left;
+}
+
+.border-left {
+  border-left: solid 2px #c5c6d0 !important;
+}
+
+.border-right {
+  border-right: solid 2px #c5c6d0 !important;
+}
+
+.border-top {
+  border-top: solid 2px #c5c6d0 !important;
+}
+
+.border-bottom {
+  border-bottom: solid 2px #c5c6d0 !important;
+}

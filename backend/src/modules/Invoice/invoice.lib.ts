@@ -39,7 +39,10 @@ export const getInvoiceById = async (condition = {}) =>
     .sort({ invoice_id: -1 });
 
 export const getAllInvoices = async (condition = {}) =>
-  Invoice.find(condition).populate("case_id").sort({ invoice_id: -1 });
+  Invoice.find(condition)
+    .populate("customer_id")
+    .populate("case_id")
+    .sort({ invoice_id: -1 });
 
 export const deleteInvoice = async (condition = {}) =>
   Invoice.deleteOne(condition);

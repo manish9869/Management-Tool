@@ -4,6 +4,10 @@ import { validateJwt } from "../middlewares/validateJWT";
 
 const router = express.Router();
 
+router.get("/case/:id", validateJwt, InvoiceController.getAllInvoicesByCaseId);
+
+router.get("/download/:id", validateJwt, InvoiceController.downloadInvoice);
+
 router.get("/:id", validateJwt, InvoiceController.getInvoiceDataById);
 
 router.get("/", validateJwt, InvoiceController.getAllInvoiceData);
